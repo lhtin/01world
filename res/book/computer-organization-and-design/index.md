@@ -5,11 +5,7 @@
 > link: https://www.elsevier.com/books/computer-organization-and-design-risc-v-edition/patterson/978-0-12-820331-6
 
 
-## Chapter 1
-
-### 1.1 Introduction
-
-#### What You Can Learn in This Book
+## What You Can Learn in This Book
 
 By the time you complete this book, we believe you will be able to answer the following questions:
 
@@ -23,17 +19,8 @@ By the time you complete this book, we believe you will be able to answer the fo
 
 Without understanding the answers to these questions, improving the performance of your program on a modern computer or evaluating what features might make one computer better than another for a particular application will be __a complex process of trial and error__(不断试错的复杂过程), rather than __a scientific procedure__(科学的过程) driven by insight and analysis.
 
-This table summarizes how the hardware and software affect performance.
 
-| Hardware or software component | How this component affects performance | Where is this topic covered? |
-| --- | --- | ---|
-| Algorithm | Determines both the number of source-level statements and the number of I/O operations executed | Other books! |
-| Programming language, compiler, and architecture | Determines the number of computer instructions for each source-level statement | Chapters 2 and 3 |
-| Processor and memory system | Determines how fast instructions can be executed | Chapters 4, 5, and 6 |
-| I/O system (hardware and operating system) | Determines how fast I/O operations may be executed | Chapters 4, 5, and 6 |
-
-
-### 1.2 Seven Great Ideas in Computer Architecture
+## Seven Great Ideas in Computer Architecture
 
 - **Use Abstraction to Simplify Design**
   
@@ -78,18 +65,6 @@ This table summarizes how the hardware and software affect performance.
   <img width="150" src="assets/dependability-via-redundancy.jpeg" />
 
 
-### 1.3 Below Your Program
-
-
-
-### 1.4 Under the Covers
-
-### 1.5 Technologles for Building Processors and Memory
-
-### 1.6 Performance
-
-
-
 ## The BIG Pictures
 
 - The five classic components of a computer are input, output, memory, datapath, and control, with the last two sometimes combined and called the processor. Figure 1.5 shows the standard organization of a computer. This organization is independent of hardware technology: you can place every piece of every computer, past and present, into one of these five categories. To help you keep all this in perspective, the five components of a computer are shown on the front page of each of the following chapters, with the portion of interest to that chapter highlighted.
@@ -97,3 +72,25 @@ This table summarizes how the hardware and software affect performance.
   <img style="max-width: 400px;" src="assets/the-standard-organization-of-a-computer.jpeg" />
 
 - Both hardware and software consist of hierarchical layers using abstraction, with each lower layer hiding details from the level above. One key interface between the levels of abstraction is the *instruction set architecture*—the interface between the hardware and low-level software. This abstract interface enables many *implementations* of varying cost and performance to run identical software.
+
+
+## Performance
+
+This table summarizes how the hardware and software affect performance:
+
+| Hardware or software component | How this component affects performance | Where is this topic covered? |
+| --- | --- | ---|
+| Algorithm | Determines both the number of source-level statements and the number of I/O operations executed | Other books! |
+| Programming language, compiler, and architecture | Determines the number of computer instructions for each source-level statement | Chapters 2 and 3 |
+| Processor and memory system | Determines how fast instructions can be executed | Chapters 4, 5, and 6 |
+| I/O system (hardware and operating system) | Determines how fast I/O operations may be executed | Chapters 4, 5, and 6 |
+
+### Defining Performance
+
+- **response time**: Also called **execution time**. The total time required for the computer to complete a task, including disk accesses, memory accesses, I/O activities, operating system overhead, CPU execution time, and so on.
+- **throughput**: Also called **bandwidth**. Another measure of performance, it is the number of tasks completed per unit time.
+
+
+$$
+Performance_X = \frac{1}{Execution \ time_X}
+$$
