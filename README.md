@@ -30,6 +30,16 @@
       - 性能
       - 功耗
   - 编程语言（pl）
+    - 编程语言设计
+    - C/C++、Java、Scheme
+    - 解释器、编译器、虚拟机
+      - GCC、LLVM
+      - OpenJDK
+      - ChezScheme
   - 操作系统（os）
+    - 操作系统理论
+    - 实现
+      - Linux
+      - RT-Tread
   - 软件工程（se）
 
