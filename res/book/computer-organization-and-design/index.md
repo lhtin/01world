@@ -88,9 +88,110 @@ This table summarizes how the hardware and software affect performance:
 ### Defining Performance
 
 - **response time**: Also called **execution time**. The total time required for the computer to complete a task, including disk accesses, memory accesses, I/O activities, operating system overhead, CPU execution time, and so on.
+  $$
+  \frac{Seconds}{Program}=\frac{Instructions}{Program}*\frac{Clock\ cycles}{Instruction}*\frac{Seconds}{Clock\ cycle}
+  $$
+
+  $$
+  CPU\ time=Instruction\ count*Clock\ cycles\ per\ instruction(CPI)*Clock\ cycle\ time
+  $$
+
+  
+
+  
+
 - **throughput**: Also called **bandwidth**. Another measure of performance, it is the number of tasks completed per unit time.
 
 
 $$
 Performance_X = \frac{1}{Execution \ time_X}
 $$
+
+
+
+![image-20210717153929167](index.assets/image-20210717153929167.png)
+
+![image-20210718005023603](index.assets/image-20210718005023603.png)
+
+![image-20210718005420681](index.assets/image-20210718005420681.png)
+
+![image-20210718005952569](index.assets/image-20210718005952569.png)
+
+![image-20210718155437463](index.assets/image-20210718155437463.png)
+
+![image-20210718155842969](index.assets/image-20210718155842969.png)
+
+
+
+
+
+x + (-x) = 10000000 = 2^n
+
+2^n - (-x)
+
+
+
+### 术语
+
+- register spilling：寄存器因为需要被重复使用，将old value保存到内存
+- frame pointer and stack pointer: 过程栈帧，栈低位置为frame pointer，栈顶位置为stack pointer
+- Executable and Linkable Format(ELF)
+
+- Application binary interface(ABI)
+
+### 读不懂的英文句子
+
+- Sometimes a bit pattern with a 1 in the most significant bit represents a negative number and, of course, is less than any positive number, which must have a 0 in the most significant bit.
+
+  两个并列谓语represents和is
+
+- What we have presented so far suggests that a single change to one line of one procedure requires compiling and assembling the whole program.
+
+  主语为What we have presented so far
+
+### 读错的英文单词
+
+queue，procedure，parameter，
+
+
+
+
+
+test:
+
+```
+C code:
+int fact (int n)
+{
+  if (n < 1) return (1);
+  else return (n * fact(n − 1));
+}
+
+RISC-V code:
+fact:
+  addi sp, sp, -8
+  sw x1, 4(sp)
+  sw x10, 0(sp)
+  addi x5, x10, -1
+	bge x5, x0, L1
+
+	addi x10, x0, 1 
+	addi sp, sp, 8 
+	// 返回
+	jalr x0, 0(x1)
+L1: 
+	// n - 1
+	addi x10, x10, -1
+	jal x1, fact
+
+	// x6 = fact(n - 1)
+	addi x6, x10, 0
+	lw x10, 0(sp) 
+	lw x1, 4(sp) 
+	addi sp, sp, 8
+	// n * fact(n - 1)
+	mul x10, x10, x6
+	// 返回
+	jalr x0, 0(x1)
+```
+

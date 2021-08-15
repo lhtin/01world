@@ -20,26 +20,19 @@
 
 > 注：随着新知识的加入，原有的知识树结构会更新需要进行迭代
 
-- 计算机世界（01World）
-  - 体系结构（arch）[链接](./arch/index.md)
+- 01 World
+  - [Computer Architecture](./arch/index.md)
     - 指令集架构
       - RISC-V
-      - ARM
-      - x86
-    - 关键指标
-      - 性能
-      - 功耗
-  - 编程语言（pl）
-    - 编程语言设计
-    - C/C++、Java、Scheme
-    - 解释器、编译器、虚拟机
-      - GCC、LLVM
-      - OpenJDK
-      - ChezScheme
-  - 操作系统（os）
+  - 编程语言
+    - C/C++
+      - GCC
+      - LLVM
+  - 操作系统
     - 操作系统理论
     - 实现
       - Linux
       - RT-Tread
-  - 软件工程（se）
+  - 资料
+    - 书
 
