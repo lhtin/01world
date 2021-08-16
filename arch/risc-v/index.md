@@ -59,3 +59,17 @@
 | Zifencei | 2.0 | Ratified |
 | Zam | 0.1 | Draft |
 | Ztso | 0.1 | Frozen |
+
+## Key Parts
+
+- Control and Status Register(CSR)
+- Exception and Interrupt
+
+
+## 交叉编译
+
+- build system: 编译编译器程序的计算机
+- host system: 运行编译器程序的计算机
+- target system: 运行编译器程序编译出的目标程序的计算机
+- build == host == target: 本地编译
+- build == host != target: 交叉编译
