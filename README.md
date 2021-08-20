@@ -19,7 +19,7 @@
 - 01 World
   - [Computer Architecture](./arch/index.md)
     - 指令集架构
-      - RISC-V
+      - [RISC-V](./arch/risc-v/index.md)
   - 编程语言
     - C/C++
       - GCC
