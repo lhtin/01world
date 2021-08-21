@@ -28,10 +28,10 @@
   ssh-add -K ~/.ssh/id_ed25519
 
   # 4. 将~/.ssh/id_ed25519.pub添加到Github中
-  pbcopy < ~/.ssh/id_ed25519.pub
+  pbcopy < ~/.ssh/id_ed25519.pub # 拷贝
 
   # 5. 也可以通过将公钥存储到远程服务器上，从而免密登陆
-  ssh-copy-id -i ~/.ssh/id_rsa.pub user_name@ip
+  ssh-copy-id -i ~/.ssh/id_ed25519.pub user_name@ip
   ```
 
 # Linux
