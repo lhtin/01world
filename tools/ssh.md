@@ -1,4 +1,0 @@
-# Secure Shell (SSH)
-
-- Wireshark
-
