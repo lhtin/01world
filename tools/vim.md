@@ -153,7 +153,7 @@
      按 <TAB> 可以使用一个补全。
 ```
 
-## .vimrc
+## VIM配置（`~/.vimrc`）
 
 ```
 set enc=utf-8
