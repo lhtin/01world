@@ -152,3 +152,25 @@
   6. 当输入 : 命令时，按 CTRL-D 可以查看可能的补全结果。
      按 <TAB> 可以使用一个补全。
 ```
+
+## .vimrc
+
+```
+set enc=utf-8
+set nocompatible
+set nobackup
+set undodir=~/.vim/undodir
+set number
+if !isdirectory(&undodir)
+  call mkdir(&undodir, 'p', 0700)
+endif
+
+if has('mouse')
+  if has('gui_running') || (&term =~ 'xterm' && !has('mac'))
+    set mouse=a
+  else
+    set mouse=nvi
+  endif
+endif
+source $VIMRUNTIME/vimrc_example.vim
+```

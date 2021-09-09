@@ -1,6 +1,8 @@
 # Mac开发环境
 
 - [oh-my-zsh](https://ohmyz.sh/) Shell
+  - `git config --global --add oh-my-zsh.hide-status 1` 取消git状态展示
+  - `git config --global --add oh-my-zsh.hide-dirty 1` 取消dirty检查
 - [brew](https://brew.sh) 包管理器
   - `brew install nvm zsh-autosuggestions`
     - [nvm](https://github.com/nvm-sh/nvm) NodeJS包管理器
@@ -41,3 +43,9 @@
 - `cd`
   - `cd -` 回到前一个访问的目录
   - `cd ~` 进入home目录
+
+# 其他文档
+
+- [vim](./vim.md)
+- [gdb](./gdb)
+- [git](./git)
