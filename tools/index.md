@@ -44,6 +44,16 @@
   - `cd -` 回到前一个访问的目录
   - `cd ~` 进入home目录
 
+# Windows
+
+- Terminal
+  - [panel管理](https://docs.microsoft.com/en-us/windows/terminal/panes)
+    - `Alt` + `Shift` + `+` 右边开一个窗口
+    - `Alt` + `Shift` + `-` 下边开一个窗口
+    - `Alt` + Up/Down/Left/Right Arrow Key 上下左右切换焦点窗口
+    - `Alt` + `Shift` + Up/Down/Left/Right Arrow Key 往相应方向调整窗口大小
+
+
 # 其他文档
 
 - [vim](./vim.md)
