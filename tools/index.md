@@ -48,10 +48,11 @@
 
 - Terminal
   - [panel管理](https://docs.microsoft.com/en-us/windows/terminal/panes)
-    - `Alt` + `Shift` + `+` 右边开一个窗口
-    - `Alt` + `Shift` + `-` 下边开一个窗口
-    - `Alt` + Up/Down/Left/Right Arrow Key 上下左右切换焦点窗口
-    - `Alt` + `Shift` + Up/Down/Left/Right Arrow Key 往相应方向调整窗口大小
+    - `Alt` + `Shift` + `+` 右边开一个panel
+    - `Alt` + `Shift` + `-` 下边开一个panel
+    - `Alt` + Up/Down/Left/Right Arrow Key 上下左右切换焦点panel
+    - `Alt` + `Shift` + Up/Down/Left/Right Arrow Key 往相应方向调整panel大小
+    - `Alt` + `Shift` + `W` 关闭panel
 
 
 # 其他文档
