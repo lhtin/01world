@@ -3,7 +3,7 @@
 - [oh-my-zsh](https://ohmyz.sh/) Shell
   - `git config --global --add oh-my-zsh.hide-status 1` 取消git状态展示
   - `git config --global --add oh-my-zsh.hide-dirty 1` 取消dirty检查
-  - 添加下面的代码到.zshrc中，解决补全信息导致字符重复的问题
+  - 遇到补全信息导致字符重复的问题时，可以添加下面的内容到.zshrc中。目前我在CnetOS 7.9.2009上遇到
     ```shell
     export LC_ALL=en_US.UTF-8
     export LANG=en_US.UTF-8
