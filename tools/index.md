@@ -3,6 +3,11 @@
 - [oh-my-zsh](https://ohmyz.sh/) Shell
   - `git config --global --add oh-my-zsh.hide-status 1` 取消git状态展示
   - `git config --global --add oh-my-zsh.hide-dirty 1` 取消dirty检查
+  - 添加下面的代码到.zshrc中，解决补全信息导致字符重复的问题
+    ```shell
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
+    ```
 - [brew](https://brew.sh) 包管理器
   - `brew install nvm zsh-autosuggestions`
     - [nvm](https://github.com/nvm-sh/nvm) NodeJS包管理器
