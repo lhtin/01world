@@ -1,4 +1,4 @@
-# 开发工具一览
+# 开发工具及使用笔记
 
 - [oh-my-zsh](https://ohmyz.sh/) Shell
   - `git config --global --add oh-my-zsh.hide-status 1` 取消git状态展示
@@ -8,7 +8,7 @@
     export LC_ALL=en_US.UTF-8
     export LANG=en_US.UTF-8
     ```
-- [brew](https://brew.sh) 包管理器
+- [brew](https://brew.sh) 包管理器（Mac only）
   - `brew install nvm zsh-autosuggestions`
     - [nvm](https://github.com/nvm-sh/nvm) NodeJS包管理器
     - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) zsh自动提示插件
