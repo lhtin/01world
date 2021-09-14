@@ -1,4 +1,4 @@
-# Mac开发环境
+# 开发工具一览
 
 - [oh-my-zsh](https://ohmyz.sh/) Shell
   - `git config --global --add oh-my-zsh.hide-status 1` 取消git状态展示
