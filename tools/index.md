@@ -1,13 +1,5 @@
 # 开发工具及使用笔记
 
-- [oh-my-zsh](https://ohmyz.sh/) Shell
-  - `git config --global --add oh-my-zsh.hide-status 1` 取消git状态展示
-  - `git config --global --add oh-my-zsh.hide-dirty 1` 取消dirty检查
-  - 遇到补全信息导致字符重复的问题时，可以添加下面的内容到.zshrc中。目前我在CnetOS 7.9.2009上遇到
-    ```shell
-    export LC_ALL=en_US.UTF-8
-    export LANG=en_US.UTF-8
-    ```
 - [brew](https://brew.sh) 包管理器（Mac only）
   - `brew install nvm zsh-autosuggestions`
     - [nvm](https://github.com/nvm-sh/nvm) NodeJS包管理器
@@ -57,10 +49,18 @@
   - `git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`
 - zsh-syntax-highlighting
   - `git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting`
+  ```shell
+  plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+  ```
 
-```shell
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-```
+- 减少git检查
+  - `git config --global --add oh-my-zsh.hide-status 1` 取消git状态展示
+  - `git config --global --add oh-my-zsh.hide-dirty 1` 取消dirty检查
+- 遇到补全信息导致字符重复的问题时，可以添加下面的内容到.zshrc中。目前我在CnetOS 7.9.2009上遇到
+    ```shell
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
+    ```
 
 # Windows
 
