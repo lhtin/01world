@@ -163,6 +163,7 @@
 ## VIM配置（`~/.vimrc`）
 
 ```
+source $VIMRUNTIME/vimrc_example.vim
 set enc=utf-8
 set nocompatible
 set nobackup
@@ -179,5 +180,4 @@ if has('mouse')
     set mouse=nvi
   endif
 endif
-source $VIMRUNTIME/vimrc_example.vim
 ```
