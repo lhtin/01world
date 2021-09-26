@@ -76,5 +76,5 @@
 # 其他文档
 
 - [vim](./vim.md)
-- [gdb](./gdb)
-- [git](./git)
+- [gdb](./gdb.md)
+- [git](./git.md)
