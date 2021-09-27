@@ -9,7 +9,6 @@
   - [Visual Studio Code](https://code.visualstudio.com)
   - [Wireshark](https://www.wireshark.org)
 - SSH key免密登录
-  - 
   ```shell
   # 1. 创建key，不要设置passphrase
   ssh-keygen -t ed25519 -C "your_email@example.com"
