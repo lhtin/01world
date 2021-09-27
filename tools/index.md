@@ -13,8 +13,19 @@
   # 1. 创建key，不要设置passphrase
   ssh-keygen -t ed25519 -C "your_email@example.com"
 
-  # 2. 也可以通过将公钥存储到远程服务器上，从而免密登陆
+  # 2. 将公钥存储到远程服务器上
   ssh-copy-id -i ~/.ssh/id_ed25519.pub user_name@ip
+  
+  # 3. 登录测试
+  ssh user_name@ip
+  
+  # 4. 给.ssh/config中添加别名，省去输入user_name@ip的过程
+  Host xxx
+    User user_name
+    HostName ip
+  
+  # 5. 如果没有免密，加-v看下debug日志
+  ssh xxx -v
   ```
 
 # Linux
