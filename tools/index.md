@@ -8,28 +8,13 @@
   - [Chrome](https://www.google.com/chrome)
   - [Visual Studio Code](https://code.visualstudio.com)
   - [Wireshark](https://www.wireshark.org)
-- 生成SSH key并在Github上使用
-  - SSH key用于解决鉴权问题
+- SSH key免密登录
   - 
   ```shell
-  # 1. 创建key
+  # 1. 创建key，不要设置passphrase
   ssh-keygen -t ed25519 -C "your_email@example.com"
 
-  # 2. 启动ssh-agent
-  eval "$(ssh-agent -s)"
-  # 然后将下面的内容添加到~/.ssh/config文件中
-  Host *
-    AddKeysToAgent yes
-    UseKeychain yes
-    IdentityFile ~/.ssh/id_ed25519
-
-  # 3. 添加key到agent，-K表示添加passphrase到keychain
-  ssh-add -K ~/.ssh/id_ed25519
-
-  # 4. 将~/.ssh/id_ed25519.pub添加到Github中
-  pbcopy < ~/.ssh/id_ed25519.pub # 拷贝
-
-  # 5. 也可以通过将公钥存储到远程服务器上，从而免密登陆
+  # 2. 也可以通过将公钥存储到远程服务器上，从而免密登陆
   ssh-copy-id -i ~/.ssh/id_ed25519.pub user_name@ip
   ```
 
