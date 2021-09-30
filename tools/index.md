@@ -59,12 +59,12 @@
 
 - CLI Keyboard Shortcuts(https://cs61c.org/fa21/labs/lab00/)
   When typing commands or file paths:
-  - <tab> will try autocomplete the current term based on what you wrote so far
+  - `<tab>` will try autocomplete the current term based on what you wrote so far
     If the current directory has filename1.txt and filename2.txt, f<tab>1<tab> will result in filename after the first tab, and filename1.txt after you type 1 and the second tab
-   - <up arrow> and <down arrow> will allow you to move through commands you've used previously, so you don't need to type them again.
-   - <ctrl> + a will move the cursor to the beginning of the current line (helpful for fixing mistakes)
-   - <ctrl> + e will move the cursor to the end of the current line (also helpful for fixing mistakes)
-   - <ctrl> + r will let you search through your recently used commands
+   - `<up arrow>` and `<down arrow>` will allow you to move through commands you've used previously, so you don't need to type them again.
+   - `<ctrl> + a` will move the cursor to the beginning of the current line (helpful for fixing mistakes)
+   - `<ctrl> + e` will move the cursor to the end of the current line (also helpful for fixing mistakes)
+   - `<ctrl> + r` will let you search through your recently used commands
 
 # Windows
 
