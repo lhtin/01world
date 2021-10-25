@@ -4,6 +4,7 @@ export PATH=/work/tools/Xilinx/Vivado/2018.3/bin:$HOME/apps/bin:$HOME/apps/riscv
 export RISCV=$HOME/apps/riscv
 export ZSH=$HOME/.oh-my-zsh
 export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # for REPO
 export REPO_URL=https://gitlab.com/lhtin-rivai/git-repo.git
