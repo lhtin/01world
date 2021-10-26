@@ -8,6 +8,7 @@
   - [Chrome](https://www.google.com/chrome)
   - [Visual Studio Code](https://code.visualstudio.com)
   - [Wireshark](https://www.wireshark.org)
+  - [MobaXterm](https://mobaxterm.mobatek.net)（windows）
 - SSH key免密登录
   ```shell
   # 1. 创建key，不要设置passphrase
