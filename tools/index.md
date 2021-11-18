@@ -25,7 +25,7 @@
     User user_name
     HostName ip
   
-  # 5. 如果没有免密，加-v看下debug日志
+  # 5. 如果没有免密，加-v看下debug日志，有可能服务器不支持使用public key登录
   ssh xxx -v
   ```
 
