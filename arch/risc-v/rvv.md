@@ -920,24 +920,24 @@
 
     # Example
 
-     7 6 5 4 3 2 1 0   Element number
+    7 6 5 4 3 2 1 0   Element number
 
-     1 0 0 1 0 1 0 0   v3 contents
-                       vmsbf.m v2, v3
-     0 0 0 0 0 0 1 1   v2 contents
+    1 0 0 1 0 1 0 0   v3 contents
+                      vmsbf.m v2, v3
+    0 0 0 0 0 0 1 1   v2 contents
 
-     1 0 0 1 0 1 0 1   v3 contents
-                       vmsbf.m v2, v3
-     0 0 0 0 0 0 0 0   v2
+    1 0 0 1 0 1 0 1   v3 contents
+                      vmsbf.m v2, v3
+    0 0 0 0 0 0 0 0   v2
 
-     0 0 0 0 0 0 0 0   v3 contents
-                       vmsbf.m v2, v3
-     1 1 1 1 1 1 1 1   v2
+    0 0 0 0 0 0 0 0   v3 contents
+                      vmsbf.m v2, v3
+    1 1 1 1 1 1 1 1   v2
 
-     1 1 0 0 0 0 1 1   v0 vcontents
-     1 0 0 1 0 1 0 0   v3 contents
-                       vmsbf.m v2, v3, v0.t
-     0 1 x x x x 1 1   v2 contents
+    1 1 0 0 0 0 1 1   v0 vcontents
+    1 0 0 1 0 1 0 0   v3 contents
+                      vmsbf.m v2, v3, v0.t
+    0 1 x x x x 1 1   v2 contents
 
 ### 15.5. `vmsif.m` set-including-first mask bit
 
@@ -945,20 +945,20 @@
 
     # Example
 
-     7 6 5 4 3 2 1 0   Element number
+    7 6 5 4 3 2 1 0   Element number
 
-     1 0 0 1 0 1 0 0   v3 contents
-                       vmsif.m v2, v3
-     0 0 0 0 0 1 1 1   v2 contents
+    1 0 0 1 0 1 0 0   v3 contents
+                      vmsif.m v2, v3
+    0 0 0 0 0 1 1 1   v2 contents
 
-     1 0 0 1 0 1 0 1   v3 contents
-                       vmsif.m v2, v3
-     0 0 0 0 0 0 0 1   v2
+    1 0 0 1 0 1 0 1   v3 contents
+                      vmsif.m v2, v3
+    0 0 0 0 0 0 0 1   v2
 
-     1 1 0 0 0 0 1 1   v0 vcontents
-     1 0 0 1 0 1 0 0   v3 contents
-                       vmsif.m v2, v3, v0.t
-     1 1 x x x x 1 1   v2 contents
+    1 1 0 0 0 0 1 1   v0 vcontents
+    1 0 0 1 0 1 0 0   v3 contents
+                      vmsif.m v2, v3, v0.t
+    1 1 x x x x 1 1   v2 contents
 
 ### 15.6. `vmsof.m` set-only-first mask bit
 
@@ -966,20 +966,20 @@
 
     # Example
 
-     7 6 5 4 3 2 1 0   Element number
+    7 6 5 4 3 2 1 0   Element number
 
-     1 0 0 1 0 1 0 0   v3 contents
-                       vmsof.m v2, v3
-     0 0 0 0 0 1 0 0   v2 contents
+    1 0 0 1 0 1 0 0   v3 contents
+                      vmsof.m v2, v3
+    0 0 0 0 0 1 0 0   v2 contents
 
-     1 0 0 1 0 1 0 1   v3 contents
-                       vmsof.m v2, v3
-     0 0 0 0 0 0 0 1   v2
+    1 0 0 1 0 1 0 1   v3 contents
+                      vmsof.m v2, v3
+    0 0 0 0 0 0 0 1   v2
 
-     1 1 0 0 0 0 1 1   v0 vcontents
-     1 1 0 1 0 1 0 0   v3 contents
-                       vmsof.m v2, v3, v0.t
-     0 1 x x x x 0 0   v2 contents
+    1 1 0 0 0 0 1 1   v0 vcontents
+    1 1 0 1 0 1 0 0   v3 contents
+                      vmsof.m v2, v3, v0.t
+    0 1 x x x x 0 0   v2 contents
 
 ### 15.8. Vector Iota Instruction
 
@@ -987,17 +987,17 @@
 
     # Example
 
-     7 6 5 4 3 2 1 0   Element number
+    7 6 5 4 3 2 1 0   Element number
 
-     1 0 0 1 0 0 0 1   v2 contents
-                       viota.m v4, v2 # Unmasked
-     2 2 2 1 1 1 1 0   v4 result
+    1 0 0 1 0 0 0 1   v2 contents
+                      viota.m v4, v2 # Unmasked
+    2 2 2 1 1 1 1 0   v4 result
 
-     1 1 1 0 1 0 1 1   v0 contents
-     1 0 0 1 0 0 0 1   v2 contents
-     2 3 4 5 6 7 8 9   v4 contents
-                       viota.m v4, v2, v0.t # Masked, vtype.vma=0
-     1 1 1 5 1 7 1 0   v4 results
+    1 1 1 0 1 0 1 1   v0 contents
+    1 0 0 1 0 0 0 1   v2 contents
+    2 3 4 5 6 7 8 9   v4 contents
+                      viota.m v4, v2, v0.t # Masked, vtype.vma=0
+    1 1 1 5 1 7 1 0   v4 results
 
 ### 15.9. Vector Element Index Instruction
 
@@ -1082,14 +1082,14 @@
 
     Example use of vcompress instruction
 
-        8 7 6 5 4 3 2 1 0   Element number
+      8 7 6 5 4 3 2 1 0   Element number
 
-        1 1 0 1 0 0 1 0 1   v0
-        8 7 6 5 4 3 2 1 0   v1
-        1 2 3 4 5 6 7 8 9   v2
+      1 1 0 1 0 0 1 0 1   v0
+      8 7 6 5 4 3 2 1 0   v1
+      1 2 3 4 5 6 7 8 9   v2
 
-                                vcompress.vm v2, v1, v0
-        1 2 3 4 8 7 5 2 0   v2
+                              vcompress.vm v2, v1, v0
+      1 2 3 4 8 7 5 2 0   v2
 
 #### 16.5.1. Synthesizing `vdecompress`
 
