@@ -37,6 +37,7 @@
   - `cd -` 回到前一个访问的目录
   - `cd ~` 进入home目录
 - `command 2>&1 | tee xxx.log` 将command的stdout和stderr输出到屏幕，同时保存到xxx.log文件中
+- `> xxx.log && command 2>&1 >> xxx.log | tee -a xxx.log` 将command的stdout和stderr保存到xxx.log文件中，同时将stderr输出到界面
 
 ## oh-my-zsh配置
 
