@@ -4,7 +4,7 @@
 - `git commit --amend` 修改最后一条commit信息，同时将staged中的修改内容包含在里面
   - `git commit --amend --no-edit` 只是将staged中的内容包含在里面，但是不修改commit message，不过hash值是会改变的
 - git stash
-  - `git stash push -u` stash当前的所有改动，包括untracked的文件
+  - `git stash push -u -m "stash message"` stash当前的所有改动，包括untracked的文件
   - `git stash pop` 应用第0个stash并从stash list中丢弃
   - `git stash pop stash@{3}` 应用第3个stash并从stash list中丢弃
   - `git stash show -p stash@{0}` 展示第0个stash（即最近一个stash）中的改动内容
