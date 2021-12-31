@@ -22,7 +22,7 @@
       - [RISC-V](./arch/risc-v/index.md)
   - 编程语言
     - C/C++
-      - GCC
+      - [GCC](./pl/gcc/index.md)
       - LLVM
   - 操作系统
     - 操作系统理论
