@@ -1,5 +1,9 @@
 # GCC 笔记
 
+## GCC options
+
+[./options.md](./options.md)
+
 ## 调试
 
 ### 打印
