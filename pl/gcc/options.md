@@ -406,3 +406,4 @@
     rtl-dfinish                                      :  ON
   *clean_state                                        :  ON
    ```
+- `-fdump-tree-all-all` all后面加上all可以dump更多的调试信息出来，方便理解pass的情况
