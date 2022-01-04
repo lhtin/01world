@@ -407,3 +407,4 @@
   *clean_state                                        :  ON
    ```
 - `-fdump-tree-all-all` all后面加上all可以dump更多的调试信息出来，方便理解pass的情况
+- `-fdump-rtl-all-graph`、`-fdump-tree-all-graph` 生成dump file，并且根据dump file生成对应的.dot文件，然后通过`dot -O -Tpng xxx.dot`生成png图片
