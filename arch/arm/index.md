@@ -14,6 +14,6 @@
   - 32 128 bits: Q0~Q31
   ![image](https://user-images.githubusercontent.com/13173904/148150466-69f0c81a-a939-4d7f-a0c7-7f51a4013488.png)
 - SVE Registers
-  - 32 VL bits(128~2048 bits) data register: Z0~Z31 
+  - 32 VL bits(128\~2048 bits) data register: Z0\~Z31 
   - 16 VL/8 bits mask register: P0~P15
   - FFR(1 First Faulting Register)
