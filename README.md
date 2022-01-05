@@ -20,6 +20,7 @@
   - [Computer Architecture](./arch/index.md)
     - 指令集架构
       - [RISC-V](./arch/risc-v/index.md)
+      - [ARM](./arch/arm/index.md)
   - 编程语言
     - C/C++
       - [GCC](./pl/gcc/index.md)
