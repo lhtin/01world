@@ -11,6 +11,7 @@
 
   int main(){
     myprintf("Hello %s!\n", "World");
+    return 0;
   }
   ```
 
