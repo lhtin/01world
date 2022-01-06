@@ -25,7 +25,7 @@
     - C/C++
       - [GCC](./pl/gcc/index.md)
       - LLVM
-      - [Some C Codes](./pl/c-codes.md)
+      - [Some C/C++ Codes](./pl/c-codes.md)
   - 操作系统
     - 操作系统理论
     - 实现
