@@ -39,4 +39,5 @@
     - [make](./tools/make.md)
     - [gdb](./tools/gdb.md)
     - [git](./tools/git.md)
+    - [english](./tools/english.md)
 
