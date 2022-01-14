@@ -1,6 +1,12 @@
 # GCC 命令
 
-- `-v` 打印GCC driver实际调用的各个阶段的程序。
+- `-fdump-tree-all-all`： all后面加上all可以dump更多的调试信息出来，方便理解pass的情况
+- `-fdump-rtl-all`、`-fdump-rtl-all-graph`： 首先生成dump file，然后根据dump file生成对应的.dot文件，然后通过`dot -O -Tpng xxx.dot`生成png图片
+- `-save-temps`： 将中间文件，比如编译可执行程序时，将预处理后的结果（`.i`）、汇编结果（`.s`）和目标文件（`.o`）保存起来
+- `-dumpdir dir`： 表示将生成的文件放到`dir`目录中，比如上面三个参数生成的文件：`-fdump-tree-all -fdump-rtl-all -save-temps -dumpdir dir`
+- `fno-builtin`：告诉编译器不要识别不带`__builtin_`前缀的builtin方法，也就是说把它当作普通方法对待
+- `-nostdlib`：链接时不默认链接标准库，比如libc、libgcc等。
+- `-v`： 打印GCC driver实际调用的各个阶段的程序。
   
   比如当需要调试编译器时，可以拷贝下面运行的cc1的命令，前面带上`gdb --args`即可：`gdb --args /path/to/gcc/bin/../libexec/gcc/x86_64-pc-linux-gnu/12.0.0/cc1 -quiet -v -iprefix /path/to/gcc/bin/../lib/gcc/x86_64-pc-linux-gnu/12.0.0/ hello.c -quiet -dumpdir a- -dumpbase hello.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/ccK38nl3.s`
   
@@ -43,7 +49,7 @@
    /path/to/gcc/bin/../libexec/gcc/x86_64-pc-linux-gnu/12.0.0/collect2 -plugin /path/to/gcc/bin/../libexec/gcc/x86_64-pc-linux-gnu/12.0.0/liblto_plugin.so -plugin-opt=/path/to/gcc/bin/../libexec/gcc/x86_64-pc-linux-gnu/12.0.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccKjbVli.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 /lib/../lib64/crt1.o /lib/../lib64/crti.o /path/to/gcc/bin/../lib/gcc/x86_64-pc-linux-gnu/12.0.0/crtbegin.o -L/path/to/gcc/bin/../lib/gcc/x86_64-pc-linux-gnu/12.0.0 -L/path/to/gcc/bin/../lib/gcc -L/path/to/gcc/bin/../lib/gcc/x86_64-pc-linux-gnu/12.0.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/path/to/gcc/bin/../lib/gcc/x86_64-pc-linux-gnu/12.0.0/../../.. /tmp/cce83hPF.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /path/to/gcc/bin/../lib/gcc/x86_64-pc-linux-gnu/12.0.0/crtend.o /lib/../lib64/crtn.o
   COLLECT_GCC_OPTIONS='-v' '-mtune=generic' '-march=x86-64' '-dumpdir' 'a.'
   ```
-- `-fdump-passes` 打印编译过程运行的pass
+- `-fdump-passes`： 打印编译过程运行的pass
   ```
   # 比如-O3会运行的pass：
   *warn_unused_result                                 :  ON
@@ -406,5 +412,3 @@
     rtl-dfinish                                      :  ON
   *clean_state                                        :  ON
    ```
-- `-fdump-tree-all-all` all后面加上all可以dump更多的调试信息出来，方便理解pass的情况
-- `-fdump-rtl-all-graph`、`-fdump-tree-all-graph` 生成dump file，并且根据dump file生成对应的.dot文件，然后通过`dot -O -Tpng xxx.dot`生成png图片
