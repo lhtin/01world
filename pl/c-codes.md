@@ -7,7 +7,7 @@
   #include <stdio.h>
 
   #define myprintf(format, ...) \
-    printf("[%s:%d:0] " format, __FILE__, __LINE__, __VA_ARGS__)
+    printf("[%s:%d:0 %s] " format, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
   int main(){
     myprintf("Hello %s!\n", "World");
@@ -17,5 +17,5 @@
 
   output:
   ```
-  [test.c:8:0] Hello World!
+  [test.c:8:0 main] Hello World!
   ```
