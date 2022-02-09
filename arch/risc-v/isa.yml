@@ -500,11 +500,69 @@ RV_M:
   <<: *id_zmmul
   meta:
     version: "2.0"
+    desc: "M Standard Extension for Integer Multiplication and Division"
   DIV:
+    asm: div rd, rs1, rs2
+    desc: |
+      DIV performs an XLEN bits by XLEN bits signed integer division of rs1 by rs2, rounding towards zero.
+      If division by zero, the quotient is -1.
+      If division overflow (i.e. only rs1 is -2^(XLEN - 1) and rs2 is -1), the quotient is -2^(XLEN - 1).
   DIVU:
+    asm: divu rd, rs1, rs2
+    desc: |
+      DIVU performs an XLEN bits by XLEN bits unsigned integer division of rs1 by rs2, rounding towards zero.
+      If division by zero, the quotient is 2^XLEN - 1.
   REM:
+    asm: rem rd, rs1, rs2
+    desc: |
+      REM provides the signed remainder of the DIV division operation. The sign of the result equals the sign of the dividend.
+      If division by zero, the remainder is rs1.
+      If division overflow (i.e. only rs1 is -2^(XLEN - 1) and rs2 is -1), the remainder is 0.
   REMU:
+    asm: remu rd, rs1, rs2
+    desc: |
+      REMU provides the unsigned remainder of the DIVU division operation.
+      If division by zero, the remainder is rs1.
   DIVW:
+    rv64_only: true
+    asm: divw rd, rs1, rs2
+    desc: |
+      DIVW is RV64 instructions that divide the lower 32 bits of rs1 by the lower 32 bits of rs2, treating it as signed integer, placing the 32-bit quotient in rd, sign-extended to 64 bits.
+      If division by zero, the quotient is -1, then sign-extended to 64 bits.
+      If division overflow (i.e. only rs1 is -2^(XLEN - 1) and rs2 is -1), the quotient is -2^(XLEN - 1), then sign-extended to 64 bits.
+    code: |
+      rd_32bit = lower_32bit(rs1) / lower_32bit(rs2)
+      rd = sign_extended(rd_32bit)
   DIVUW:
+    rv64_only: true
+    asm: divuw rd, rs1, rs2
+    desc: |
+      DIVUW is RV64 instructions that divide the lower 32 bits of rs1 by the lower 32 bits of rs2, treating it as unsigned integer, placing the 32-bit quotient in rd, sign-extended to 64 bits.
+      If division by zero, the quotient is 2^32 - 1, then sign-extended to 64 bits.
+    code: |
+      rd_32bit = unsigned(lower_32bit(rs1)) / unsigned(lower_32bit(rs2))
+      rd = sign_extended(rd_32bit)
   REMW:
+    rv64_only: true
+    asm: remw rd, rs1, rs2
+    desc: |
+      REMW is RV64 instructions that provides the signed remainder of the DIVW division operation and placing the remainder in rd, sign-extended to 64 bits. The sign of the result equals the sign of the dividend.
+      If division by zero, the remainder is rs1, then sign-extended to 64 bits.
+      If division overflow (i.e. only rs1 is -2^(XLEN - 1) and rs2 is -1), the remainder is 0, then sign-extended to 64 bits.
+    code: |
+      rd_32bit = lower_32bit(rs1) % lower_32bit(rs2)
+      rd = sign_extended(rd_32bit)
   REMUW:
+    rv64_only: true
+    asm: remuw rd, rs1, rs2
+    desc: |
+      REMUW is RV64 instructions that provides the unsigned remainder of the DIVW division operation and placing the remainder in rd, sign-extended to 64 bits.
+      If division by zero, the remainder is rs1, then sign-extended to 64 bits.
+    code: |
+      rd_32bit = unsigned(lower_32bit(rs1)) % unsigned(lower_32bit(rs2))
+      rd = sign_extended(rd_32bit)
+
+RV_A:
+  meta:
+    version: "2.1"
+    desc: "A Standard Extension for Atomic Instructions"
