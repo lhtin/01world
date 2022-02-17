@@ -73,7 +73,8 @@ Some difference is because the backward compatibility intrinsic is different.
   | Yes     | N/A  | Yes | `vmseq_vv_i8m1_b8_mu(mask, vd, vs1, vs2, vl)`<br>`vmseq_vv_i8m1_b8_m(mask, vd, vs1, vs2, vl)` |
 
 - only tail policy
-  Some intrinsics be considered no mask operation even though have mask parameters. Because the mask parameter in there doesn't control the active or inactive status of vd's elements. like `vmerge.vvm`, `vcompress.vm`.
+  
+  Some intrinsics be considered non-mask operation even though have mask parameters. Because the mask parameter in there doesn't control the active or inactive status of vd's elements. like `vmerge.vvm`, `vcompress.vm`.
   - 11.4. Vector Integer Add-with-Carry / Subtract-with-Borrow Instructions
     - vadc.vvm, vadc.vxm, vadc.vim
     - vsbc.vvm, vsbc.vxm
