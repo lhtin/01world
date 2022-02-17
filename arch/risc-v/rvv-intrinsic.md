@@ -28,7 +28,7 @@ Some difference is because the backward compatibility intrinsic is different.
   - 14\. Vector Reduction Operations
   - 15.8. Vector Iota Instruction
   - 15.9. Vector Element Index Instruction
-  - 16.3. Vector Slide Instructions
+  - 16.3. Vector Slide Instructions (当前的intrinsic文档，vfclass没有提供_tu的版本，但是根据ISA规范，应该要提供，需要再确认下）
   - 16.4. Vector Register Gather Instructions
 
   | Masked? | TU? | MU? | Intrinsic |
@@ -84,7 +84,7 @@ Some difference is because the backward compatibility intrinsic is different.
     - vmv.s.x
   - 16.2. Floating-Point Scalar Move Instructions
     - vfmv.s.f
-  - 16.5. Vector Compress Instruction
+  - 16.5. Vector Compress Instruction (当前intrinsic文档没有提供_tu版本，但是根据ISA应该提供)
 
   | Masked? | TU? | MU? | Intrinsic |
   | ------- | --- | --- | --------- |
