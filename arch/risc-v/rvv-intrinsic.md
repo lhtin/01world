@@ -23,6 +23,7 @@ Some difference is because the backward compatibility intrinsic is different.
   - 12.4. Vector Single-Width Scaling Shift Instructions
   - 12\. Vector Fixed-Point Arithmetic Instructions
   - 13\. Vector Floating-Point Instructions
+    - 13.14. Vector Floating-Point Classify Instruction (当前的intrinsic文档，vfclass没有提供_tu的版本，但是根据ISA规范，应该要提供，需要再确认下）
     - except 13.6, 13.7, 13.13, 13.15, 13.16
   - 14\. Vector Reduction Operations
   - 15.8. Vector Iota Instruction
