@@ -73,6 +73,7 @@ Some difference is because the backward compatibility intrinsic is different.
   | Yes     | N/A  | Yes | `vmseq_vv_i8m1_b8_mu(mask, vd, vs1, vs2, vl)`<br>`vmseq_vv_i8m1_b8_m(mask, vd, vs1, vs2, vl)` |
 
 - only tail policy
+  Some intrinsics be considered no mask operation even though have mask parameters. Because the mask parameter in there doesn't control the active or inactive status of vd's elements. like `vmerge.vvm`, `vcompress.vm`.
   - 11.4. Vector Integer Add-with-Carry / Subtract-with-Borrow Instructions
     - vadc.vvm, vadc.vxm, vadc.vim
     - vsbc.vvm, vsbc.vxm
@@ -90,11 +91,6 @@ Some difference is because the backward compatibility intrinsic is different.
   | ------- | --- | --- | --------- |
   | No      | No  | N/A | `vmv_s_x_i8m1_ta(src, vl)`<br>`vmv_s_x_i8m1(src, vl)` |
   | No      | Yes | N/A | `vmv_s_x_i8m1_tu(dest, src, vl)` |
-
-  | Masked? | TU? | MU? | Intrinsic |
-  | ------- | --- | --- | --------- |
-  | No      | No  | N/A | `vmerge_vvm_i8m1_ta(vs1, vs2, select, vl)`<br>`vmerge_vvm_i8m1(vs1, vs2, select, vl)` |
-  | No      | Yes | N/A | `vmerge_vvm_i8m1_tu(vs1, vs2, select, vl)` |
 
 - ignore mask policy and ignore tail policy
   - 7\. Mask load and streo(vlm, vsm)
