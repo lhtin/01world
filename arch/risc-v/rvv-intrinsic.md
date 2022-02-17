@@ -92,8 +92,8 @@ Some difference is because the backward compatibility intrinsic is different.
 
   | Masked? | TU? | MU? | Intrinsic |
   | ------- | --- | --- | --------- |
-  | No      | No  | N/A | `vmerge_vvm_i8m1_ta(mask, vs1, vs2, vl)`<br>`vmerge_vvm_i8m1(mask, vs1, vs2, vl)` |
-  | No      | Yes | N/A | `vmerge_vvm_i8m1_tu(mask, vs1, vs2, vl)` |
+  | No      | No  | N/A | `vmerge_vvm_i8m1_ta(vs1, vs2, select, vl)`<br>`vmerge_vvm_i8m1(vs1, vs2, select, vl)` |
+  | No      | Yes | N/A | `vmerge_vvm_i8m1_tu(vs1, vs2, select, vl)` |
 
 - ignore mask policy and ignore tail policy
   - 7\. Mask load and streo(vlm, vsm)
