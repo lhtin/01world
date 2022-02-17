@@ -10,7 +10,6 @@ Some difference is because the backward compatibility intrinsic is different.
   - 11.1. Vector Single-Width Integer Add and Subtract
   - 11.2. Vector Widening Integer Add/Subtract
   - 11.3. Vector Integer Extension
-  - 11.4. Vector Integer Add-with-Carry / Subtract-with-Borrow Instructions
   - 11.5. Vector Bitwise Logical Instructions
   - 11.6. Vector Single-Width Shift Instructions
   - 11.7. Vector Narrowing Integer Right Shift Instructions
