@@ -40,15 +40,6 @@ Some difference is because the backward compatibility intrinsic is different.
   | Yes     | Yes | No  | `vadd_vv_i8m1_tuma(mask, vd, vs2, vs1, vl)` |
   | Yes     | Yes | Yes | `vadd_vv_i8m1_tumu(mask, vd, vs2, vs1, vl)` |
 
-  | Masked? | TU? | MU? | Intrinsic |
-  | ------- | --- | --- | --------- |
-  | No      | No  | N/A | `redsum_vs_i8m1_i8m1_ta(vs2, vs1, vl)`<br>`redsum_vs_i8m1_i8m1(vd, vs1, vs2, vl)` |
-  | No      | Yes | N/A | `redsum_vs_i8m1_i8m1_tu(vd, vs2, vs1, vl)` |
-  | Yes     | No  | No  | `redsum_vs_i8m1_i8m1_tama(mask, vs2, vs1, vl)` |
-  | Yes     | No  | Yes | `redsum_vs_i8m1_i8m1_tamu(mask, vd, vs2, vs1, vl)`<br>`redsum_vs_i8m1_i8m1_m(mask, vd, vs2, vs1, vl)` |
-  | Yes     | Yes | No  | `redsum_vs_i8m1_i8m1_tuma(mask, vd, vs2, vs1, vl)` |
-  | Yes     | Yes | Yes | `redsum_vs_i8m1_i8m1_tumu(mask, vd, vs2, vs1, vl)` |
-
 - mask policy and tail policy and vd get involved
   - 11.13. Vector Single-Width Integer Multiply-Add Instructions
   - 11.14. Vector Widening Integer Multiply-Add Instructions
