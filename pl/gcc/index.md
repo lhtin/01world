@@ -8,19 +8,36 @@
 
 ### 打印
 
-- gimple-pretty-print.h
-- print-rtl.h, rtl.h, print-tree.h
-- gdb
+- print-tree.h
+
   ```
-  call gimple_dump_bb(stderr, bb, 0, 0)
-  call print_gimple_seq(stderr, stmts, 0, 0)
-  call print_gimple_stmt(stderr, stmt, 0, 0)
-  call print_generic_expr(stderr, from, 0)
-  call print_rtl_single(stderr, last)
-  call print_rtl(stderr, get_insns())
-  p gimple_code(stmt)
+  call debug_tree(decl) # 打印tree的信息
   ```
 
+- gimple-pretty-print.h
+
+  ```
+  # gimple*
+  call print_gimple_stmt(stderr, stmt, 0, 0)
+  call print_generic_expr(stderr, from, 0)
+  
+  # gimple_seq
+  call print_gimple_seq(stderr, stmts, 0, 0)
+  
+  # basic_block
+  call gimple_dump_bb(stderr, bb, 0, 0)
+  ```
+
+- print-rtl.h
+
+  ```
+  # rtx
+  # 打印单个rtx
+  call print_rtl_single(stderr, last)
+  # 打印rtx列表
+  # get_insns() 获取当前的rtx list
+  call print_rtl(stderr, get_insns())
+  ```
 
 ## Passes
 
