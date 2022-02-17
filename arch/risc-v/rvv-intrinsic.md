@@ -74,7 +74,7 @@ Some difference is because the backward compatibility intrinsic is different.
 
 - only tail policy
   
-  Some intrinsics are considered non-mask operations even though have mask parameters. Because the mask parameter in there doesn't control the active or inactive status of vd's elements. like `vmerge.vvm`, `vcompress.vm`.
+  Some intrinsics are considered non-mask operations even though have mask parameters. Because the mask parameter doesn't control the active or inactive status of vd's elements. Like `vmerge.vvm`, `vcompress.vm`.
   - 11.4. Vector Integer Add-with-Carry / Subtract-with-Borrow Instructions
     - vadc.vvm, vadc.vxm, vadc.vim
     - vsbc.vvm, vsbc.vxm
