@@ -7,6 +7,7 @@
 ## GCC开发的坑
 
 - 头文件的改动，不会触发引用到该头文件的c文件重新编译，会导致代码不更新。解决方法是手动改下每个该头文件的c文件。
+- error: unrecognizable insn 错误，可能是因为没有找到合适的pattern，可能是constraint没有匹配的，虽然predicate过了。一般在reload pass中出错
 
 ## 调试
 
