@@ -24,7 +24,7 @@
   - 编程语言
     - C/C++
       - [GCC](./pl/gcc/index.md)
-      - LLVM
+      - [LLVM](./pl/llvm/index.md)
       - [Some C/C++ Codes](./pl/c-codes.md)
   - 操作系统
     - 操作系统理论
