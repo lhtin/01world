@@ -11,7 +11,7 @@
 
 ## 调试
 
-- `gcc hello.c -v` 找到cc1的命令，因为gcc是一个wrapper，实际调用cc1进行编译
+- `gcc hello.c -v` 找到cc1的命令，因为gcc是一个wrapper，实际调用cc1进行编译。当然前提是编译时使用`-O0 -g`编译的。
 - `gdb --args /usr/local/libexec/gcc/x86_64-pc-linux-gnu/7.5.0/cc1 -quiet -v hello.c -quiet -dumpbase hello.c -mtune=generic -march=x86-64 -auxbase hello -version -o /tmp/ccJgWTK3.s` 调试cc1
 
 ### 打印
