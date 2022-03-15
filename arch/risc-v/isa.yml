@@ -566,3 +566,47 @@ RV_A:
   meta:
     version: "2.1"
     desc: "A Standard Extension for Atomic Instructions"
+  LR.W:
+    asm: lr.w rd, (rs1)
+    desc: LR.W loads a word from the address in rs1, places the sign-extended value in rd, and registers a reservation set--a set of bytes that subsumes the bytes in the addressed word.
+  SC.W:
+    asm: sc.w rd, rs2, (rs1)
+    desc: SC.W conditionally writes a word in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd (sign-extend the value on RV64). Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
+  LR.D:
+    rv64_only: true
+    asm: lr.d rd, (rs1)
+    desc: LR.D loads a doubleword from the address in rs1, places the sign-extended value in rd, and registers a reservation set--a set of bytes that subsumes the bytes in the addressed doubleword.
+  SC.D:
+    rv64_only: true
+    asm: sc.d rd, rs2, (rs1)
+    desc: SC.D conditionally writes a doubleword in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd. Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
+
+RV_F:
+  meta:
+    version: "2.2"
+    desc: "A Standard Extension for Single-Precision Floating-Point"
+  FLW:
+    asm: flw rd, imm12(rs1)
+    desc: The FLW instruction loads a single-precision floating-point value from memory into floating-point register rd.
+  FSW:
+    asm: fsw rs2, imm12(rs1)
+    desc: FSW stores a single-precision value from floating-point register rs2 to memory.
+  FADD.S:
+    asm: fadd.s rd, rs1, rs2
+  FSUB.S:
+    asm: fsub.s rd, rs1, rs2
+
+RV_D:
+  meta:
+    version: "2.2"
+    desc: "A Standard Extension for Double-Precision Floating-Point"
+
+RV_Q:
+  meta:
+    version: "2.2"
+    desc: "A Standard Extension for Quad-Precision Floating-Point"
+
+RV_C:
+  meta:
+    version: "2.0"
+    desc: "A Standard Extension for Compressed Instructions"
