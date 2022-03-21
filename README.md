@@ -29,7 +29,7 @@
   - 操作系统
     - 操作系统理论
     - 实现
-      - Linux
+      - [Linux](./os/linux/index.md)
       - RT-Tread
   - 资料
     - 书
