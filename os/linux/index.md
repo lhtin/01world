@@ -17,3 +17,4 @@
   - CentOS 7上面需要安装`glib-devel pixman-devel`
 - `make -j10`
 - `make install`
+- `qemu-riscv64 -B 0x10000000 a.out`
