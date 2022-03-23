@@ -18,3 +18,4 @@
 - `make -j10`
 - `make install`
 - `qemu-riscv64 -B 0x10000000 a.out`
+- `qemu-riscv64 -L /path/to/riscv/sysroot/ gcc`
