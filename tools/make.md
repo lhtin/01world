@@ -1,4 +1,8 @@
-# Make Note
+# Make
+
+## Note List
+
+- `$(MAKE)`: 在Makefile里面调用make时使用MAKE变量，可以让`-j`等参数传到子make命令中去。[参考](https://www.gnu.org/software/make/manual/html_node/MAKE-Variable.html#MAKE-Variable)
 
 ## Debug Makefile
 
