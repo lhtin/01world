@@ -19,3 +19,5 @@
 - `make install`
 - `qemu-riscv64 -B 0x10000000 a.out`
 - `qemu-riscv64 -L /path/to/riscv/sysroot/ gcc`
+- 运行ubuntu server参加这个链接：https://wiki.ubuntu.com/RISC-V
+  - 如果在非ubuntu环境下，可以先wget对应opensbi和u-boot-qemu的.deb包然后解压获取所需文件
