@@ -14,6 +14,7 @@
     - `git checkout stable-X.YY`
     - `cd qemu`
 - `./configure --target-list=x86_64-softmmu,riscv64-softmmu,riscv64-linux-user --prefix=/path/to/dir`
+  - `softmmu` 表示裸机模式，可以用于启动Linux操作系统，`linux-user` 表示用户模式，可以直接用于启动用户的程序。
   - CentOS 7上面需要安装`glib-devel pixman-devel`
 - `make -j10`
 - `make install`
