@@ -1,5 +1,11 @@
 # GCC 命令
 
+## 功能参数
+
+- `-frename-registers`: Attempt to avoid false dependencies in scheduled code by making use of registers left over after register allocation. This optimization will most benefit processors with lots of registers. It can, however, make debugging impossible, since variables will no longer stay in a "home register".
+
+## utils
+
 - `-H`: 打印源文件依赖的头文件树
 - `-fno-common`: 不把未初始化的全局变量放到COMMON块中处理
 - `-fdump-tree-all-all`： all后面加上all可以dump更多的调试信息出来，方便理解pass的情况
