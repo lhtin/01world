@@ -3,6 +3,7 @@
 ## 功能参数
 
 - `-frename-registers`: Attempt to avoid false dependencies in scheduled code by making use of registers left over after register allocation. This optimization will most benefit processors with lots of registers. It can, however, make debugging impossible, since variables will no longer stay in a "home register".
+- `-fno-inline`: 禁止inline函数
 
 ## utils
 
