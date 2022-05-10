@@ -6,6 +6,7 @@
 
 ## utils
 
+- `-Wl,option`: 给链接器传的参数，比如`-Wl,-verbose`会输出链接过程，包括所用的链接脚本，库文件等
 - `-H`: 打印源文件依赖的头文件树
 - `-fno-common`: 不把未初始化的全局变量放到COMMON块中处理
 - `-fdump-tree-all-all`： all后面加上all可以dump更多的调试信息出来，方便理解pass的情况
