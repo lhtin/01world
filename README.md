@@ -41,3 +41,9 @@
     - [git](./tools/git.md)
     - [english](./tools/english.md)
 
+# Blog
+
+- [软硬件接口之内存模型及RISC-V内存模型介绍](./blog/memory-model.md)（2022-5-17）
+
+
+
