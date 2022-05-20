@@ -1,6 +1,8 @@
 # 开发工具及使用笔记
 
-- [brew](https://brew.sh) 包管理器（Mac only）
+一键初始化：`/bin/bash -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/01world/-/raw/main/tools/init-dev-env.sh)"`
+
+- [brew](https://brew.sh) 包管理器（Mac and Linux and WSL）
   - `/bin/bash -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/brew-install/-/raw/tin/install.sh)"`
   - `brew install nvm`
     - [nvm](https://github.com/nvm-sh/nvm) NodeJS包管理器
