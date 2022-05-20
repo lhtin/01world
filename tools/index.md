@@ -48,15 +48,19 @@
 [my .zshrc](./.zshrc)
 
 - oh-my-zsh
-  - `sh -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/ohmyzsh/-/raw/master/tools/install.sh)"`
 - zsh-autosuggestins
-  - `git clone https://gitlab.com/lhtin-rivai/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`
 - zsh-syntax-highlighting
-  - `git clone https://gitlab.com/lhtin-rivai/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting`
 
-```shell
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-```
+  ```
+  sh -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/ohmyzsh/-/raw/master/tools/install.sh)"
+  git clone https://gitlab.com/lhtin-rivai/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  git clone https://gitlab.com/lhtin-rivai/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+  ```
+- 修改.zshrc
+
+  ```shell
+  plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+  ```
 
 - 减少git检查
   - `git config --global --add oh-my-zsh.hide-status 1` 取消git状态展示
