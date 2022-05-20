@@ -1,6 +1,7 @@
 # 开发工具及使用笔记
 
 - [brew](https://brew.sh) 包管理器（Mac only）
+  - `/bin/bash -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/brew-install/-/raw/tin/install.sh)"`
   - `brew install nvm zsh-autosuggestions`
     - [nvm](https://github.com/nvm-sh/nvm) NodeJS包管理器
     - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) zsh自动提示插件
