@@ -1,6 +1,7 @@
 # AArch64
 
 - [ISA相关内容搜索](https://developer.arm.com/search)
+- [ARM SVE](https://developer.arm.com/documentation/100891/0612/coding-considerations/using-sve-intrinsics-directly-in-your-c-code)
 
 ## Registers
 
