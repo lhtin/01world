@@ -1,9 +1,5 @@
 > Tintin's Computer World
 
-## Apps
-
-- [RISC-V ISA指令速览](./app/riscv)
-
 ## 前言
 
 欢迎来到**01 World**，这里是我通过学习和思考所构建的有关计算机领域的知识体系。内容包括计算机体系结构、编程语言、操作系统、软件工程等。对于涉及到的任何技术，我都会尝试回答**为什么需要这个技术(why)**、**这个技术对外的接口(What)**、**这个技术的实现原理(How)**以及**它的优缺点和适用范围**这四个问题。
@@ -43,9 +39,13 @@
     - [git](./tools/git.md)
     - [english](./tools/english.md)
 
-# Blog
+## Blog
 
 - [软硬件接口之内存模型及RISC-V内存模型介绍](./blog/memory-model.md)（2022-5-17）
+
+## Apps
+
+- [RISC-V ISA指令速览](./app/riscv)
 
 
 
