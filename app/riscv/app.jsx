@@ -32,7 +32,7 @@ const parse = (opcode, info) => {
 };
 
 const getISA = () => {
-  return fetch('/arch/risc-v/isa.yml')
+  return fetch('../../arch/risc-v/isa.yml')
     .then((res) => res.text())
     .then((yml) => {
       const obj = jsyaml.load(yml);
