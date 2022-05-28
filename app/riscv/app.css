@@ -1,0 +1,54 @@
+.btn, .btn-small, .btn-large {
+  text-transform: none;
+  margin: 5px;
+}
+
+.container {
+  max-width: 800px;
+}
+
+.checkbox+.checkbox, .radio+.radio {
+  margin-top: 10px;
+}
+
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.margin-top {
+  margin-top: 10px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.margin-left-20 {
+  margin-left: 20px;
+}
+
+.margin-right-20 {
+  margin-right: 20px;
+}
+
+.asm code {
+  font-size: 120%;
+}
+
+.flexbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.panel-heading {
+  cursor: pointer;
+}

@@ -1,12 +1,9 @@
-HELPER:
-  - sign_extended(imm)
-
 RV32I: &id_rv32i
   meta:
     version: "2.1"
   ADDI:
     asm: addi rd, rs1, imm12
-    desc: ADDI adds the sign-extended 12-bit immediate to register rs1. Arithmetic overflow is ignored and the result is simply the low XLEN bits of the result. ADDI rd, rs1, 0 is used to implement the MV rd, rs1 assembler pseudoinstruction.
+    desc: ADDI adds the sign-extended 12-bit immediate to register rs1. Arithmetic overflow is ignored and the result is simply the low XLEN bits of the result.
     code: |
       imm = sign_extended(imm12)
       rd = rs1 + imm
@@ -15,8 +12,6 @@ RV32I: &id_rv32i
         asm: mv rd, rs1
         real: addi rd, rs1, 0
         desc: MV copies the value in register rs1 to register rd.
-        code: |
-          rd = rs1
       NOP:
         asm: nop
         real: addi x0, x0, 0
@@ -25,14 +20,13 @@ RV32I: &id_rv32i
     asm: slti rd, rs1, imm12
     desc: SLTI (set less than immediate) places the value 1 in register rd if register rs1 is less than the sign-extended 12-bit immediate when both are treated as signed numbers, else 0 is written to rd.
     code: |
-      imm = sign_extended(imm12)
-      rd = rs1 < imm ? 1 : 0
+      rd = signed(rs1) < imm12 ? 1 : 0
   SLTIU:
     asm: sltiu rd, rs1, imm12
     desc: SLTIU is similar with SLTI but compares the values as unsigned numbers (i.e., the immediate is first sign-extended to XLEN bits then treated as an unsigned number).
     code: |
       imm = sign_extended(imm12)
-      rd = unsign(rs1) < unsign(imm) ? 1 : 0
+      rd = unsigned(rs1) < unsigned(imm) ? 1 : 0
     pseudos:
       SEQZ:
         asm: seqz rd, rs1
@@ -75,16 +69,16 @@ RV32I: &id_rv32i
     asm: srai rd, rs1, uimm5
     desc: SRAI is an arithmetic right shift (the original sign bit is copied into the vacated upper bits).
   LUI:
-    asm: lui rd, imm20_upper
+    asm: lui rd, imm20
     desc: LUI (load upper immediate) is used to build 32-bit constants and uses the U-type format. LUI places the 32-bit U-immediate value into the destination register rd, filling in the lowest 12 bits with zeros.
     code: |
-      imm = imm20_upper << 12
+      imm = imm20 << 12
       rd = imm
   AUIPC:
-    asm: auipc rd, imm20_upper
+    asm: auipc rd, imm20
     desc: AUIPC (add upper immediate to pc) is used to build pc-relative addresses and uses the U-type format. AUIPC forms a 32-bit offset from the U-immediate, filling in the lowest 12 bits with zeros, adds this offset to the address of the AUIPC instruction, then places the result in register rd.
     code: |
-      imm = imm20_upper << 12
+      imm = imm20 << 12
       rd = pc + imm
   ADD:
     asm: add rd, rs1, rs2
@@ -105,7 +99,7 @@ RV32I: &id_rv32i
     asm: sltu rd, rs1, rs2
     desc: SLTU perform unsigned compares, writing 1 to rd if rs1 < rs2, 0 otherwise.
     code: |
-      rd = unsign(rs1) < unsign(rs2) ? 1 : 0
+      rd = unsigned(rs1) < unsigned(rs2) ? 1 : 0
   AND:
     asm: and rd, rs1, rs2
     desc: AND are logical operations that perform bitwise AND on register rs1 and rs2 and place the result in rd.
@@ -132,129 +126,129 @@ RV32I: &id_rv32i
     desc: SRL perform logical right shifts on the value in register rs1 by the shift amount held in the lower 5 bits of register rs2.
     code: |
       uimm5 = uimm5_low(rs2)
-      rd = unsign(rs1) >> uimm5
+      rd = unsigned(rs1) >> uimm5
   SRA:
     asm: sra rd, rs1, rs2
     desc: SRA perform arithmetic right shifts on the value in register rs1 by the shift amount held in the lower 5 bits of register rs2.
     code: |
       uimm5 = uimm5_low(rs2)
-      rd = sign(rs1) >> uimm5
+      rd = signed(rs1) >> uimm5
   JAL:
-    asm: jal rd, offset20
-    desc: The jump and link (JAL) instruction uses the J-type format, where the offset20 encodes a signed offset in multiples of 2 bytes. The offset is sign-extended and added to the address of the jump instruction to form the jump target address. Jumps can therefore target a ±1 MiB range. JAL stores the address of the instruction following the jump (pc+4) into register rd. The standard software calling convention uses x1 as the return address register and x5 as an alternate link register.
+    asm: jal rd, imm20
+    desc: The jump and link (JAL) instruction uses the J-type format, where the imm20 encodes a signed offset in multiples of 2 bytes. The offset is sign-extended and added to the address of the jump instruction to form the jump target address. Jumps can therefore target a ±1 MiB range. JAL stores the address of the instruction following the jump (pc+4) into register rd. The standard software calling convention uses x1 as the return address register and x5 as an alternate link register.
     code: |
       rd = pc + 4
-      goto pc + sign(offset20 << 1)
+      goto pc + (imm20 << 1)
     pseudos:
       J:
-        asm: j offset20
-        real: jal x0, offset20
+        asm: j imm20
+        real: jal x0, imm20
         desc: Plain unconditional jumps.
         code: |
-          got pc + sign(offset20 << 1)
+          goto pc + (imm20 << 1)
   JALR:
-    asm: jalr rd, rs1, offset12
-    desc: The target address is obtained by adding the sign-extended 12-bit offset12 to the register rs1, then setting the least-significant bit of the result to zero. The address of the instruction following the jump (pc+4) is written to register rd. Register x0 can be used as the destination if the result is not required. The JALR instruction was defined to enable a two-instruction sequence to jump anywhere in a 32-bit absolute address range. A LUI instruction can first load rs1 with the upper 20 bits of a target address, then JALR can add in the lower bits. Similarly, AUIPC then JALR can jump anywhere in a 32-bit pc-relative address range.
+    asm: jalr rd, rs1, imm12
+    desc: The target address is obtained by adding the sign-extended 12-bit imm12 to the register rs1, then setting the least-significant bit of the result to zero. The address of the instruction following the jump (pc+4) is written to register rd. Register x0 can be used as the destination if the result is not required. The JALR instruction was defined to enable a two-instruction sequence to jump anywhere in a 32-bit absolute address range. A LUI instruction can first load rs1 with the upper 20 bits of a target address, then JALR can add in the lower bits. Similarly, AUIPC then JALR can jump anywhere in a 32-bit pc-relative address range.
     code: |
       rd = pc + 4
-      goto rs1 + sign(offset12)
+      goto rs1 + imm12
   # 2.5 Control Transfer Instructions
   # Conditional Branches
   BEQ:
-    asm: beq rs1, rs2, offset12
+    asm: beq rs1, rs2, imm12
     desc: BEQ take the branch if registers rs1 and rs2 are equal. The 12-bit B-immediate encodes signed offsets in multiples of 2 bytes. The offset is sign-extended and added to the address of the branch instruction to give the target address.
     code: |
       if (rs1 == rs2) {
-        next_pc = current_pc + sign_extended(offset12 << 1)
+        next_pc = current_pc + (imm12 << 1)
       } else {
         next_pc = current_pc + 4
       }
   BNE:
-    asm: bne rs1, rs2, offset12
+    asm: bne rs1, rs2, imm12
     desc: BNE take the branch if registers rs1 and rs2 are unequal. The 12-bit B-immediate encodes signed offsets in multiples of 2 bytes. The offset is sign-extended and added to the address of the branch instruction to give the target address.
     code: |
       if (rs1 != rs2) {
-        next_pc = current_pc + sign_extended(offset12 << 1)
+        next_pc = current_pc + (imm12 << 1)
       } else {
         next_pc = current_pc + 4
       }
   BLT:
-    asm: blt rs1, rs2, offset12
+    asm: blt rs1, rs2, imm12
     desc: BLT take the branch if rs1 is less than rs2, using signed comparison.
     code: |
       if (rs1 < rs2) {
-        next_pc = current_pc + sign_extended(offset12 << 1)
+        next_pc = current_pc + (imm12 << 1)
       } else {
         next_pc = current_pc + 4
       }
     pseudos:
       BGT:
-        asm: bgt rs1, rs2, offset12
-        real: blt rs2, rs1, offset12
+        asm: bgt rs1, rs2, imm12
+        real: blt rs2, rs1, imm12
         desc: BGT take the branch if rs1 is greater than rs2, using signed comparison.
         code: |
           if (rs1 > rs2) {
-            next_pc = current_pc + sign_extended(offset12 << 1)
+            next_pc = current_pc + (imm12 << 1)
           } else {
             next_pc = current_pc + 4
           }
   BLTU:
-    asm: bltu rs1, rs2, offset12
+    asm: bltu rs1, rs2, imm12
     desc: BLTU take the branch if rs1 is less than rs2, using unsigned comparison.
     code: |
       if (unsigned(rs1) < unsigned(rs2)) {
-        next_pc = current_pc + sign_extended(offset12 << 1)
+        next_pc = current_pc + (imm12 << 1)
       } else {
         next_pc = current_pc + 4
       }
     pseudos:
       BGTU:
-        asm: bgtu rs1, rs2, offset12
-        real: bltu rs2, rs1, offset12
+        asm: bgtu rs1, rs2, imm12
+        real: bltu rs2, rs1, imm12
         desc: BGTU take the branch if rs1 is greater than rs2, using unsigned comparison.
         code: |
           if (unsigned(rs1) > unsigned(rs2)) {
-            next_pc = current_pc + sign_extended(offset12 << 1)
+            next_pc = current_pc + (imm12 << 1)
           } else {
             next_pc = current_pc + 4
           }
   BGE:
-    asm: bge rs1, rs2, offset12
+    asm: bge rs1, rs2, imm12
     desc: BGE take the branch if rs1 is greater or equal than rs2, using signed comparison.
     code: |
       if (rs1 >= rs2) {
-        next_pc = current_pc + sign_extended(offset12 << 1)
+        next_pc = current_pc + (imm12 << 1)
       } else {
         next_pc = current_pc + 4
       }
     pseudos:
       GLE:
-        asm: ble rs1, rs2, offset12
-        real: bge rs2, rs1, offset12
+        asm: ble rs1, rs2, imm12
+        real: bge rs2, rs1, imm12
         desc: BLE take the branch if rs1 is less or equal than rs2, using signed comparison.
         code: |
           if (rs1 > rs2) {
-            next_pc = current_pc + sign_extended(offset12 << 1)
+            next_pc = current_pc + (imm12 << 1)
           } else {
             next_pc = current_pc + 4
           }
   BGEU:
-    asm: bgeu rs1, rs2, offset12
+    asm: bgeu rs1, rs2, imm12
     desc: BGEU take the branch if rs1 is greater and equal than rs2, using unsigned comparison.
     code: |
       if (unsigned(rs1) >= unsigned(rs2)) {
-        next_pc = current_pc + sign_extended(offset12 << 1)
+        next_pc = current_pc + (imm12 << 1)
       } else {
         next_pc = current_pc + 4
       }
     pseudos:
       BLEU:
-        asm: bleu rs1, rs2, offset12
-        real: bgeu rs2, rs1, offset12
+        asm: bleu rs1, rs2, imm12
+        real: bgeu rs2, rs1, imm12
         desc: BLEU take the branch if rs1 is less or equal than rs2, using unsigned comparison.
         code: |
           if (unsigned(rs1) > unsigned(rs2)) {
-            next_pc = current_pc + sign_extended(offset12 << 1)
+            next_pc = current_pc + (imm12 << 1)
           } else {
             next_pc = current_pc + 4
           }
@@ -262,28 +256,28 @@ RV32I: &id_rv32i
   # 2.6 Load and Store Instructions
 
   LW:
-    asm: lw rd, offset(rs1)
+    asm: lw rd, imm12(rs1)
     desc: LW loads a 32-bit value from memory into rd.
   LH:
-    asm: lh rd, offset(rs1)
+    asm: lh rd, imm12(rs1)
     desc: LH loads a 16-bit value from memory, then sign-extends to 32-bits before storing in rd.
   LHU:
-    asm: lhu rd, offset(rs1)
+    asm: lhu rd, imm12(rs1)
     desc: LHU loads a 16-bit value from memory, then zero extends to 32-bits before storing in rd.
   LB:
-    asm: lb rd, offset(rs1)
+    asm: lb rd, imm12(rs1)
     desc: LB loads a 8-bit value from memory, then sign-extends to 32-bits before storing in rd.
   LBU:
-    asm: lbu rd, offset(rs1)
+    asm: lbu rd, imm12(rs1)
     desc: LBU loads a 8-bit value from memory, then zero extends to 32-bits before storing in rd.
   SW:
-    asm: sw rs2, offset(rs1)
+    asm: sw rs2, imm12(rs1)
     desc: SW stores 32-bit value from the register rs2 to memory.
   SH:
-    asm: sh rs2, offset(rs1)
+    asm: sh rs2, imm12(rs1)
     desc: SH stores 16-bit value from the low bits of register rs2 to memory.
   SB:
-    asm: sb rs2, offset(rs1)
+    asm: sb rs2, imm12(rs1)
     desc: SB stores 8-bit value from the low bits of register rs2 to memory.
 
   # 2.7 Memory Ordering Instructions
@@ -415,38 +409,42 @@ RV64I: &id_rv64i
       rd_32bit = low_32bit(rs1) - low_32bit(rs2)
       rd = sign_extended(rd_32bit)
   LD:
-    asm: ld rd, offset(rs1)
+    asm: ld rd, imm12(rs1)
     desc: LD loads a 64-bit value from the memory into register rd for RV64I.
   LW:
-    asm: lw rd, offset(rs1)
+    asm: lw rd, imm12(rs1)
     desc: LW loads a 32-bit value from the memory and sign-extends this to 64 bits before storing it in register rd.
   LWU:
-    asm: lwu rd, offset(rs1)
+    asm: lwu rd, imm12(rs1)
     desc: LWU loads a 32-bit value from the memory and zero-extends this to 64 bits before storing it in register rd.
   LH:
-    asm: lh rd, offset(rs1)
+    asm: lh rd, imm12(rs1)
     desc: LH loads a 16-bit value from the memory and sign-extends this to 64 bits before storing it in register rd.
   LHU:
-    asm: lhu rd, offset(rs1)
+    asm: lhu rd, imm12(rs1)
     desc: LHU loads a 16-bit value from the memory and zero-extends this to 64 bits before storing it in register rd.
   LB:
-    asm: lb rd, offset(rs1)
+    asm: lb rd, imm12(rs1)
     desc: LB loads a 8-bit value from the memory and sign-extends this to 64 bits before storing it in register rd.
   LBU:
-    asm: lbu rd, offset(rs1)
+    asm: lbu rd, imm12(rs1)
     desc: LBU loads a 8-bit value from the memory and zero-extends this to 64 bits before storing it in register rd.
   SD:
-    asm: sd rs2, offset(rs1)
+    asm: sd rs2, imm12(rs1)
     desc: SD stores the 64-bit value from register rs2 to memory.
   SW:
-    asm: sw rs2, offset(rs1)
+    asm: sw rs2, imm12(rs1)
     desc: SW stores the 32-bit value from the low bits of register rs2 to memory.
   SH:
-    asm: sd rs2, offset(rs1)
+    asm: sd rs2, imm12(rs1)
     desc: SH stores the 16-bit value from the low bits of register rs2 to memory.
   SB:
-    asm: sd rs2, offset(rs1)
+    asm: sd rs2, imm12(rs1)
     desc: SB stores the 8-bit value from the low bits of register rs2 to memory.
+
+Zicsr:
+  meta:
+    version: "2.0"
 
 Zifencei:
   meta:
@@ -456,7 +454,8 @@ Zifencei:
     desc: The FENCE.I instruction is used to synchronize the instruction and data streams. RISC-V does not guarantee that stores to instruction memory will be made visible to instruction fetches on a RISC-V hart until that hart executes a FENCE.I instruction. A FENCE.I instruction ensures that a subsequent instruction fetch on a RISC-V hart will see any previous data stores already visible to the same RISC-V hart. FENCE.I does not ensure that other RISC-V hart’s instruction fetches will observe the local hart’s stores in a multiprocessor system. To make a store to instruction memory visible to all RISC-V harts, the writing hart also has to execute a data FENCE before requesting that all remote RISC-V harts execute a FENCE.I.
 
 Zihintpause:
-  version: "2.0"
+  meta:
+    version: "2.0"
   PAUSE:
     asm: pause
     desc: The PAUSE instruction is a HINT that indicates the current hart’s rate of instruction retirement should be temporarily reduced or paused. The duration of its effect must be bounded and may be zero. No architectural state is changed.
@@ -496,7 +495,7 @@ Zmmul: &id_zmmul
       rd_64bit = lower_32bit(rs1) * lower_32bit(rs2)
       rd = sign_extended(lower_32bit(rd_64bit))
 
-RV_M:
+M:
   <<: *id_zmmul
   meta:
     version: "2.0"
@@ -562,7 +561,7 @@ RV_M:
       rd_32bit = unsigned(lower_32bit(rs1)) % unsigned(lower_32bit(rs2))
       rd = sign_extended(rd_32bit)
 
-RV_A:
+A:
   meta:
     version: "2.1"
     desc: "A Standard Extension for Atomic Instructions"
@@ -581,7 +580,7 @@ RV_A:
     asm: sc.d rd, rs2, (rs1)
     desc: SC.D conditionally writes a doubleword in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd. Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
 
-RV_F:
+F:
   meta:
     version: "2.2"
     desc: "A Standard Extension for Single-Precision Floating-Point"
@@ -596,17 +595,22 @@ RV_F:
   FSUB.S:
     asm: fsub.s rd, rs1, rs2
 
-RV_D:
+D:
   meta:
     version: "2.2"
     desc: "A Standard Extension for Double-Precision Floating-Point"
 
-RV_Q:
+Q:
   meta:
     version: "2.2"
     desc: "A Standard Extension for Quad-Precision Floating-Point"
 
-RV_C:
+C:
   meta:
     version: "2.0"
     desc: "A Standard Extension for Compressed Instructions"
+
+V:
+  meta:
+    version: "1.0"
+    desc: "A Standard Extension for Vector Instructions"
