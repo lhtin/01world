@@ -1,11 +1,12 @@
 RV32I: &id_rv32i
   meta:
     version: "2.1"
+    desc: "base integer instruction set"
   ADDI:
     asm: addi rd, rs1, imm12
     desc: ADDI adds the sign-extended 12-bit immediate to register rs1. Arithmetic overflow is ignored and the result is simply the low XLEN bits of the result.
     code: |
-      imm = sign_extended(imm12)
+      imm = sign_extend(imm12)
       rd = rs1 + imm
     pseudos:
       MV:
@@ -25,7 +26,7 @@ RV32I: &id_rv32i
     asm: sltiu rd, rs1, imm12
     desc: SLTIU is similar with SLTI but compares the values as unsigned numbers (i.e., the immediate is first sign-extended to XLEN bits then treated as an unsigned number).
     code: |
-      imm = sign_extended(imm12)
+      imm = sign_extend(imm12)
       rd = unsigned(rs1) < unsigned(imm) ? 1 : 0
     pseudos:
       SEQZ:
@@ -38,19 +39,19 @@ RV32I: &id_rv32i
     asm: andi rd, rs1, imm12
     desc: ANDI are logical operations that perform bitwise AND on register rs1 and the sign-extended 12-bit immediate and place the result in rd.
     code: |
-      imm = sign_extended(imm12)
+      imm = sign_extend(imm12)
       rd = rs1 & imm
   ORI:
     asm: ori rd, rs1, imm12
     desc: ORI are logical operations that perform bitwise OR on register rs1 and the sign-extended 12-bit immediate and place the result in rd.
     code: |
-      imm = sign_extended(imm12)
+      imm = sign_extend(imm12)
       rd = rs1 | imm
   XORI:
     asm: andi rd, rs1, imm12
     desc: XORI are logical operations that perform bitwise XOR on register rs1 and the sign-extended 12-bit immediate and place the result in rd.
     code: |
-      imm = sign_extended(imm12)
+      imm = sign_extend(imm12)
       rd = rs1 ^ imm
     pseudos:
       NOT:
@@ -305,21 +306,22 @@ RV64I: &id_rv64i
   <<: *id_rv32i
   meta:
     version: "2.1"
+    desc: "base integer instruction set"
     XLEN: 64
 
   ADDIW:
     asm: addiw rd, rs1, imm12
     desc: ADDIW is an RV64I instruction that adds the sign-extended 12-bit immediate to register rs1 and produces the proper sign-extension of a 32-bit result in rd. Overflows are ignored and the result is the low 32 bits of the result sign-extended to 64 bits.
     code: |
-      rd_32bit = sign_extended(imm12) + low_32bit(rs1)
-      rd = sign_extended(rd_32bit)
+      rd_32bit = sign_extend(imm12) + low_32bit(rs1)
+      rd = sign_extend(rd_32bit)
     pseudos:
       SEXT.W:
         asm: sext.w rd, rs1
         real: addiw rd, rs1, 0
         desc: SEXT.W writes the sign-extension of the lower 32 bits of register rs1 into register rd.
         code: |
-          rd = sign_extended(low_32bit(rs1))
+          rd = sign_extend(low_32bit(rs1))
   SLLI:
     asm: slli rd, rs1, uimm6
     desc: SLLI is a logical left shift (zeros are shifted into the lower bits).
@@ -340,31 +342,31 @@ RV64I: &id_rv64i
     desc: SLLIW is a logical left shift (zeros are shifted into the lower bits) and operates on the low 32-bit value of reigster rs1, then sign-extend the 32-bit result to 64 bits.
     code: |
       rd_32bit = low_32bit(rs1) << uimm5
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   SRLIW:
     asm: srliw rd, rs1, uimm5
     desc: SRLIW is a logical right shift (zeros are shifted into the upper bits) and operates on the low 32-bit value of reigster rs1, then sign-extend the 32-bit result to 64 bits.
     code: |
       rd_32bit = unsigned(low_32bit(rs1)) >> uimm5
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   SRAIW:
     asm: sraiw rd, rs1, uimm5
     desc: SRAIW is an arithmetic right shift (the original sign bit is copied into the vacated upper bits) and operates on the low 32-bit value of reigster rs1, then sign-extend the 32-bit result to 64 bits.
     code: |
       rd_32bit = low_32bit(rs1) >> uimm5
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   LUI:
     asm: lui rd, imm20
     desc: LUI (load upper immediate) places the imm20 << 12 into register rd, filling in the lowest 12 bits with zeros. The 32-bit result is sign-extended to 64 bits.
     code: |
       rd_32bit = imm20 << 12
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   AUIPC:
     asm: auipc rd, imm20
     desc: AUIPC (add upper immediate to pc) forms a 32-bit offset from the imm20, filling in the lowest 12 bits with zeros, sign-extends the result to 64 bits, adds it to the address of the AUIPC instruction, then places the result in register rd.
     code: |
       rd_32bit = imm20 << 12
-      rd = pc + sign_extended(rd_32bit)
+      rd = pc + sign_extend(rd_32bit)
   SLL:
     asm: sll rd, rs1, rs2
     code: |
@@ -385,29 +387,29 @@ RV64I: &id_rv64i
     code: |
       shift_amount = low_5bit(rs2)
       rd_32bit = low_32bit(rs1) << shift_amount
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   SRLW:
     asm: srlw rd, rs1, rs2
     code: |
       shift_amount = low_5bit(rs2)
       rd_32bit = unsigned(low_32bit(rs1)) >> shift_amount
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   SRAW:
     asm: sraw rd, rs1, rs2
     code: |
       shift_amount = low_5bit(rs2)
       rd_32bit = low_32bit(rs1) >> shift_amount
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   ADDW:
     asm: addw rd, rs1, rs2
     code: |
       rd_32bit = low_32bit(rs1) + low_32bit(rs2)
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   SUBW:
     asm: sll rd, rs1, rs2
     code: |
       rd_32bit = low_32bit(rs1) - low_32bit(rs2)
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   LD:
     asm: ld rd, imm12(rs1)
     desc: LD loads a 64-bit value from the memory into register rd for RV64I.
@@ -445,10 +447,42 @@ RV64I: &id_rv64i
 Zicsr:
   meta:
     version: "2.0"
+    desc: "control and status register (CSR) instructions"
+  CSRRW:
+    asm: csrrw rd, rs1, csr
+    desc: The CSRRW (Atomic Read/Write CSR) instruction atomically swaps values in the CSRs and integer registers. CSRRW reads the old value of the CSR, zero-extends the value to XLEN bits, then writes it to integer register rd. The initial value in rs1 is written to the CSR. If rd=x0, then the instruction shall not read the CSR and shall not cause any of the side effects that might occur on a CSR read.
+  CSRRS:
+    asm: csrrs rd, rs1, csr
+    desc: |
+      The CSRRS (Atomic Read and Set Bits in CSR) instruction reads the value of the CSR, zero-extends the value to XLEN bits, and writes it to integer register rd. The initial value in integer register rs1 is treated as a bit mask that specifies bit positions to be set in the CSR. Any bit that is high in rs1 will cause the corresponding bit to be set in the CSR, if that CSR bit is writable. Other bits in the CSR are unaffected (though CSRs might have side effects when written).
+      For both CSRRS and CSRRC, if rs1=x0, then the instruction will not write to the CSR at all, and so shall not cause any of the side effects that might otherwise occur on a CSR write, nor raise illegal instruction exceptions on accesses to read-only CSRs. Both CSRRS and CSRRC always read the addressed CSR and cause any read side effects regardless of rs1 and rd fields. Note that if rs1 specifies a register holding a zero value other than x0, the instruction will still attempt to write the unmodified value back to the CSR and will cause any attendant side effects. A CSRRW with rs1=x0 will attempt to write zero to the destination CSR.
+  CSRRC:
+    asm: csrrc rd, rs1, csr
+    desc: |
+      The CSRRC (Atomic Read and Clear Bits in CSR) instruction reads the value of the CSR, zero-extends the value to XLEN bits, and writes it to integer register rd. The initial value in integer register rs1 is treated as a bit mask that specifies bit positions to be cleared in the CSR. Any bit that is high in rs1 will cause the corresponding bit to be cleared in the CSR, if that CSR bit is writable. Other bits in the CSR are unaffected.
+      For both CSRRS and CSRRC, if rs1=x0, then the instruction will not write to the CSR at all, and so shall not cause any of the side effects that might otherwise occur on a CSR write, nor raise illegal instruction exceptions on accesses to read-only CSRs. Both CSRRS and CSRRC always read the addressed CSR and cause any read side effects regardless of rs1 and rd fields. Note that if rs1 specifies a register holding a zero value other than x0, the instruction will still attempt to write the unmodified value back to the CSR and will cause any attendant side effects. A CSRRW with rs1=x0 will attempt to write zero to the destination CSR.
+  CSRRWI:
+    asm: csrrwi rd, uimm5, csr
+    desc: |
+      The CSRRWI variant is similar to CSRRW, except it update the CSR using an XLEN-bit value obtained by zero-extending a 5-bit unsigned immediate (uimm[4:0]) field encoded in the rs1 field instead of a value from an integer register.
+      For CSRRWI, if rd=x0, then the instruction shall not read the CSR and shall not cause any of the side effects that might occur on a CSR read.
+  CSRRSI:
+    asm: csrrsi rd, uimm5, csr
+    desc: |
+      The CSRRSI variant is similar to CSRRS, except it update the CSR using an XLEN-bit value obtained by zero-extending a 5-bit unsigned immediate (uimm[4:0]) field encoded in the rs1 field instead of a value from an integer register.
+      For CSRRSI and CSRRCI, if the uimm[4:0] field is zero, then these instructions will not write to the CSR, and shall not cause any of the side effects that might otherwise occur on a CSR write, nor raise illegal instruction exceptions on accesses to read-only CSRs.
+      Both CSRRSI and CSRRCI will always read the CSR and cause any read side effects regardless of rd and rs1 fields.
+  CSRRCI:
+    asm: csrrci rd, uimm5, csr
+    desc: |
+      The CSRRCI variant is similar to CSRRC, except it update the CSR using an XLEN-bit value obtained by zero-extending a 5-bit unsigned immediate (uimm[4:0]) field encoded in the rs1 field instead of a value from an integer register.
+      For CSRRSI and CSRRCI, if the uimm[4:0] field is zero, then these instructions will not write to the CSR, and shall not cause any of the side effects that might otherwise occur on a CSR write, nor raise illegal instruction exceptions on accesses to read-only CSRs.
+      Both CSRRSI and CSRRCI will always read the CSR and cause any read side effects regardless of rd and rs1 fields.
 
 Zifencei:
   meta:
     version: "2.0"
+    desc: "instruction-fetch fence instruction"
   FENCE.I:
     asm: fence.i
     desc: The FENCE.I instruction is used to synchronize the instruction and data streams. RISC-V does not guarantee that stores to instruction memory will be made visible to instruction fetches on a RISC-V hart until that hart executes a FENCE.I instruction. A FENCE.I instruction ensures that a subsequent instruction fetch on a RISC-V hart will see any previous data stores already visible to the same RISC-V hart. FENCE.I does not ensure that other RISC-V hart’s instruction fetches will observe the local hart’s stores in a multiprocessor system. To make a store to instruction memory visible to all RISC-V harts, the writing hart also has to execute a data FENCE before requesting that all remote RISC-V harts execute a FENCE.I.
@@ -493,13 +527,13 @@ Zmmul: &id_zmmul
     desc: MULW is an RV64 instruction that multiplies the lower 32 bits of the source registers, placing the sign-extension of the lower 32 bits of the result into the destination register.
     code: |
       rd_64bit = lower_32bit(rs1) * lower_32bit(rs2)
-      rd = sign_extended(lower_32bit(rd_64bit))
+      rd = sign_extend(lower_32bit(rd_64bit))
 
 M:
   <<: *id_zmmul
   meta:
     version: "2.0"
-    desc: "M Standard Extension for Integer Multiplication and Division"
+    desc: "integer multiplication and division instructions"
   DIV:
     asm: div rd, rs1, rs2
     desc: |
@@ -531,7 +565,7 @@ M:
       If division overflow (i.e. only rs1 is -2^(XLEN - 1) and rs2 is -1), the quotient is -2^(XLEN - 1), then sign-extended to 64 bits.
     code: |
       rd_32bit = lower_32bit(rs1) / lower_32bit(rs2)
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   DIVUW:
     rv64_only: true
     asm: divuw rd, rs1, rs2
@@ -540,7 +574,7 @@ M:
       If division by zero, the quotient is 2^32 - 1, then sign-extended to 64 bits.
     code: |
       rd_32bit = unsigned(lower_32bit(rs1)) / unsigned(lower_32bit(rs2))
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   REMW:
     rv64_only: true
     asm: remw rd, rs1, rs2
@@ -550,7 +584,7 @@ M:
       If division overflow (i.e. only rs1 is -2^(XLEN - 1) and rs2 is -1), the remainder is 0, then sign-extended to 64 bits.
     code: |
       rd_32bit = lower_32bit(rs1) % lower_32bit(rs2)
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
   REMUW:
     rv64_only: true
     asm: remuw rd, rs1, rs2
@@ -559,26 +593,88 @@ M:
       If division by zero, the remainder is rs1, then sign-extended to 64 bits.
     code: |
       rd_32bit = unsigned(lower_32bit(rs1)) % unsigned(lower_32bit(rs2))
-      rd = sign_extended(rd_32bit)
+      rd = sign_extend(rd_32bit)
 
 A:
   meta:
     version: "2.1"
-    desc: "A Standard Extension for Atomic Instructions"
+    desc: "atomic instructions"
   LR.W:
     asm: lr.w rd, (rs1)
-    desc: LR.W loads a word from the address in rs1, places the sign-extended value in rd, and registers a reservation set--a set of bytes that subsumes the bytes in the addressed word.
+    desc: |
+      LR.W loads a word from the address in rs1, places the sign-extended value in rd, and registers a reservation set--a set of bytes that subsumes the bytes in the addressed word.
+      LR.W can with aq, rl and aqrl suffix which mean acquire, release, acquire and release access ordering respectively. e.g. `lr.w.aq rd, (rs1)`
   SC.W:
     asm: sc.w rd, rs2, (rs1)
-    desc: SC.W conditionally writes a word in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd (sign-extend the value on RV64). Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
+    desc: |
+      SC.W conditionally writes a word in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd (sign-extend the value on RV64). Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
+      SC.W can with aq, rl and aqrl suffix which mean acquire, release, acquire and release access ordering respectively. e.g. `sc.w.rl rd, (rs1)`
   LR.D:
     rv64_only: true
     asm: lr.d rd, (rs1)
-    desc: LR.D loads a doubleword from the address in rs1, places the sign-extended value in rd, and registers a reservation set--a set of bytes that subsumes the bytes in the addressed doubleword.
+    desc: |
+      LR.D loads a doubleword from the address in rs1, places the sign-extended value in rd, and registers a reservation set--a set of bytes that subsumes the bytes in the addressed doubleword.
+      LR.D can with aq, rl and aqrl suffix which mean acquire, release, acquire and release access ordering respectively. e.g. `lr.d.aq rd, (rs1)`
   SC.D:
     rv64_only: true
     asm: sc.d rd, rs2, (rs1)
-    desc: SC.D conditionally writes a doubleword in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd. Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
+    desc: |
+      SC.D conditionally writes a doubleword in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd. Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
+      SC.D can with aq, rl and aqrl suffix which mean acquire, release, acquire and release access ordering respectively. e.g. `sc.d.rl rd, (rs1)`
+  AMOSWAP.W:
+    asm: amoswap.w rd, rs2, (rs1)
+    desc: The AMOSWAP.W instruction atomically load a data value from the address in rs1, place the value into register rd, then store the value from register rs2 to the original address in rs1.
+  AMOADD.W:
+    asm: amoadd.w rd, rs2, (rs1)
+    desc: The AMOADD.W instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `add` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOAND.W:
+    asm: amoand.w rd, rs2, (rs1)
+    desc: The AMOAND.W instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `and` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOOR.W:
+    asm: amoor.w rd, rs2, (rs1)
+    desc: The AMOOR.W instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `or` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOXOR.W:
+    asm: amoxor.w rd, rs2, (rs1)
+    desc: The AMOXOR.W instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `xor` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOMAX.W:
+    asm: amomax.w rd, rs2, (rs1)
+    desc: The AMOMAX.W instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `max` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOMAXU.W:
+    asm: amomaxu.w rd, rs2, (rs1)
+    desc: The AMOMAXU.W instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `max` unsigned operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOMIN.W:
+    asm: amomin.w rd, rs2, (rs1)
+    desc: These AMOMIN.W instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `min` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOMINU.W:
+    asm: amominu.w rd, rs2, (rs1)
+    desc: These AMOMINU.W instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `min` unsigned operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOSWAP.D:
+    asm: amoswap.d rd, rs2, (rs1)
+    desc: The AMOSWAP.D instruction atomically load a data value from the address in rs1, place the value into register rd, then store the value from register rs2 to the original address in rs1.
+  AMOADD.D:
+    asm: amoadd.d rd, rs2, (rs1)
+    desc: The AMOADD.D instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `add` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOAND.D:
+    asm: amoand.d rd, rs2, (rs1)
+    desc: The AMOAND.D instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `and` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOOR.D:
+    asm: amoor.d rd, rs2, (rs1)
+    desc: The AMOOR.D instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `or` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOXOR.D:
+    asm: amoxor.d rd, rs2, (rs1)
+    desc: The AMOXOR.D instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `xor` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOMAX.D:
+    asm: amomax.d rd, rs2, (rs1)
+    desc: The AMOMAX.D instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `max` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOMAXU.D:
+    asm: amomaxu.d rd, rs2, (rs1)
+    desc: The AMOMAXU.D instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `max` unsigned operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOMIN.D:
+    asm: amomin.d rd, rs2, (rs1)
+    desc: These AMOMIN.D instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `min` operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
+  AMOMINU.D:
+    asm: amominu.d rd, rs2, (rs1)
+    desc: These AMOMINU.D instruction atomically load a data value from the address in rs1, place the value into register rd, apply a `min` unsigned operator to the loaded value and the original value in rs2, then store the result back to the original address in rs1.
 
 F:
   meta:
@@ -598,19 +694,19 @@ F:
 D:
   meta:
     version: "2.2"
-    desc: "A Standard Extension for Double-Precision Floating-Point"
+    desc: "double-precision floating-point instructions"
 
 Q:
   meta:
     version: "2.2"
-    desc: "A Standard Extension for Quad-Precision Floating-Point"
+    desc: "quad-precision floating-point instructions"
 
 C:
   meta:
     version: "2.0"
-    desc: "A Standard Extension for Compressed Instructions"
+    desc: "compressed instructions"
 
 V:
   meta:
     version: "1.0"
-    desc: "A Standard Extension for Vector Instructions"
+    desc: "vector instructions"
