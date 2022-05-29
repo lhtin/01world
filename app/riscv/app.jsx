@@ -160,6 +160,9 @@ const App = () => {
       setISA(ISA);
     })
   }, []);
+  if (!ISA) {
+    return null;
+  }
   return <div className="container">
     <h1 className="row row-no-gutters">RISC-V Instruction Sets</h1>
     <div className="row row-no-gutters">
@@ -180,7 +183,7 @@ const App = () => {
       <div className="checkbox margin-right-20">
         <label>
           <input type="checkbox" checked={isAll(extSet)} onChange={() => setExtSet(toggle(extSet, "all"))} />
-          ALL
+          All
         </label>
       </div>
       <div className="checkbox margin-right-20">
@@ -193,7 +196,7 @@ const App = () => {
         <div className="checkbox margin-right-20" key={ext}>
           <label>
             <input type="checkbox" checked={extSet.has(ext)} onChange={() => setExtSet(toggle(extSet, ext))} />
-            {ext}
+            {ext} ({ISA[xlen][ext].insns.length})
           </label>
         </div>
       ))}
