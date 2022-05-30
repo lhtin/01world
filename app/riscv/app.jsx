@@ -97,6 +97,14 @@ const getISA = () => {
     })
 }
 
+const formatExts = (extSet) => {
+  const str = Array.from(extSet)
+    .sort((a, b) => a.length - b.length)
+    .map(ext => (ext.length > 1 ? `_` : '') + ext)
+    .join("");
+  return str.replace(new RegExp(`^_+`), "");
+};
+
 const Instruction = ({info}) => {
   return (
     <div className="insn margin-top margin-bottom">
@@ -201,7 +209,7 @@ const App = () => {
         </div>
       ))}
     </div>
-    <p>-march={Array.from(extSet).sort((a, b) => a.length - b.length).map(ext => (ext.length > 1 ? `_` : '') + ext).join("")}</p>
+    <p>-march={formatExts(extSet)}</p>
     <div className="panel panel-info margin-top">
       <div className="panel-heading">Notations</div>
       <div className="panel-body">
