@@ -99,3 +99,4 @@
 - [gdb](./gdb.md)
 - [git](./git.md)
 - [make](./make.md)
+- [qemu](./qemu.md)
