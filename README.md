@@ -1,3 +1,5 @@
+网页版地址：https://lhtin.github.io/01world
+
 > Tintin's Computer World
 
 ## 前言
