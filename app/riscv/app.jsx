@@ -164,7 +164,7 @@ const App = () => {
     return null;
   }
   return <div className="container">
-    <h1 className="row row-no-gutters">RISC-V Instruction Sets</h1>
+    <h1 className="row row-no-gutters">List of RISC-V Instructions</h1>
     <div className="row row-no-gutters">
       <div className="col-xs-4 col-md-2 radio">
         <label>
