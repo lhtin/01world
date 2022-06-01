@@ -7,7 +7,10 @@
 ## GCC开发的坑
 
 - 头文件的改动，不会触发引用到该头文件的c文件重新编译，会导致代码不更新。解决方法是手动改下每个include该头文件的c文件或者重新完整编译。
-- error: unrecognizable insn 错误，可能是因为没有找到合适的pattern，可能是constraint没有匹配的，虽然predicate过了。一般在reload pass中出错
+- error: unrecognizable insn 错误
+  - 可能是因为没有找到合适的pattern，一般是在vregs pass中出错
+    - 自定义的pattern的寻找是通过mode和unspec进行的，如果某个指定了mode的参数的predicate支持(const_int 0)，则有可能在GET_MODE的时候返回VOID mode，进而无法匹配到pattern
+  - 可能是constraint没有匹配的，虽然predicate过了。一般在reload pass中出错
 
 ## 调试
 
