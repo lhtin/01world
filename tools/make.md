@@ -3,6 +3,7 @@
 ## Note List
 
 - `$(MAKE)`: 在Makefile里面调用make时使用MAKE变量，可以让`-j`等参数传到子make命令中去。[参考](https://www.gnu.org/software/make/manual/html_node/MAKE-Variable.html#MAKE-Variable)
+- CMake生成的Makefile通过添加`VERBOSE=1`参数就可以看到详细的编译命令了
 
 ## Debug Makefile
 
