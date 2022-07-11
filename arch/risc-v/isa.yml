@@ -233,6 +233,9 @@ RV32I: &id_rv32i
           } else {
             next_pc = current_pc + 4
           }
+      GLEZ:
+        asm: blez rs2, imm12
+        real: bge zero, rs2, imm12
   BGEU:
     asm: bgeu rs1, rs2, imm12
     desc: BGEU take the branch if rs1 is greater and equal than rs2, using unsigned comparison.
