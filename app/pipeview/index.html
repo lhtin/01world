@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pipeline Viewer (Fork from Konata Project)</title>
+    <style>
+      * {
+        font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+      }
+      body {
+        margin: 0;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      .box {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+      }
+      .splitter-container {
+        width: 0;
+      }
+      #splitter {
+        position: relative;
+        left: -5px;
+        width: 10px;
+        height: 100%;
+        margin-left: -5px;
+        background-color: transparent;
+        cursor: col-resize;
+      }
+      #label-canvas-container {
+        width: 320px;
+      }
+      #pipeline-canvas-container {
+        flex: 1;
+      }
+      #label-canvas-container,
+      #pipeline-canvas-container {
+        position: relative;
+      }
+      canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      #progress-bar {
+        position: fixed;
+        width: 100%;
+        height: 3px;
+        z-index: 3;
+        border: none;
+      }
+      #progress-bar::-webkit-progress-bar {
+        background-color: transparent;
+      }
+      #progress-bar::-webkit-progress-value {
+        background-color: #0392cf;
+      }
+      #open-file {
+        position: fixed;
+        top: 0; right: 0;
+        z-index: 2;
+        font-size: 12px;
+        padding: 5px;
+        background-color: white;
+        cursor: pointer;
+        color: gray;
+      }
+      #open-file:hover {
+        color: black;
+      }
+      #tool-tip {
+        position: fixed;
+        color: #eee;
+        background: rgba(51, 51, 51, 0.9);
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 140%;
+      }
+      #user-guide {
+        display: none;
+        flex-direction: column;
+      }
+      #search-box {
+        display: none;
+      }
+      .center-box {
+        position: fixed;
+        top: 0;
+        right: 0;
+        padding: 20px;
+        background-color: white;
+        border-radius: 5px;
+        z-index: 4;
+      }
+      #search-up::before {
+        content: '↑';
+      }
+      #search-down::before {
+        content: '↓';
+      }
+      #search-close::before {
+        content: '✖';
+      }
+      .search-item {
+        margin-left: 10px;
+        border: 1px solid transparent;
+        height: 24px;
+        width: 24px;
+        text-align: center;
+        line-height: 24px;
+        vertical-align: center;
+        cursor: pointer;
+      }
+      .search-item:hover {
+        border-color: lightgray;
+      }
+      .search-input {
+        border: 1px solid black;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <progress id="progress-bar" max="1" value="0"></progress>
+    <div id="open-file">Open File</div>
+    <div class="box">
+      <div id="label-canvas-container">
+        <canvas id="lable-canvas"></canvas>
+      </div>
+      <div class="splitter-container">
+        <div id="splitter"></div>
+      </div>
+      <div id="pipeline-canvas-container">
+        <canvas id="pipeline-canvas"></canvas>
+      </div>
+    </div>
+    <div id="tool-tip"></div>
+    <div id="user-guide" class="center-box">
+      operations:
+      <ul>
+        <li>mouse scroll: move up/down</li>
+        <li>ctrl + mousue scroll: zoom in/out</li>
+        <li>shift + `-` or `=`: zoom in/out</li>
+        <li>shift + `A`: hide/show flushed insns</li>
+        <li>shift + `F`: find pc</li>
+      </ul>
+    </div>
+    <div id="search-box" class="center-box">
+      <input id="search-input" class="search-input" value="" placeholder="pc value" />
+      <!-- <div id="search-results" class="search-item"></div> -->
+      <div id="search-up" class="search-item"></div>
+      <div id="search-down" class="search-item"></div>
+      <div id="search-close" class="search-item"></div>
+    </div>
+    <script src="./js-yaml.min.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+meta: {stages: [Fetch1, Fetch2, Decode, Dispatch, Execute, Forwarding, WriteBack, Commit, Retire, Flush], shortStages: [F1, F2, DC, DS, EX, FW, WB, CM, RE, FL]}
+traceLog:
+- {m: "25:4:0x80000032:0x4d01", disasm: "li  s10,0", stages: "F1,0:F2,3:DC,12:DS,14:EX,15:FW,16:WB,17:CM,18"}
+- {m: "26:4:0x80000034:0x4d81", disasm: "li  s11,0", stages: "F1,0:F2,3:DC,12:DS,15:EX,16:FW,17:WB,18:CM,19"}
+- {m: "27:4:0x80000036:0x4e01", disasm: "li  t3,0", stages: "F1,0:F2,3:DC,13:DS,15:EX,16:FW,17:WB,18:CM,19"}
+- {m: "28:4:0x80000038:0x4e81", disasm: "li  t4,0", stages: "F1,0:F2,3:DC,13:DS,16:EX,17:FW,18:WB,19:CM,20"}
+- {m: "29:4:0x8000003a:0x4f01", disasm: "li  t5,0", stages: "F1,0:F2,3:DC,13:DS,16:EX,17:FW,18:WB,19:CM,20"}
+- {m: "30:4:0x8000003c:0x4f81", disasm: "li  t6,0", stages: "F1,0:F2,3:DC,15:DS,17:EX,18:FW,19:WB,20:CM,21"}
+- {m: "31:4:0x8000003e:0x62f9", disasm: "lui  t0,0x1e", stages: "F1,0:F2,3:DC,15:DS,17:EX,18:FW,19:WB,20:CM,21"}
+- {m: "32:5:0x80000040:0x3002a073", disasm: "csrs  mstatus,t0", stages: "F1,0:F2,3:DC,14:DS,16:EX,20:WB,22:CM,23"}
+- {m: "33:5:0x80000044:0x4285", disasm: "li  t0,1", stages: "F1,0:F2,3:DC,15:DS,17:EX,18:FW,19:WB,20:CM,23"}
+- {m: "34:5:0x80000046:0x2fe", disasm: "slli  t0,t0,0x1f", stages: "F1,0:F2,3:DC,15:DS,17:EX,19:FW,20:WB,21:CM,23"}
+- {m: "35:5:0x80000048:0x2d863", disasm: "bgez  t0,80000058 <_start+0x58>", stages: "F1,0:F2,3:DC,15:DS,17:EX,20:WB,22:CM,24", tags: "18|Operand not ready:19|Operand not ready"}
+- {m: "36:5:0x8000004c:0x4505", disasm: "li  a0,1", stages: "F1,0:F2,3:DC,16:DS,18:EX,19:FW,20:WB,21:FL,22"}
+- {m: "37:6:0x8000004e:0x1297", disasm: "auipc  t0,0x1", stages: "F1,0:F2,4:DC,15:DS,17:EX,19:FW,20:WB,21:FL,21"}
+- {m: "38:6:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1,0:F2,4:DC,15:DS,17:EX,21:FL,21", tags: "18|Operand not ready:19|Operand not ready:20|read port not avaiable"}
+- {m: "39:6:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1,0:F2,4:DC,16:DS,18:EX,20:FL,21"}
+- {m: "40:6:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1,0:F2,4:DC,16:DS,18:EX,19:FW,21:FL,21"}
+- {m: "41:6:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1,0:F2,4:DC,16:DS,18:EX,21:FL,21"}
+- {m: "42:8:0x80000060:0x30529073", disasm: "csrw  mtvec,t0", stages: "F1,0:F2,3:DC,15:DS,17:FL,19"}
+- {m: "43:8:0x80000064:0xb197", disasm: "auipc  gp,0xb", stages: "F1,0:F2,3:DC,15:DS,17:EX,19:FL,19", tags: "18|Fu is Busy"}
+- {m: "44:8:0x80000068:0x7fc18193", disasm: "addi  gp,gp,2044 # 8000b860 <__global_pointer$>", stages: "F1,0:F2,3:DC,15:DS,17:FL,19"}
