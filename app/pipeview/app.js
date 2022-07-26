@@ -87,19 +87,24 @@ const initKey = () => {
     currentApp.loadFile(file)
   }
   document.getElementById('open-file').addEventListener('click', onFileOpen)
-  window.addEventListener('keypress', (e) => {
+  window.addEventListener('keydown', (e) => {
     console.log(e)
-    if (e.shiftKey && (e.key == "O" || e.key == "o")) {
+    if (e.ctrlKey && e.code == "KeyO") {
       onFileOpen();
-    } else if (e.shiftKey && (e.key == "+" || e.key == "=")) {
+      e.preventDefault()
+    } else if (e.ctrlKey && e.code == "Equal") {
       currentApp.zoom.startZoom(-1, 0, 0)
-    } else if (e.shiftKey && (e.key == "_" || e.key == "-")) {
+      e.preventDefault()
+    } else if (e.ctrlKey && e.code == "Minus") {
       currentApp.zoom.startZoom(1, 0, 0)
-    } else if (e.shiftKey && (e.key == "A" || e.key == "a")) {
+      e.preventDefault()
+    } else if (e.ctrlKey && e.code == "KeyA") {
       currentApp.renderer.hideFlushedOps = !currentApp.renderer.hideFlushedOps;
-    } else if (e.shiftKey && (e.key == "G" || e.key == "g")) {
+      e.preventDefault()
+    } else if (e.ctrlKey && e.code == "KeyG") {
       doms.userGuide.style.display = doms.userGuide.style.display == "flex" ? "none" : "flex";
-    } else if (e.shiftKey && (e.key == "F" || e.key == "f")) {
+      e.preventDefault()
+    } else if (e.ctrlKey && e.code == "KeyF") {
       doms.searchBox.style.display = doms.searchBox.style.display == "flex" ? "none" : "flex";
       if (doms.searchBox.style.display == "flex") {
         doms.searchInput.focus();
@@ -139,8 +144,9 @@ const initBox = () => {
     }
   }
   const onMouseMove = (e) => {
-    currentApp.drag.drag(e.clientX, e.clientY)
-    e.preventDefault()
+    if (currentApp.drag.drag(e.clientX, e.clientY)) {
+      e.preventDefault()
+    }
   }
   const onResize = (e) => {
     currentApp.renderer.resize()
@@ -189,3 +195,13 @@ const initBox = () => {
 initKey()
 initBox()
 initSearch()
+
+const loadDemo = async () => {
+  const demo = 'demo.pipeview.txt'
+  const response = await fetch(`./${demo}`);
+  const data = await response.blob();
+  const file = new File([data], demo, { type: data.type })
+  currentApp.loadFile(file)
+}
+
+loadDemo()

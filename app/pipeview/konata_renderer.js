@@ -529,7 +529,7 @@ class KonataRenderer{
 
         // X 座標に対応したサイクル数を取得
         let cycle = self.getCycleFromPixelPosX(x);
-        let text = `cycle: ${cycle}<br>line: ${op.id}`;
+        let text = `cycle: ${cycle}<br>id: ${op.id}<br>rid: ${op.rid}<br>${op.labelName}`;
         if (cycle < op.fetchedCycle || cycle > op.retiredCycle) {
             return text;
         }

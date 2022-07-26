@@ -138,7 +138,7 @@ class Drag {
   }
   drag (x, y) {
     if (!this.inDrag) {
-      return
+      return false;
     }
     let diff = [
       this.prevMousePoint[0] - x,
@@ -146,6 +146,7 @@ class Drag {
     ];
     this.prevMousePoint = [x, y];
     this.renderer.movePixelDiff(diff)
+    return true;
   }
 }
 
