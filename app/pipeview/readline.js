@@ -3,7 +3,7 @@ class ReadlineInterface {
     this.lineCB = null;
     this.closeCB = null;
     this.file = file
-    this.reader = file.stream().getReader()
+    this.reader = file.reader
     this.filePath = filePath
     this.totalSize = file.size
     this.readSize = 0;
@@ -50,6 +50,9 @@ class ReadlineInterface {
     }
   }
   getPercent () {
+    if (Number.isNaN(this.totalSize)) {
+      return 0.5;
+    }
     return this.readSize / this.totalSize;
   }
 }

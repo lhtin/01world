@@ -84,11 +84,15 @@ const initKey = () => {
   const onFileOpen = async () => {
     const [fileHandle] = await window.showOpenFilePicker();
     const file = await fileHandle.getFile();
-    currentApp.loadFile(file)
+    currentApp.loadFile({
+      size: file.size,
+      name: demo,
+      reader: file.stream().getReader(),
+    })
   }
   document.getElementById('open-file').addEventListener('click', onFileOpen)
   window.addEventListener('keydown', (e) => {
-    console.log(e)
+    // console.log(e)
     if (e.ctrlKey && e.code == "KeyO") {
       onFileOpen();
       e.preventDefault()
@@ -197,11 +201,17 @@ initBox()
 initSearch()
 
 const loadDemo = async () => {
-  const demo = 'demo.pipeview.txt'
-  const response = await fetch(`./${demo}`);
-  const data = await response.blob();
-  const file = new File([data], demo, { type: data.type })
-  currentApp.loadFile(file)
+  const demo = 'demo.pipeview.txt-disasm.log'
+  fetch(`./${demo}`)
+    .then((res) => res.body)
+    .then((body) => {
+      const reader = body.getReader();
+      currentApp.loadFile({
+        size: NaN,
+        name: demo,
+        reader: reader,
+      })
+    })
 }
 
 loadDemo()

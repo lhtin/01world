@@ -203,15 +203,17 @@ class PipeViewLogParser {
       op.id = id; // この段階ではまだ未定
       op.gid = Number(gid);
       op.tid = 0;
-      const stages = log.stages.split(":").map((item) => item.split(","));
+      const stages = log.stages.split(",").map((item) => item.split(":"));
       op.fetchedCycle = Number(cycle);
       op.line = this.curLine_++;
       op.labelName += `${pc}: ${log.disasm}`;
       op.labelDetail += `Fetched Tick: ${op.fetchedCycle}`;
       if (log.tags) {
-        log.tags.split(":").map((item) => item.split("|")).forEach(([cycle, tag]) => {
+        for (let i = 0; i < log.tags.length; i += 2) {
+          const cycle = log.tags[i]
+          const tag = log.tags[i + 1]
           op.tags[op.fetchedCycle + Number(cycle)] = tag;
-        })
+        }
       }
       // console.log(op.tags)
 
@@ -273,6 +275,11 @@ class PipeViewLogParser {
         }
 
         // console.log('line', line);
+        line = line.trim()
+
+        if (!line) {
+          return;
+        }
         
         if (line.startsWith("meta:")) {
           this.isGem5O3PipeView = true;
@@ -289,6 +296,8 @@ class PipeViewLogParser {
         if (!this.parsedTracelog) {
           return;
         }
+
+        this.updateCount_++;
 
         const log = window.jsyaml.load(line)[0]
 
@@ -318,7 +327,6 @@ class PipeViewLogParser {
                 this.file_.getPercent(),
                 this.updateCount_
             );
-            this.updateCount_++;
 
             if (this.isGem5O3PipeView) {
                 // this.drainParsingOps_(false);

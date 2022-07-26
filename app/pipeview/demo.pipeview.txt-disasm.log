@@ -1,0 +1,140 @@
+meta: {stages: [Fetch1, Fetch2, Decode, Dispatch, Execute, Forwarding, WriteBack, Commit, Retire, Flush], shortStages: [F1, F2, DC, DS, EX, FW, WB, CM, RE, FL]}
+traceLog:
+- {m: "0:1:0x80000000:0x4081", disasm: "li  ra,0", stages: "F1:0,F2:3,DC:4,DS:5,EX:6,FW:7,WB:8,CM:9"}
+- {m: "1:1:0x80000002:0x4101", disasm: "li  sp,0", stages: "F1:0,F2:3,DC:4,DS:5,EX:6,FW:7,WB:8,CM:9"}
+- {m: "2:1:0x80000004:0x4181", disasm: "li  gp,0", stages: "F1:0,F2:3,DC:4,DS:6,EX:7,FW:8,WB:9,CM:10"}
+- {m: "3:1:0x80000006:0x4201", disasm: "li  tp,0", stages: "F1:0,F2:3,DC:5,DS:6,EX:7,FW:8,WB:9,CM:10"}
+- {m: "4:1:0x80000008:0x4281", disasm: "li  t0,0", stages: "F1:0,F2:3,DC:5,DS:7,EX:8,FW:9,WB:10,CM:11"}
+- {m: "5:1:0x8000000a:0x4301", disasm: "li  t1,0", stages: "F1:0,F2:3,DC:5,DS:7,EX:8,FW:9,WB:10,CM:11"}
+- {m: "6:1:0x8000000c:0x4381", disasm: "li  t2,0", stages: "F1:0,F2:3,DC:6,DS:8,EX:9,FW:10,WB:11,CM:12"}
+- {m: "7:1:0x8000000e:0x4401", disasm: "li  s0,0", stages: "F1:0,F2:3,DC:6,DS:8,EX:9,FW:10,WB:11,CM:12"}
+- {m: "8:2:0x80000010:0x4481", disasm: "li  s1,0", stages: "F1:0,F2:3,DC:5,DS:8,EX:9,FW:10,WB:11,CM:12"}
+- {m: "9:2:0x80000012:0x4501", disasm: "li  a0,0", stages: "F1:0,F2:3,DC:6,DS:8,EX:9,FW:10,WB:11,CM:12"}
+- {m: "10:2:0x80000014:0x4581", disasm: "li  a1,0", stages: "F1:0,F2:3,DC:6,DS:9,EX:10,FW:11,WB:12,CM:13"}
+- {m: "11:2:0x80000016:0x4601", disasm: "li  a2,0", stages: "F1:0,F2:3,DC:6,DS:9,EX:10,FW:11,WB:12,CM:13"}
+- {m: "12:2:0x80000018:0x4681", disasm: "li  a3,0", stages: "F1:0,F2:3,DC:8,DS:10,EX:11,FW:12,WB:13,CM:14"}
+- {m: "13:2:0x8000001a:0x4701", disasm: "li  a4,0", stages: "F1:0,F2:3,DC:8,DS:10,EX:11,FW:12,WB:13,CM:14"}
+- {m: "14:2:0x8000001c:0x4781", disasm: "li  a5,0", stages: "F1:0,F2:3,DC:8,DS:11,EX:12,FW:13,WB:14,CM:15"}
+- {m: "15:2:0x8000001e:0x4801", disasm: "li  a6,0", stages: "F1:0,F2:3,DC:9,DS:11,EX:12,FW:13,WB:14,CM:15"}
+- {m: "16:3:0x80000020:0x4881", disasm: "li  a7,0", stages: "F1:0,F2:3,DC:8,DS:11,EX:12,FW:13,WB:14,CM:15"}
+- {m: "17:3:0x80000022:0x4901", disasm: "li  s2,0", stages: "F1:0,F2:3,DC:8,DS:11,EX:12,FW:13,WB:14,CM:15"}
+- {m: "18:3:0x80000024:0x4981", disasm: "li  s3,0", stages: "F1:0,F2:3,DC:10,DS:12,EX:13,FW:14,WB:15,CM:16"}
+- {m: "19:3:0x80000026:0x4a01", disasm: "li  s4,0", stages: "F1:0,F2:3,DC:10,DS:12,EX:13,FW:14,WB:15,CM:16"}
+- {m: "20:3:0x80000028:0x4a81", disasm: "li  s5,0", stages: "F1:0,F2:3,DC:10,DS:13,EX:14,FW:15,WB:16,CM:17"}
+- {m: "21:3:0x8000002a:0x4b01", disasm: "li  s6,0", stages: "F1:0,F2:3,DC:11,DS:13,EX:14,FW:15,WB:16,CM:17"}
+- {m: "22:3:0x8000002c:0x4b81", disasm: "li  s7,0", stages: "F1:0,F2:3,DC:11,DS:14,EX:15,FW:16,WB:17,CM:18"}
+- {m: "23:3:0x8000002e:0x4c01", disasm: "li  s8,0", stages: "F1:0,F2:3,DC:11,DS:14,EX:15,FW:16,WB:17,CM:18"}
+- {m: "24:4:0x80000030:0x4c81", disasm: "li  s9,0", stages: "F1:0,F2:3,DC:12,DS:14,EX:15,FW:16,WB:17,CM:18"}
+- {m: "25:4:0x80000032:0x4d01", disasm: "li  s10,0", stages: "F1:0,F2:3,DC:12,DS:14,EX:15,FW:16,WB:17,CM:18"}
+- {m: "26:4:0x80000034:0x4d81", disasm: "li  s11,0", stages: "F1:0,F2:3,DC:12,DS:15,EX:16,FW:17,WB:18,CM:19"}
+- {m: "27:4:0x80000036:0x4e01", disasm: "li  t3,0", stages: "F1:0,F2:3,DC:13,DS:15,EX:16,FW:17,WB:18,CM:19"}
+- {m: "28:4:0x80000038:0x4e81", disasm: "li  t4,0", stages: "F1:0,F2:3,DC:13,DS:16,EX:17,FW:18,WB:19,CM:20"}
+- {m: "29:4:0x8000003a:0x4f01", disasm: "li  t5,0", stages: "F1:0,F2:3,DC:13,DS:16,EX:17,FW:18,WB:19,CM:20"}
+- {m: "30:4:0x8000003c:0x4f81", disasm: "li  t6,0", stages: "F1:0,F2:3,DC:15,DS:17,EX:18,FW:19,WB:20,CM:21"}
+- {m: "31:4:0x8000003e:0x62f9", disasm: "lui  t0,0x1e", stages: "F1:0,F2:3,DC:15,DS:17,EX:18,FW:19,WB:20,CM:21"}
+- {m: "32:5:0x80000040:0x3002a073", disasm: "csrs  mstatus,t0", stages: "F1:0,F2:3,DC:14,DS:16,EX:20,WB:22,CM:23"}
+- {m: "33:5:0x80000044:0x4285", disasm: "li  t0,1", stages: "F1:0,F2:3,DC:15,DS:17,EX:18,FW:19,WB:20,CM:23"}
+- {m: "34:5:0x80000046:0x2fe", disasm: "slli  t0,t0,0x1f", stages: "F1:0,F2:3,DC:15,DS:17,EX:19,FW:20,WB:21,CM:23", tags: [18,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "35:5:0x80000048:0x2d863", disasm: "bgez  t0,80000058 <_start+0x58>", stages: "F1:0,F2:3,DC:15,DS:17,EX:20,WB:22,CM:24", tags: [18,"Operand not ready",19,"Operand not ready"]}
+- {m: "36:5:0x8000004c:0x4505", disasm: "li  a0,1", stages: "F1:0,F2:3,DC:16,DS:18,EX:19,FW:20,WB:21,FL:22"}
+- {m: "37:6:0x8000004e:0x1297", disasm: "auipc  t0,0x1", stages: "F1:0,F2:4,DC:15,DS:17,EX:19,FW:20,WB:21,FL:21"}
+- {m: "38:6:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,F2:4,DC:15,DS:17,FL:21", tags: [18,"Operand not ready",19,"Operand not ready",20,"read port not avaiable",21,"read port not avaiable"]}
+- {m: "39:6:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,F2:4,DC:16,DS:18,EX:20,FL:21"}
+- {m: "40:6:0x80000050:0x0", disasm: "0x0", stages: "F1:0,FL:2"}
+- {m: "41:6:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,FL:2"}
+- {m: "42:6:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,FL:2"}
+- {m: "43:6:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1:0,FL:2"}
+- {m: "44:6:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1:0,FL:2"}
+- {m: "45:6:0x80000060:0x0", disasm: "csrw  mtvec,t0", stages: "F1:0,FL:2"}
+- {m: "46:9:0x8000004c:0x4505", disasm: "li  a0,1", stages: "F1:0,F2:3,DC:13,DS:15,EX:16,FW:18,FL:18", tags: [17,"WriteBack Port Busy"]}
+- {m: "47:10:0x8000004e:0x1297", disasm: "auipc  t0,0x1", stages: "F1:0,F2:3,DC:12,DS:14,EX:16,FW:17,FL:17"}
+- {m: "48:10:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,F2:3,DC:13,DS:15,FL:17"}
+- {m: "49:10:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,F2:3,DC:13,DS:15,EX:17,FL:17"}
+- {m: "50:10:0x80000050:0x0", disasm: "0x0", stages: "F1:0,FL:2"}
+- {m: "51:10:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,FL:2"}
+- {m: "52:10:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,FL:2"}
+- {m: "53:10:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1:0,FL:2"}
+- {m: "54:10:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1:0,FL:2"}
+- {m: "55:10:0x80000060:0x0", disasm: "csrw  mtvec,t0", stages: "F1:0,FL:2"}
+- {m: "56:12:0x8000004c:0x4505", disasm: "li  a0,1", stages: "F1:0,F2:3,DC:11,DS:13,EX:15,FL:15", tags: [14,"Fu is Busy"]}
+- {m: "57:13:0x8000004e:0x1297", disasm: "auipc  t0,0x1", stages: "F1:0,F2:3,DC:11,DS:13,FL:14"}
+- {m: "58:13:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,F2:3,DC:11,DS:13,FL:14"}
+- {m: "59:13:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,F2:3,DC:11,DS:13,FL:14"}
+- {m: "60:13:0x80000050:0x0", disasm: "0x0", stages: "F1:0,FL:2"}
+- {m: "61:13:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,FL:2"}
+- {m: "62:13:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,FL:2"}
+- {m: "63:13:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1:0,FL:2"}
+- {m: "64:13:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1:0,FL:2"}
+- {m: "65:13:0x80000060:0x0", disasm: "csrw  mtvec,t0", stages: "F1:0,FL:2"}
+- {m: "66:15:0x8000004c:0x4505", disasm: "li  a0,1", stages: "F1:0,F2:3,DC:10,FL:12"}
+- {m: "67:16:0x8000004e:0x1297", disasm: "auipc  t0,0x1", stages: "F1:0,F2:3,DC:9,FL:11"}
+- {m: "68:16:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,F2:3,DC:9,FL:11"}
+- {m: "69:16:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,F2:3,DC:10,FL:11"}
+- {m: "70:16:0x80000050:0x0", disasm: "0x0", stages: "F1:0,FL:2"}
+- {m: "71:16:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,FL:2"}
+- {m: "72:16:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,FL:2"}
+- {m: "73:16:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1:0,FL:2"}
+- {m: "74:16:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1:0,FL:2"}
+- {m: "75:16:0x80000060:0x0", disasm: "csrw  mtvec,t0", stages: "F1:0,FL:2"}
+- {m: "76:18:0x8000004c:0x4505", disasm: "li  a0,1", stages: "F1:0,F2:3,DC:8,FL:9"}
+- {m: "77:19:0x8000004e:0x1297", disasm: "auipc  t0,0x1", stages: "F1:0,F2:3,DC:7,FL:8"}
+- {m: "78:19:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,F2:3,FL:8"}
+- {m: "79:19:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,F2:3,FL:8"}
+- {m: "80:19:0x80000050:0x0", disasm: "0x0", stages: "F1:0,FL:2"}
+- {m: "81:19:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,FL:2"}
+- {m: "82:19:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,FL:2"}
+- {m: "83:19:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1:0,FL:2"}
+- {m: "84:19:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1:0,FL:2"}
+- {m: "85:19:0x80000060:0x0", disasm: "csrw  mtvec,t0", stages: "F1:0,FL:2"}
+- {m: "86:21:0x8000004c:0x4505", disasm: "li  a0,1", stages: "F1:0,F2:3,FL:6"}
+- {m: "87:22:0x8000004e:0x1297", disasm: "auipc  t0,0x1", stages: "F1:0,F2:3,FL:5"}
+- {m: "88:22:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,F2:3,FL:5"}
+- {m: "89:22:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,F2:3,FL:5"}
+- {m: "90:22:0x80000050:0x0", disasm: "0x0", stages: "F1:0,FL:2"}
+- {m: "91:22:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,FL:2"}
+- {m: "92:22:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,FL:2"}
+- {m: "93:22:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1:0,FL:2"}
+- {m: "94:22:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1:0,FL:2"}
+- {m: "95:22:0x80000060:0x0", disasm: "csrw  mtvec,t0", stages: "F1:0,FL:2"}
+- {m: "96:24:0x8000004c:0x4505", disasm: "li  a0,1", stages: "F1:0,FL:3"}
+- {m: "97:25:0x8000004e:0x1297", disasm: "auipc  t0,0x1", stages: "F1:0,FL:2"}
+- {m: "98:25:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,FL:2"}
+- {m: "99:25:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,FL:2"}
+- {m: "100:25:0x80000050:0x0", disasm: "0x0", stages: "F1:0,FL:2"}
+- {m: "101:25:0x80000052:0xfaa2a923", disasm: "sw  a0,-78(t0) # 80001000 <tohost>", stages: "F1:0,FL:2"}
+- {m: "102:25:0x80000056:0xbfdd", disasm: "j  8000004c <_start+0x4c>", stages: "F1:0,FL:2"}
+- {m: "103:25:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1:0,FL:2"}
+- {m: "104:25:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1:0,FL:2"}
+- {m: "105:25:0x80000060:0x0", disasm: "csrw  mtvec,t0", stages: "F1:0,FL:2"}
+- {m: "106:25:0x8000004c:0x0", disasm: "li  a0,1", stages: "F1:0,FL:2"}
+- {m: "107:28:0x80000058:0x297", disasm: "auipc  t0,0x0", stages: "F1:0,F2:3,DC:4,DS:5,EX:6,FW:7,WB:8,CM:9"}
+- {m: "108:28:0x8000005c:0x4828293", disasm: "addi  t0,t0,72 # 800000a0 <trap_entry>", stages: "F1:0,F2:3,DC:4,DS:5,EX:7,FW:8,WB:9,CM:10", tags: [6,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "109:29:0x80000060:0x30529073", disasm: "csrw  mtvec,t0", stages: "F1:0,F2:3,DC:4,DS:5,EX:7,WB:9,CM:10"}
+- {m: "110:29:0x80000064:0x5197", disasm: "auipc  gp,0x5", stages: "F1:0,F2:3,DC:4,DS:5,EX:6,FW:7,WB:8,CM:10"}
+- {m: "111:29:0x80000068:0xdd418193", disasm: "addi  gp,gp,-556 # 80004e38 <__global_pointer$>", stages: "F1:0,F2:3,DC:4,DS:5,EX:7,FW:8,WB:9,CM:10"}
+- {m: "112:29:0x8000006c:0x1000217", disasm: "auipc  tp,0x1000", stages: "F1:0,F2:3,DC:5,DS:6,EX:7,FW:9,WB:10,CM:11", tags: [8,"WriteBack Port Busy"]}
+- {m: "113:30:0x80000070:0xfe320213", disasm: "addi  tp,tp,-29 # 8100004f <_end+0x3f>", stages: "F1:0,F2:3,DC:4,DS:5,EX:8,FW:9,WB:10,CM:11", tags: [7,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "114:30:0x80000074:0xfc027213", disasm: "andi  tp,tp,-64", stages: "F1:0,F2:3,DC:4,DS:6,EX:9,FW:10,WB:11,CM:12", tags: [7,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",8,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "115:30:0x80000078:0xf1402573", disasm: "csrr  a0,mhartid", stages: "F1:0,F2:3,DC:5,DS:6,EX:11,FW:12,WB:13,CM:14"}
+- {m: "116:30:0x8000007c:0x4585", disasm: "li  a1,1", stages: "F1:0,F2:3,DC:5,DS:6,EX:7,FW:8,WB:9,CM:14"}
+- {m: "117:31:0x8000007e:0xb57063", disasm: "bgeu  a0,a1,8000007e <_start+0x7e>", stages: "F1:0,F2:3,DC:4,DS:6,EX:11,WB:13,CM:14", tags: [7,"Operand not ready",8,"Operand not ready",9,"Operand not ready",10,"Operand not ready"]}
+- {m: "118:31:0x80000082:0x1151613", disasm: "slli  a2,a0,0x11", stages: "F1:0,F2:3,DC:5,DS:6,EX:12,FW:13,WB:14,CM:15", tags: [7,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",9,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",10,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",11,"Fu is Busy"]}
+- {m: "119:31:0x80000086:0x9232", disasm: "add  tp,tp,a2", stages: "F1:0,F2:3,DC:5,DS:6,EX:13,FW:14,WB:15,CM:16", tags: [8,"operand not ready, rs1 true, rs2 true, rs3 false, br.rs1 false, br.rs2 false",9,"operand not ready, rs1 false, rs2 true, rs3 false, br.rs1 false, br.rs2 false",10,"operand not ready, rs1 false, rs2 true, rs3 false, br.rs1 false, br.rs2 false",11,"operand not ready, rs1 false, rs2 true, rs3 false, br.rs1 false, br.rs2 false",12,"operand not ready, rs1 false, rs2 true, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "120:31:0x80000088:0x150113", disasm: "addi  sp,a0,1", stages: "F1:0,F2:3,DC:5,DS:7,EX:13,FW:14,WB:15,CM:16", tags: [9,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",10,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "121:31:0x8000008c:0x146", disasm: "slli  sp,sp,0x11", stages: "F1:0,F2:3,DC:6,DS:7,EX:14,FW:15,WB:16,CM:17", tags: [8,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",9,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",10,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",11,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false",12,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "122:31:0x8000008e:0x9112", disasm: "add  sp,sp,tp", stages: "F1:0,F2:3,DC:6,DS:8,EX:15,FW:16,WB:17,CM:18", tags: [9,"operand not ready, rs1 true, rs2 true, rs3 false, br.rs1 false, br.rs2 false",10,"operand not ready, rs1 true, rs2 true, rs3 false, br.rs1 false, br.rs2 false",14,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "123:32:0x80000090:0x4f17", disasm: "auipc  t5,0x4", stages: "F1:0,F2:3,DC:5,DS:7,EX:8,FW:9,WB:10,CM:17"}
+- {m: "124:32:0x80000094:0xb40f0f13", disasm: "addi  t5,t5,-1216 # 80003bd0 <_init>", stages: "F1:0,F2:3,DC:6,DS:8,EX:9,FW:11,WB:12,CM:17", tags: [10,"WriteBack Port Busy"]}
+- {m: "125:32:0x80000098:0xf00e7", disasm: "jalr  t5", stages: "F1:0,F2:3,DC:6,DS:8,EX:11,FW:12,WB:13,CM:18"}
+- {m: "126:32:0x8000009c:0xff0000f", disasm: "fence", stages: "F1:0,F2:3,DC:6,CM:8"}
+- {m: "127:33:0x800000a0:0x716d", disasm: "addi  sp,sp,-272", stages: "F1:0,F2:3,DC:6,DS:8,FL:12", tags: [12,"operand not ready, rs1 true, rs2 false, rs3 false, br.rs1 false, br.rs2 false"]}
+- {m: "128:33:0x800000a2:0xe406", disasm: "sd  ra,8(sp)", stages: "F1:0,F2:3,DC:6,DS:8,FL:12", tags: [9,"Operand not ready",10,"Operand not ready",11,"Operand not ready",12,"Operand not ready"]}
+- {m: "129:33:0x800000a4:0xe80a", disasm: "sd  sp,16(sp)", stages: "F1:0,F2:3,DC:6,DS:9,FL:12"}
+- {m: "130:33:0x800000a6:0xec0e", disasm: "sd  gp,24(sp)", stages: "F1:0,F2:3,DC:7,DS:10,FL:12"}
+- {m: "131:33:0x800000a8:0xf012", disasm: "sd  tp,32(sp)", stages: "F1:0,F2:3,DC:7,DS:11,FL:12"}
+- {m: "132:33:0x800000aa:0xf416", disasm: "sd  t0,40(sp)", stages: "F1:0,F2:3,DC:7,FL:12"}
+- {m: "133:33:0x800000ac:0xf81a", disasm: "sd  t1,48(sp)", stages: "F1:0,F2:3,DC:9,FL:12"}
+- {m: "134:33:0x800000ae:0xfc1e", disasm: "sd  t2,56(sp)", stages: "F1:0,F2:3,DC:9,FL:12"}
+- {m: "135:34:0x800000b0:0xe0a2", disasm: "sd  s0,64(sp)", stages: "F1:0,F2:3,DC:8,FL:11"}
+- {m: "136:34:0x800000b2:0xe4a6", disasm: "sd  s1,72(sp)", stages: "F1:0,F2:3,FL:11"}
+- {m: "137:34:0x800000b4:0xe8aa", disasm: "sd  a0,80(sp)", stages: "F1:0,F2:3,FL:11"}
