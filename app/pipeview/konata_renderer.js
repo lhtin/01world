@@ -517,6 +517,23 @@ class KonataRenderer{
         return text;
     }
 
+    startSlop(x, y) {
+      let op = this.getOpFromPixelPosY(y, this.opResolution);
+      if (!op) {
+          this.startPoint = null
+          this.endPoint = null
+      } else {
+        this.startPoint = [x, y]
+        this.startPos = [this.hideFlushedOps ? op.rid : op.id, this.getCycleFromPixelPosX(x)]
+      }
+    }
+
+    stopSlop() {
+      this.startPoint = null
+      this.endPoint = null
+      this.changed = true
+    }
+
     // 为像素坐标创建工具提示文本
     getPipelineToolTipText(x, y){
         let self = this;
@@ -529,7 +546,13 @@ class KonataRenderer{
 
         // X 座標に対応したサイクル数を取得
         let cycle = self.getCycleFromPixelPosX(x);
-        let text = `cycle: ${cycle}<br>id: ${op.id}<br>rid: ${op.rid}<br>${op.labelName}`;
+        let text = ""
+        if (this.startPoint) {
+          text += `slop: ${(((this.hideFlushedOps ? op.rid : op.id) - this.startPos[0]) / (cycle - this.startPos[1])).toFixed(2)}<br>`
+          this.endPoint = [x, y]
+          this.changed = true;
+        }
+        text += `cycle: ${cycle}<br>id: ${op.id}<br>gid: ${op.gid}<br>rid: ${op.rid}<br>${op.labelName}`;
         if (cycle < op.fetchedCycle || cycle > op.retiredCycle) {
             return text;
         }
@@ -880,6 +903,14 @@ class KonataRenderer{
             begin = Math.max(0, begin);
             ctx.fillStyle = this.style_.pipelinePane.invalidBackgroundColor;
             ctx.fillRect(0, begin, tile.width, tile.height);
+        }
+
+        if (this.startPoint && this.endPoint) {
+          ctx.beginPath()
+          ctx.moveTo(this.startPoint[0], this.startPoint[1])
+          ctx.lineTo(this.endPoint[0], this.endPoint[1])
+          ctx.strokeStyle = "red"
+          ctx.stroke()
         }
     }
 

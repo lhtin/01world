@@ -164,7 +164,24 @@ const initBox = () => {
   window.addEventListener('mousemove', onMouseMove)
   doms.pipelineCanvas.addEventListener("mousewheel", onMouseWheel)
   doms.labelCanvas.addEventListener("mousewheel", onMouseWheel)
+  let fired = false
+  let starSlope = false;
+  window.addEventListener("keydown", (e) => {
+    // console.log(e)
+    if (e.ctrlKey && e.code == "ShiftLeft" && !fired) {
+      fired = true
+      e.preventDefault()
+    } else if (e.code == "Escape") {
+      currentApp.renderer.stopSlop();
+      fired = false
+      starSlope = false
+    }
+  })
   doms.pipelineCanvas.addEventListener("mousemove", (e) => {
+    if (fired && !starSlope) {
+      currentApp.renderer.startSlop(e.offsetX, e.offsetY);
+      starSlope = true
+    }
     currentApp.toolTipPipeline.move(e)
   })
   doms.pipelineCanvas.addEventListener("mouseleave", (e) => {
