@@ -167,11 +167,13 @@ const initBox = () => {
   let fired = false
   let starSlope = false;
   window.addEventListener("keydown", (e) => {
-    // console.log(e)
-    if (e.ctrlKey && e.code == "ShiftLeft" && !fired) {
+    if (e.code == "AltLeft" && !fired) {
       fired = true
       e.preventDefault()
-    } else if (e.code == "Escape") {
+    }
+  })
+  window.addEventListener("keyup", (e) => {
+    if (e.code == "AltLeft") {
       currentApp.renderer.stopSlop();
       fired = false
       starSlope = false
