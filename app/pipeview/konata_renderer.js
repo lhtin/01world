@@ -11,7 +11,7 @@ let DEP_ARROW_TYPE = {
 
 class KonataRenderer{
 
-    constructor(labelCanvas, pipelineCanvas){
+    constructor(labelCanvas, pipelineCanvas, shadow = false){
         this.labelCanvas = labelCanvas
         this.pipelineCanvas = pipelineCanvas
         this.changed = false;
@@ -22,8 +22,9 @@ class KonataRenderer{
         this.viewPos_ = {
             left: NaN,
             top: 0
-        }; 
+        };
 
+        this.shadow = shadow;
 
         // 依存関係の矢印のタイプ
         this.depArrowType_ = DEP_ARROW_TYPE.INSIDE_LINE;
@@ -79,17 +80,28 @@ class KonataRenderer{
         // Styles of Konata renderer defined by JSON
         /** @type {Object} */
         this.style_ = null;
+
+        this.startCycle = null;
+    }
+
+    addDiffRenderer (renderer) {
+      this.diffRenderer = renderer
     }
 
     setSearchRegexp (regexp) {
       this.searchRegexp = regexp;
-      this.changed = true;
+      this.change()
     }
 
     listenChange () {
       if (this.changed) {
-        this.drawLabel(this.labelCanvas)
+        !this.shadow && this.drawLabel(this.labelCanvas)
         this.drawPipeline(this.pipelineCanvas)
+        if (this.diffRenderer && this.startCycle && this.diffRenderer.startCycle) {
+          this.diffRenderer.zoomScale_ = this.zoomScale_
+          this.diffRenderer.moveLogicalPos([this.viewPos[0] + this.diffRenderer.startCycle - this.startCycle, this.viewPos[1]])
+          this.diffRenderer.change()
+        }
         this.changed = false;
       }
       requestAnimationFrame(() => this.listenChange())
@@ -496,6 +508,15 @@ class KonataRenderer{
         return Math.floor(self.viewPos_.left + x / self.opW_);
     }
 
+    escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
 
     // ピクセル座標に対応するツールチップのテキストを作る
     getLabelToolTipText(y){
@@ -505,7 +526,7 @@ class KonataRenderer{
             return null;
         }
         let text = 
-            `${op.labelName}<br>` + 
+            `${this.escapeHtml(op.labelName)}<br>` + 
             `${op.labelDetail}<br>` + 
             `Line: \t\t${op.line}<br>` +
             `Serial ID:\t${op.gid}<br>` +
@@ -531,7 +552,7 @@ class KonataRenderer{
     stopSlop() {
       this.startPoint = null
       this.endPoint = null
-      this.changed = true
+      this.change()
     }
 
     // 为像素坐标创建工具提示文本
@@ -548,11 +569,13 @@ class KonataRenderer{
         let cycle = self.getCycleFromPixelPosX(x);
         let text = ""
         if (this.startPoint) {
-          text += `slop: ${(((this.hideFlushedOps ? op.rid : op.id) - this.startPos[0]) / (cycle - this.startPos[1])).toFixed(2)}<br>`
+          const diffY = (this.hideFlushedOps ? op.rid : op.id) - this.startPos[0]
+          const diffX = cycle - this.startPos[1]
+          text += `IPC: ${(diffY / diffX).toFixed(2)} (${diffY} insns / ${diffX} cycle)<br>`
           this.endPoint = [x, y]
-          this.changed = true;
+          this.change()
         }
-        text += `cycle: ${cycle}<br>id: ${op.id}<br>gid: ${op.gid}<br>rid: ${op.rid}<br>${op.labelName}`;
+        text += `cycle: ${cycle}<br>id: ${op.id}<br>gid: ${op.gid}<br>rid: ${op.rid}<br>${this.escapeHtml(op.labelName)}`;
         if (cycle < op.fetchedCycle || cycle > op.retiredCycle) {
             return text;
         }
@@ -673,6 +696,9 @@ class KonataRenderer{
     }
     set hideFlushedOps(h){
         this.hideFlushedOps_ = h;
+        if (this.diffRenderer) {
+          this.diffRenderer.hideFlushedOps_ = h;
+        }
         this.updateScaleParameter();
         this.change();
     }
@@ -822,7 +848,13 @@ class KonataRenderer{
         let left = pos.left;
 
         self.updateScaleParameter();    // 非同期読み込みの関係で，毎回呼ぶ必要がある
+        let ctx = canvas.getContext("2d");
+        ctx.save()
         self.drawPipelineTile_(canvas, top, left);
+        ctx.restore()
+        ctx.font = "32px"
+        ctx.fillStyle = "white"
+        ctx.fillText(self.zoomScale_, canvas.width / 2, 20);
         return true;
     }
 
@@ -834,12 +866,14 @@ class KonataRenderer{
         let width = tile.width / self.opW_;
 
         let ctx = tile.getContext("2d");
-        ctx.fillStyle = self.style_.pipelinePane.backgroundColor; //"rgb(255,255,255)";
-        ctx.fillRect(0, 0, tile.width, tile.height);
+        if (!this.shadow) {
+          ctx.fillStyle = self.style_.pipelinePane.backgroundColor; //"rgb(255,255,255)";
+          ctx.fillRect(0, 0, tile.width, tile.height);
+        }
 
         // 上側にはみ出ていた場合，暗く描画
         let offsetY = 0;
-        if (top < 0) {
+        if (top < 0 && !this.shadow) {
             let bottom = -top * self.opH_ + self.PIXEL_ADJUST;
             bottom = Math.min(tile.height, bottom);
             ctx.fillStyle = this.style_.pipelinePane.invalidBackgroundColor;
@@ -860,7 +894,7 @@ class KonataRenderer{
 
             // 背景をストライプに
             let pixelY = y - top + offsetY;
-            if (self.canDrawFrame) {
+            if (self.canDrawFrame && !this.shadow) {
                 if (y % 2 == 0) {
                     let fillTop = pixelY * this.opH_ + self.PIXEL_ADJUST;
                     ctx.fillStyle = this.style_.pipelinePane.backgroundColorStripeOverlay;
@@ -897,7 +931,7 @@ class KonataRenderer{
 
 
         // 下側にはみ出ていた場合，暗く描画
-        if (top - offsetY + height > self.getVisibleBottom()) {
+        if (top - offsetY + height > self.getVisibleBottom() && !this.shadow) {
           // console.log(self.getVisibleBottom())
             let begin = tile.height - (top - offsetY + height - (self.getVisibleBottom() + 1)) * self.opH_ + self.PIXEL_ADJUST;
             begin = Math.max(0, begin);
@@ -905,7 +939,7 @@ class KonataRenderer{
             ctx.fillRect(0, begin, tile.width, tile.height);
         }
 
-        if (this.startPoint && this.endPoint) {
+        if (this.startPoint && this.endPoint && !this.shadow) {
           ctx.beginPath()
           ctx.moveTo(this.startPoint[0], this.startPoint[1])
           ctx.lineTo(this.endPoint[0], this.endPoint[1])
@@ -1098,7 +1132,7 @@ class KonataRenderer{
         let stageLevelMap = this.konata_.stageLevelMap;
         let laneNum = stageLevelMap.laneNum;
 
-        if (self.canDrawDetailedly) {
+        if (self.canDrawDetailedly && !this.shadow) {
             // 枠内に表示の余地がある場合
             ctx.strokeStyle = this.style_.pipelinePane.borderColor;
 
@@ -1131,7 +1165,15 @@ class KonataRenderer{
                 ctx.fillStyle = self.colorScheme_;
             }
             else{
+              if (!this.shadow) {
                 ctx.fillStyle = "#888888";
+              } else {
+                if (self.canDrawDetailedly) {
+                  ctx.fillStyle = "rgba(255,0,0,0.2)";
+                } else {
+                  ctx.fillStyle = "red";
+                }
+              }
             }
 
             // 表示位置の計算

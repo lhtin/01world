@@ -38,7 +38,7 @@ class ReadlineInterface {
 
       setTimeout(() => {
         this.reading()
-      }, 100)
+      }, 10)
     })
   }
   on (event, cb) {

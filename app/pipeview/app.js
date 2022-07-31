@@ -36,9 +36,10 @@ class App {
     this.renderer.reset()
     this.konata.openFile(file,
       (percent, count) => {
-        console.log(percent, count);
+        console.log("base", percent, count);
         if (Number.isNaN(this.renderer.viewPos[0])) {
           this.renderer.moveLogicalPos([this.konata.startCycle, this.renderer.viewPos[1]])
+          this.renderer.startCycle = this.konata.startCycle
         }
         this.renderer.change()
         doms.progressBar.value = percent;
@@ -46,6 +47,25 @@ class App {
         console.log("finish")
         doms.progressBar.value = 1;
         this.renderer.change()
+      }, (errMsg) => {
+        console.warn(errMsg);
+      })
+  }
+  loadDiffFile (file) {
+    this.diffRenderer = new KonataRenderer(doms.labelCanvas, doms.pipelineCanvas, true);
+    this.diffKonata = new Konata()
+    this.diffRenderer.init(this.diffKonata, this.config)
+    this.renderer.addDiffRenderer(this.diffRenderer)
+    this.diffRenderer.reset()
+    this.diffKonata.openFile(file,
+      (percent, count) => {
+        console.log("diff", percent, count);
+        if (Number.isNaN(this.diffRenderer.viewPos[0])) {
+          this.diffRenderer.moveLogicalPos([this.diffKonata.startCycle, this.diffRenderer.viewPos[1]])
+          this.diffRenderer.startCycle = this.diffKonata.startCycle
+        }
+      }, () => {
+        console.log("finish")
       }, (errMsg) => {
         console.warn(errMsg);
       })
@@ -90,11 +110,24 @@ const initKey = () => {
       reader: file.stream().getReader(),
     })
   }
+  const onDiffFileOpen = async () => {
+    const [fileHandle] = await window.showOpenFilePicker();
+    const file = await fileHandle.getFile();
+    currentApp.loadDiffFile({
+      size: file.size,
+      name: demo,
+      reader: file.stream().getReader(),
+    })
+  }
   document.getElementById('open-file').addEventListener('click', onFileOpen)
   window.addEventListener('keydown', (e) => {
     // console.log(e)
     if (e.ctrlKey && e.code == "KeyO") {
-      onFileOpen();
+      if (e.shiftKey) {
+        onDiffFileOpen()
+      } else {
+        onFileOpen();
+      }
       e.preventDefault()
     } else if (e.ctrlKey && e.code == "Equal") {
       currentApp.zoom.startZoom(-1, 0, 0)
@@ -121,6 +154,13 @@ const initKey = () => {
         currentApp.renderer.setSearchRegexp(null);
       }
       e.preventDefault()
+    } else if (e.ctrlKey && e.code == "KeyZ") {
+      if (currentApp.splitterDrag.hideLabelPanel) {
+        currentApp.splitterDrag.show()
+      } else {
+        currentApp.splitterDrag.hide()
+        currentApp.renderer.moveLogicalPos([currentApp.konata.startCycle, 0])
+      }
     }
   })
 }
@@ -181,8 +221,8 @@ const initBox = () => {
   })
   doms.pipelineCanvas.addEventListener("mousemove", (e) => {
     if (fired && !starSlope) {
-      currentApp.renderer.startSlop(e.offsetX, e.offsetY);
       starSlope = true
+      currentApp.renderer.startSlop(e.offsetX, e.offsetY);
     }
     currentApp.toolTipPipeline.move(e)
   })
@@ -219,18 +259,43 @@ initKey()
 initBox()
 initSearch()
 
-const loadDemo = async () => {
-  const demo = 'demo.pipeview.txt-disasm.log'
+const loadDemo1 = async () => {
+  const demo = sessionStorage.getItem("fileName") || 'demo.pipeview.txt-disasm.log'
   fetch(`./${demo}`)
-    .then((res) => res.body)
-    .then((body) => {
-      const reader = body.getReader();
+    .then((res) => {
+      const size = Number(res.headers.get("content-length"));
+      const reader = res.body.getReader();
       currentApp.loadFile({
-        size: NaN,
+        size: size,
         name: demo,
         reader: reader,
       })
     })
 }
 
-loadDemo()
+const loadDemo2 = async () => {
+  const demo = sessionStorage.getItem("fileName") || 'demo.pipeview.txt-disasm.log'
+  const demo1 = "statemate-default.pipeview.txt-disasm.log"
+  const demo2 = "statemate-scheduling.pipeview.txt-disasm.log"
+  fetch(`./${demo2}`)
+    .then((res) => {
+      const size = Number(res.headers.get("content-length"));
+      const reader = res.body.getReader();
+      currentApp.loadFile({
+        size: size,
+        name: demo,
+        reader: reader,
+      })
+      fetch(`./${demo1}`).then((res) => {
+        const size = Number(res.headers.get("content-length"));
+        const reader = res.body.getReader();
+        currentApp.loadDiffFile({
+          size: size,
+          name: demo,
+          reader: reader,
+        })
+      })
+    })
+}
+
+loadDemo1()

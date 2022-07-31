@@ -154,6 +154,7 @@ class SplitterDrag {
   constructor (labelCantainer, renderer) {
     this.labelCantainer = labelCantainer;
     this.renderer = renderer;
+    this.hideLabelPanel = false;
   }
   startDrap (x) {
     this.inDrag = true;
@@ -169,6 +170,16 @@ class SplitterDrag {
     let diff = x - this.prevMouseX;
     this.prevMouseX = x;
     this.labelCantainer.style.width = `${this.labelCantainer.offsetWidth + diff}px`;
+    this.renderer.resize()
+  }
+  hide () {
+    this.labelCantainer.style.display = "none"
+    this.hideLabelPanel = true;
+    this.renderer.resize()
+  }
+  show () {
+    this.labelCantainer.style.display = "block"
+    this.hideLabelPanel = false;
     this.renderer.resize()
   }
 }
