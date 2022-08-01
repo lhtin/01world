@@ -43,6 +43,9 @@
 
 ## Blog
 
+- RV64中`int32_t`和`uint32_t`对性能的影响
+- RISC-V中寻址模式总结及链接器实现
+- RISC-V函数栈帧及GCC实现
 - [软硬件接口之内存模型及RISC-V内存模型介绍](./blog/memory-model.md)（2022-5-17）
 
 ## Apps
