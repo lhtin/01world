@@ -207,7 +207,7 @@ matrix_add_const_signed(int32_t N, char *A, char val)
 
 ## ARM64和x86-64指令集的表现
 
-对于ARM64指令集，如果禁掉ivopts pass的话（编译参数 `-O2 -fno-ivopts`），循环部分的指令数并没有差距，核心原因是 `ldrb` 和 `strb` 指令支持32位和64位寄存器直接相加，并且相加时可以指定32位操作数如何扩展为64位（[在线地址](https://godbolt.org/z/dohh7M8eT)）：
+对于ARM64指令集，如果禁掉ivopts pass的话（编译参数 `-O2 -fno-ivopts`），循环部分的指令数并没有差距，核心原因是 `ldrb` 和 `strb` 指令支持32位和64位寄存器直接相加，并且相加时可以指定32位操作数如何扩展为64位（uxtw表示无符号扩展，sxtw表示有符号扩展，[在线地址](https://godbolt.org/z/dohh7M8eT)）：
 
 ```asm
 matrix_add_const_unsigned:
@@ -254,7 +254,7 @@ matrix_add_const_signed:
         ret
 ```
 
-然后对于x86-64指令集来说，如果禁掉ivopts pass的话（编译参数 `-O2 -fno-ivopts`），循环部分的指令数signed版反而多了一条 `cdqe` 指令。经过查资料，发现这是因为x86-64指令集规定，做32位数值运算时，32位的结果是zero-extended到64位存储到寄存器中的，当需要符号扩展的时候就需要使用 `cdqe` 指令（[在线地址](https://godbolt.org/z/MYndav5x6)）：
+然后对于x86-64指令集来说，如果禁掉ivopts pass的话（编译参数 `-O2 -fno-ivopts`），循环部分的指令数signed版反而多了一条 `cdqe` 指令。经过查资料，发现这是因为x86-64指令集规定，做32位数值运算时，32位的结果是zero-extended到64位存储到寄存器中的，当需要符号扩展的时候就需要多使用一条 `cdqe` 指令（[在线地址](https://godbolt.org/z/MYndav5x6)）：
 
 ```asm
 matrix_add_const_unsigned:
