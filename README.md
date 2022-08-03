@@ -43,7 +43,7 @@
 
 ## Blog
 
-- RV64中`int32_t`和`uint32_t`对性能的影响
+- [CoreMark中的ee_u32类型对指令数的影响（使用RV64GC指令集）](./blog/coremark-unsigned-signed-perf-on-rv64.md)
 - RISC-V中寻址模式总结及链接器实现
 - RISC-V函数栈帧及GCC实现
 - [软硬件接口之内存模型及RISC-V内存模型介绍](./blog/memory-model.md)（2022-5-17）
