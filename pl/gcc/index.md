@@ -49,8 +49,13 @@
   # get_insns() 获取当前的rtx list
   call print_rtl(stderr, get_insns())
   
-  # insn uid
-  insn->u2.insn_uid
+  # insn 结构
+  struct rtx_insn {
+    rtx_code code;
+    union {
+      int insn_uid;
+    } u2;
+  }
   ```
 
 ## Passes
