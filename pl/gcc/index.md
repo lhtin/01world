@@ -48,6 +48,9 @@
   # 打印rtx列表
   # get_insns() 获取当前的rtx list
   call print_rtl(stderr, get_insns())
+  
+  # insn uid
+  insn->u2.insn_uid
   ```
 
 ## Passes
