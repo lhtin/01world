@@ -35,6 +35,7 @@
     - 书
       - [Computer Organization and Design: the Hardware/Software Interface](./res/book/computer-organization-and-design/index.md)
   - [工具箱](./tools/index.md)
+    - [dev-env-init](./tools/dev-env-init.md)
     - [vim](./tools/vim.md)
     - [make](./tools/make.md)
     - [gdb](./tools/gdb.md)
