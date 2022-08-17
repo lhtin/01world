@@ -39,7 +39,10 @@
   - `cd -` 回到前一个访问的目录
   - `cd ~` 进入home目录
 - `command 2>&1 | tee xxx.log` 将command的stdout和stderr输出到屏幕，同时保存到xxx.log文件中
-- `> xxx.log && command 2>&1 >> xxx.log | tee -a xxx.log` 将command的stdout和stderr保存到xxx.log文件中，同时将stderr输出到界面
+- `> xxx.log && command 2>&1 >> xxx.log | tee -a xxx.log` 目的是报错stderr和stdout的内容到xxx.log，同时只在屏幕输出stderr的内容
+  1. `> xxx.log` 表示清空xxx.log文件
+  2. `command 2>&1 >> xxx.log` 表示将command的stdout输出追加到xxx.log文件，并且将stderr重定向到stdout
+  3. `| tee -a xxx.log` 表示将前面命令的stdout，其实这是就是stderr重定向过来的内容追加到xxx.log并继续输出到stdout
 - `less` 按Shift+F等待新写入的内容，按Ctrl+C取消等待
 - decompress:
   - `.deb`: `ar -vx xxx.deb` 里面会有data.tar.zst文件，使用下面的方式解压
