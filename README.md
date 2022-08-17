@@ -40,6 +40,7 @@
     - [gdb](./tools/gdb.md)
     - [git](./tools/git.md)
     - [english](./tools/english.md)
+    - [shell](./tools/shell.md)
 
 ## Blog
 
