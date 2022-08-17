@@ -34,13 +34,14 @@
   - 资料
     - 书
       - [Computer Organization and Design: the Hardware/Software Interface](./res/book/computer-organization-and-design/index.md)
-  - [工具箱](./tools/index.md)
+  - 工具箱
     - [dev-env-init](./tools/dev-env-init.md)
+    - [shell](./tools/shell.md)
     - [vim](./tools/vim.md)
     - [make](./tools/make.md)
     - [gdb](./tools/gdb.md)
     - [git](./tools/git.md)
-    - [shell](./tools/shell.md)
+    - [qemu](./tools/qemu.md)
 
 ## Blog
 
