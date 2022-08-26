@@ -141,7 +141,7 @@ x = 1        |  y = 1        |  r1 = x       |  r3 = y
 7. Thread 4观察到Thread 1修改的内存x的值
 8. Thread 3观察到Thread 2修改的内存y的值
 
-为了保证程序执行完之后y和z的值要么是Thread 1修改后的1和2，要么是Thread 2修改后的2和1，而不希望出现1和1或者2和2的情况。通过使用acquire和release操作（类似lock和unlock），使得y和z的修改操作可以看做是是原子的。
+又如下面的例子，为了保证程序执行完之后y和z的值要么是Thread 1修改后的1和2，要么是Thread 2修改后的2和1，而不希望出现1和1或者2和2的情况。通过使用acquire和release操作（类似lock和unlock），使得y和z的修改操作可以看做是是原子的。
 
 ```
 // Thread 1  |  // Thread 2
@@ -169,7 +169,7 @@ RISC-V架构中提供两种内存模型供选择，RVWMO和RVTSO。RVWMO属于RC
 - 内存操作执行了：load操作的返回值确定；store操作被所有harts观察到
 -->
 
-RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中Preserved Program Order规则集规定了哪些情况下，同一线程中的内存操作a和b之间的global memory order必须和他们之间的program order保持一致（即preserved program order）。3条公理用于增加新的规则集没有规定的限制。详细介绍如下：
+RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中Preserved Program Order规则集规定了哪些情况下，同一线程中的内存操作a和b之间的global memory order必须和他们之间的program order保持一致（即preserved program order）。3条公理用于增加新的限制。详细介绍如下：
 
 - Preserved Program Order
 
@@ -207,6 +207,8 @@ RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中
   1. 在global memory order中发生在i之前的store操作。
 
   2. 在program order中在i之前的store操作。
+  
+  这条公理增加了对load操作返回值的限制，如果当前线程对应的store操作还没有写到shared memory组件时，返回该store的值，否则返回写到shared memory的最后一个store的值。
 
 - Atomicity Axiom
 
