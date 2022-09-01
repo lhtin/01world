@@ -34,19 +34,25 @@
   - 资料
     - 书
       - [Computer Organization and Design: the Hardware/Software Interface](./res/book/computer-organization-and-design/index.md)
-  - [工具箱](./tools/index.md)
+  - 工具箱
+    - [dev-env-init](./tools/dev-env-init.md)
+    - [shell](./tools/shell.md)
     - [vim](./tools/vim.md)
     - [make](./tools/make.md)
     - [gdb](./tools/gdb.md)
     - [git](./tools/git.md)
-    - [english](./tools/english.md)
+    - [qemu](./tools/qemu.md)
 
 ## Blog
 
+- RISC-V中寻址模式总结及链接器实现
+- RISC-V函数栈帧及GCC实现
+- [CoreMark中的ee_u32类型对指令数的影响（使用RV64GC指令集）](./blog/coremark-unsigned-signed-perf-on-rv64.md)（2022-8-3）
 - [软硬件接口之内存模型及RISC-V内存模型介绍](./blog/memory-model.md)（2022-5-17）
 
 ## Apps
 
+- RISC-V指令Decode
 - [RISC-V ISA指令速览](./app/riscv-isa)
 - [Pipeline Viewer (Fork from Konata Project)](./app/pipeview)
 

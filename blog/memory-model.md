@@ -1,8 +1,6 @@
 # 软硬件接口之内存模型及RISC-V内存模型介绍
 
-[TOC]
-
-本文介绍软硬件接口中的内存模型接口，包括内存模型的概念及常见的几种内存模型，然后介绍RISC-V指令架构中的内存模型。其中的例子大部分部分来自于参考资料。
+本文介绍软硬件接口中的内存模型接口，包括内存模型的概念及常见的几种内存模型，然后介绍RISC-V指令架构中的内存模型。其中的例子大部分来自于参考资料。
 
 术语
 
@@ -13,13 +11,13 @@
 
 ## 内存模型简介
 
-内存模型（memory model or memory consistency model）是一种软件与硬件之间的接口，包含一系列的规则。**这些规则规定了在多线程程序（多个独立的执行体，多线程）的运行过程中，共享内存访问指令（LOAD和STORE）的行为，或者说规定LOAD指令可以返回哪些值。**这些规则越宽松（也就是说运行时的可能顺序越多），允许的处理器优化就越多，同时在该模型上编程就越复杂。如何在这两者之间选择一个平衡点是关键。经过多年发展，业界提出了多个内存模型。本文主要介绍几种在工业界使用的内存模型，包括sequential consistency model（SC）、total store ordering model（TSO）和release consistency model（RC）。这三个内存模型，规则越来越宽松。其中x86-64处理器实现的是STO内存模型，RISC-V则提供STO和RC两种内存模型选择。
+内存模型（memory model or memory consistency model）是一种软件与硬件之间的接口，包含一系列的规则。**这些规则规定了在多线程程序（多个独立的执行体，多线程）的运行过程中，共享内存访问指令（LOAD和STORE）的行为，或者说规定LOAD指令可以返回哪些值**。这些规则越宽松（也就是说运行时的可能顺序越多），允许的处理器优化就越多，同时在该模型上编程就越复杂。如何在这两者之间选择一个平衡点是关键。经过多年发展，业界提出了多个内存模型。本文主要介绍几种在工业界使用的内存模型，包括sequential consistency model（SC）、total store ordering model（TSO）和release consistency model（RC）。这三个内存模型，规则越来越宽松。其中x86-64处理器实现的是STO内存模型，RISC-V则提供STO和RC两种内存模型选择。
 
 ### Sequential Consistency Model
 
-直观上来看，多线程程序中的共享内存访问指令应该是排他地访问shared memory，在完成之前其他访问指令将被阻塞。因此从shared memory的角度来看，它并不需要知道有多个线程在同时执行。多个线程中的所有共享内存访问指令最终是以某种先后顺序（全局内存访问顺序，global memory order）访问shared memory。然后具体到一个线程中的内存访问指令，这些指令在global memory order中的先后顺序跟它在程序中的先后顺序（program order）一致。这也是sequential consistency model规定的行为。SC内存模型由Leslie Lamport在1979年提出[x]。
+直观上来看，多线程程序中的共享内存访问指令应该是排他地访问shared memory，在完成之前其他访问指令将被阻塞。因此从shared memory的角度来看，它并不需要知道有多个线程在同时执行。多个线程中的所有共享内存访问指令最终是以某种先后顺序（全局内存访问顺序，global memory order）访问shared memory。然后具体到一个线程中的内存访问指令，这些指令在global memory order中的先后顺序跟它在程序中的先后顺序（program order）一致。这也是sequential consistency model规定的行为。
 
-在SC内存模型下，并行程序相比于串行程序，因为每个线程被调度的时机是不确定的，会存在多个可能的global memory order。**并行程序执行的结果就像是每次从所有未结束的线程中随机选择一个并执行其当前指令，直到所有线程的指令都执行完。**因此在这个模型中，每个线程中的指令被处理器执行的先后顺序跟指令的program order一致。比如下面这个例子，有以下6种可能的global memory order（例子中的x、y、z为内存变量，r1、r2、r3等为寄存器变量，并假设这些变量的初始值为0，后面的示例都采用类似约定）。
+在SC内存模型下，并行程序相比于串行程序，因为每个线程被调度的时机是不确定的，会存在多个可能的global memory order。**并行程序执行的结果就像是每次从所有未结束的线程中随机选择一个并执行其当前指令，直到所有线程的指令都执行完**。因此在这个模型中，每个线程中的指令被处理器执行的先后顺序跟指令的program order一致。比如下面这个例子，有以下6种可能的global memory order（例子中的x、y、z为内存变量，r1、r2、r3等为寄存器变量，并假设这些变量的初始值为0，后面的示例都采用类似约定）。
 
 ```
 // Thread 1  |  // Thread 2  |  // Thread 3
@@ -49,11 +47,11 @@ check:           |  x = 1
 
 保证内存y的值为修改后的内存x的值加上2。
 
-这种交互是多线程相比单线程天然增加的一种情况，跟用的哪种内存模型没有关系。而比SC更弱的内存模型，因为共享内存指令执行的实际顺序可能跟program order不一致，还需要考虑这种不一致的情况是否会导致程序运行不符合预期。如果可能会出问题，则需要加入更多的顺序控制指令以保证程序的实际顺序不会出现不符合预期的情况。
+这种交互是多线程相比单线程天然增加的一种情况，跟用哪种内存模型没有关系。而比SC更弱的内存模型，因为共享内存指令执行的实际顺序可能跟program order不一致，还需要考虑这种不一致的情况是否会导致程序运行不符合预期。如果可能会出问题，则需要加入更多的顺序控制指令以保证程序的实际顺序不会出现不符合预期的情况。
 
 ### Total Store Ordering Model
 
-假如将SC内存模型中的一些指令的顺序放宽，比如允许改变program order中的STORE -> LOAD的顺序。这种模型叫做total store ordering model，是x86处理器实现的内存模型。跟SC相比，program order中的STORE -> LOAD（先STORE后LOAD）这种顺序可以改变，其余的组合（LOAD -> LOAD，LOAD -> STORE，STORE -> STORE）和SC内存模型一样必须保持program order。需要注意的是，这里说的LOAD与STORE之间的顺序是相对shared memory组件来说的。比如这里的STORE -> LOAD顺序可以改变是说LOAD可以先读取shared memory，STORE后写入shared memory。但是假如LOAD的内存地址和STORE的内存地址一样，则优先返回STORE的值（即使该STORE还没有写入shared memory），而不是从shared memory中读取，这是为了保证程序的语义。否则有可能出现读取到之前STORE的值。
+假如将SC内存模型中的一些指令的顺序放宽，比如允许改变program order中的STORE -> LOAD的顺序（STORE和LOAD都处于同一个线程）。这种模型叫做total store ordering model，是x86处理器实现的内存模型。跟SC相比，program order中的STORE -> LOAD（先STORE后LOAD）这种顺序可以改变，其余的组合（LOAD -> LOAD，LOAD -> STORE，STORE -> STORE）和SC内存模型一样必须保持program order。需要注意的是，这里说的LOAD与STORE之间的顺序是相对shared memory组件来说的。比如这里的STORE -> LOAD顺序可以改变是说LOAD可以先读取shared memory，STORE后写入shared memory。但是假如LOAD的内存地址和STORE的内存地址一样，则优先返回STORE的值（即使该STORE还没有写入shared memory），而不是从shared memory中读取，这是为了保证程序的语义。否则有可能出现读到之前该线程STORE的值。
 
 从实现角度上来理解，可以认为每个处理器有一个私有的write queue，执行STORE时先放入write queue，然后继续执行后面的指令。等到时机成熟再将write queue中的STOREs按照先进先出的顺序批量写入shared memory。这里也可以看成STORE操作不再是原子操作，而是分成了两步操作。首先是写入write queue（STORE1），这时仅对自己线程的LOAD指令可见。然后写入shared memory（STORE2），对其他线程的LOAD指令可见。
 
@@ -79,12 +77,12 @@ r1 = y       |  r2 = x
 4. 执行`r2 = x`，从shared memory读取内存x的值为0（此时`x = 1`的写入操作还在write queue中）（LOAD_x）
 5. 执行Thread 1中的write queue，修改shared memory中内存x的值为1（STORE2_x）
 
-通过使用fence内存屏障指令（比如x86中的mfence）强制在该指令之前强制执行write queue中的STORE操作，从而保证Thread 3能够结束（也就是说Thread 1和Thread 2执行完之后，内存a和b中的值不会同时为0）：
+这时就需要引入新的内存控制指令（比如fence内存屏障指令），以便让用户告知CPU强制执行write queue中的STOREs指令。比如下面的例子，使用fence内存屏障指令（比如x86中的mfence）强制在该指令之前执行write queue中的STOREs操作，从而保证Thread 3能够结束（也就是说Thread 1和Thread 2执行完之后，内存a和b中的值不会同时为0）：
 
 ```
 // Thread 1  |  // Thread 2  |  // Thread 3
 x = 1        |  y = 1        |  wait:
-fence        |  fence        |    if (a != 1 && b != 1)
+fence        |  fence        |    if (a == 0 && b == 0)
 a = y        |  b = x        |      goto wait
 ```
 
@@ -143,7 +141,7 @@ x = 1        |  y = 1        |  r1 = x       |  r3 = y
 7. Thread 4观察到Thread 1修改的内存x的值
 8. Thread 3观察到Thread 2修改的内存y的值
 
-为了保证程序执行完之后y和z的值要么是Thread 1修改后的1和2，要么是Thread 2修改后的2和1，而不希望出现1和1或者2和2的情况。通过使用acquire和release操作（类似lock和unlock），使得y和z的修改操作可以看做是是原子的。
+又如下面的例子，为了保证程序执行完之后y和z的值要么是Thread 1修改后的1和2，要么是Thread 2修改后的2和1，而不希望出现1和1或者2和2的情况。通过使用acquire和release操作（类似lock和unlock），使得y和z的修改操作可以看做是是原子的。
 
 ```
 // Thread 1  |  // Thread 2
@@ -171,7 +169,7 @@ RISC-V架构中提供两种内存模型供选择，RVWMO和RVTSO。RVWMO属于RC
 - 内存操作执行了：load操作的返回值确定；store操作被所有harts观察到
 -->
 
-RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中Preserved Program Order规则集规定了哪些情况下，同一线程中的内存操作a和b之间的global memory order必须和他们之间的program order保持一致（即preserved program order）。3条公理用于增加新的规则集没有规定的限制。详细介绍如下：
+RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中Preserved Program Order规则集规定了哪些情况下，同一线程中的内存操作a和b之间的global memory order必须和他们之间的program order保持一致（即preserved program order）。3条公理用于增加新的限制。详细介绍如下：
 
 - Preserved Program Order
 
@@ -209,6 +207,8 @@ RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中
   1. 在global memory order中发生在i之前的store操作。
 
   2. 在program order中在i之前的store操作。
+  
+  这条公理增加了对load操作返回值的限制，如果当前线程对应的store操作还没有写到shared memory组件时，返回该store的值，否则返回写到shared memory的最后一个store的值。
 
 - Atomicity Axiom
 

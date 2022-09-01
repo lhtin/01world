@@ -1,5 +1,14 @@
 # Git
 
+## .gitconfig
+
+```
+[core]
+        filemode = true # 提交时包含文件得可执行权限属性
+```
+
+## 常用命令
+
 - `git show <commit-id>` 展示commit-id的修改内容
 - `git reset --soft hash` 将hash之后的所有commit合并为一个修改并staged，需要重新commit提交。一般用于将多个相关的commit合并为一个。`hash`也可以改为`HEAD~N`，表示将最近N个commit合并为一个
 - `git commit --amend` 修改最后一条commit信息，同时将staged中的修改内容包含在里面
