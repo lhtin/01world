@@ -47,7 +47,7 @@
 
 ## Apps
 
-- [RISC-V ISA指令速览](./app/riscv)
+- [RISC-V ISA指令速览](./app/riscv-isa)
 - [Pipeline Viewer (Fork from Konata Project)](./app/pipeview)
 
 

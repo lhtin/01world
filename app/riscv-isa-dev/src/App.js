@@ -1,3 +1,11 @@
+import React from "react"
+import * as marked from "marked"
+import jsyaml from "js-yaml"
+
+import "./App.css"
+import "./lib/bootstrap/css/bootstrap.min.css"
+import "./lib/bootstrap/css/bootstrap-theme.min.css"
+
 const RISCV_EXTENSIONS = new Set([
   "I", "M", "A", "F", "D", "Q", "C", "V",
   "Zicsr", "Zifencei"
@@ -248,6 +256,4 @@ const App = () => {
   </div>
 };
 
-const container = document.getElementById('root');
-const root = ReactDOM.createRoot(container);
-root.render(<App />);
+export default App;
