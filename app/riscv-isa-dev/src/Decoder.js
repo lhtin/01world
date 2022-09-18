@@ -173,7 +173,7 @@ const Decoder = ({xlen}) => {
       <p>Type: {insnInfo.type}</p>
       <p>assembly: <code>{insnInfo.asm}</code></p>
       <pre className="d-flex flex-column align-items-stretch">
-        <code className="d-flex flex-row text-center" style={{fontSize: '9px'}}>
+        <code className="d-flex flex-row text-center" style={{fontSize: '10px'}}>
           {[...Array(32).keys()].map((i) => {
             let j = 31 - i
             return <React.Fragment key={i}>
@@ -193,7 +193,7 @@ const Decoder = ({xlen}) => {
               </React.Fragment>
             })}
         </code>
-        <code className="d-flex flex-row text-center">
+        <code className="d-flex flex-row text-center" style={{fontSize: '10px'}}>
           {tpl[insnInfo.type].map((field, i) => {
             return <React.Fragment key={i}>
               {i > 0 ? <Bar /> : null}
