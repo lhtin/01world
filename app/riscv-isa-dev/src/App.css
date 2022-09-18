@@ -1,54 +1,61 @@
-.btn, .btn-small, .btn-large {
-  text-transform: none;
-  margin: 5px;
+:root {
+  --bs-body-font-size: 0.8rem;
 }
 
 .container {
   max-width: 800px;
 }
 
-.checkbox+.checkbox, .radio+.radio {
-  margin-top: 10px;
-}
-
-.margin-bottom {
-  margin-bottom: 10px;
-}
-
-.margin-bottom-20 {
-  margin-bottom: 20px;
-}
-
-.margin-top {
-  margin-top: 10px;
-}
-
-.margin-top-20 {
-  margin-top: 20px;
-}
-
-.margin-left {
-  margin-left: 10px;
-}
-
-.margin-left-20 {
-  margin-left: 20px;
-}
-
-.margin-right-20 {
-  margin-right: 20px;
-}
-
 .asm code {
   font-size: 110%;
 }
 
-.flexbox {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+body {
+  font-size: 14px;
 }
 
-.panel-heading {
-  cursor: pointer;
+code {
+  padding: 5px;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+  color: #c7254e;
+}
+
+pre {
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+  display: block;
+  font-size: 13px;
+  line-height: 1.42857143;
+  margin: 0 0 10px;
+  padding: 9.5px;
+  word-break: break-all;
+}
+
+pre code {
+  background-color: initial;
+  border-radius: 0;
+  color: inherit;
+  font-size: inherit;
+  padding: 0;
+  white-space: pre-wrap;
+}
+
+.flex-1 {
+  flex: 1;
+}
+.flex-7 {
+  flex: 7;
+}
+.flex-5 {
+  flex: 5;
+}
+.flex-3 {
+  flex: 3;
+}
+.flex-6 {
+  flex: 6;
 }

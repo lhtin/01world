@@ -1,0 +1,10 @@
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap
+}
+
+.field-item {
+    border: 1px solid black;
+    border-width: 0 1px;
+}
