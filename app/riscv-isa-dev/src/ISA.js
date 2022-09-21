@@ -240,16 +240,22 @@ const ISA = () => {
                 <small>&nbsp;&nbsp;&nbsp;&nbsp;{extInfo.meta?.version}</small>
               </h3>
               {extInfo.meta?.desc ? <div className="mt-2"><small>{extInfo.meta.desc}</small></div> : null}
+          </div>
+          {extInfo.meta.notations ? <div className="card m-2">
+            <div className="card-header">Notations</div>
+            <div className="card-body">
+              <pre><code>{extInfo.meta.notations}</code></pre>
             </div>
-            {extVisible[extInfo.name] === false 
-              ? null 
-              : <ul className="list-group list-group-flush">
-                  {extInfo.insns.map((info) => (
-                    <li key={info.name} className="list-group-item">
-                      <Instruction info={info} />
-                    </li>
-                  ))}
-                </ul>}
+          </div> : null}
+          {extVisible[extInfo.name] === false 
+            ? null 
+            : <ul className="list-group list-group-flush">
+                {extInfo.insns.map((info) => (
+                  <li key={info.name} className="list-group-item">
+                    <Instruction info={info} />
+                  </li>
+                ))}
+              </ul>}
         </div>
     )) : null}
   </div>

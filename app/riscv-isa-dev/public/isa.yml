@@ -707,8 +707,283 @@ Q:
 C:
   meta:
     version: "2.0"
-    desc: "compressed instructions"
+    desc: "compressed instructions."
+    notations: |
+      compression scheme:
+        - the immediate or address offset is small, or
+        - one of the registers is the zero register (x0), the ABI link register (x1), or the ABI stack pointer (x2), or
+        - the destination register and the first source register are identical, or
+        - the registers used are the 8 most popular ones.
+      
+      rd', rs1', rs2': use 3 bits for x8(0b000) ~ x15(0b111) or f8 ~ f15
 
+  # Stack-Pointer-Based Loads and Stores
+  C.LWSP:
+    asm: c.lwsp rd, imm6
+    desc: C.LWSP loads a 32-bit value from memory into register rd. It computes an effective address by adding the zero-extended offset, scaled by 4, to the stack pointer, x2. It expands to lw rd, offset(x2). C.LWSP is only valid when rd̸=x0; the code points with rd=x0 are reserved.
+    code: |
+      offset = zero_extend(imm6) << 2
+      rd = mem[x2 + offset]
+  C.LDSP:
+    only_base: [rv64, rv128]
+    asm: c.ldsp rd, imm6
+    desc: C.LDSP is an RV64C/RV128C-only instruction that loads a 64-bit value from memory into register rd. It computes its effective address by adding the zero-extended offset, scaled by 8, to the stack pointer, x2. It expands to ld rd, offset(x2). C.LDSP is only valid when rd̸=x0; the code points with rd=x0 are reserved.
+    code: |
+      offset = zero_extend(imm6) << 3
+      rd = mem[x2 + offset]
+  C.LQSP:
+    only_base: [rv128]
+    asm: c.lqsp rd, imm6
+    desc: C.LQSP is an RV128C-only instruction that loads a 128-bit value from memory into register rd. It computes its effective address by adding the zero-extended offset, scaled by 16, to the stack pointer, x2. It expands to lq rd, offset(x2). C.LQSP is only valid when rd̸=x0; the code points with rd=x0 are reserved.
+    code: |
+      offset = zero_extend(imm6) << 4
+      rd = mem[x2 + offset]
+  C.FLWSP:
+    only_base: [rv32]
+    asm: c.flwsp rd, imm6
+    desc: C.FLWSP is an RV32FC-only instruction that loads a single-precision floating-point value from memory into floating-point register rd. It computes its effective address by adding the zero-extended offset, scaled by 4, to the stack pointer, x2. It expands to flw rd, offset(x2).
+    code: |
+      offset = zero_extend(imm6) << 2
+      rd = mem[x2 + offset]
+  C.FLDSP:
+    asm: c.fldsp rd, imm6
+    desc: C.FLDSP is an RV32DC/RV64DC-only instruction that loads a double-precision floating-point value from memory into floating-point register rd. It computes its effective address by adding the zero-extended offset, scaled by 8, to the stack pointer, x2. It expands to fld rd, offset(x2).
+    code: |
+      offset = zero_extend(imm6) << 3
+      rd = mem[x2 + offset]
+  C.SWSP:
+    asm: c.swsp rs2, imm6
+    desc: C.SWSP stores a 32-bit value in register rs2 to memory. It computes an effective address by adding the zero-extended offset, scaled by 4, to the stack pointer, x2. It expands to sw rs2, offset(x2).
+    code: |
+      offset = zero_extend(imm6) << 2
+      mem[x2 + offset] = rs2
+  C.SDSP:
+    only_base: [rv64, rv128]
+    asm: c.sdsp rs2, imm6
+    desc: C.SDSP is an RV64C/RV128C-only instruction that stores a 64-bit value in register rs2 to memory. It computes an effective address by adding the zero-extended offset, scaled by 8, to the stack pointer, x2. It expands to sd rs2, offset(x2).
+    code: |
+      offset = zero_extend(imm6) << 3
+      mem[x2 + offset] = rs2
+  C.SQSP:
+    only_base: [rv128]
+    asm: c.sqsp rs2, imm6
+    desc: C.SQSP is an RV128C-only instruction that stores a 128-bit value in register rs2 to memory. It computes an effective address by adding the zero-extended offset, scaled by 16, to the stack pointer, x2. It expands to sq rs2, offset(x2).
+    code: |
+      offset = zero_extend(imm6) << 4
+      mem[x2 + offset] = rs2
+  C.FSWSP:
+    only_base: [rv32]
+    asm: c.fswsp rs2, imm6
+    desc: C.FSWSP is an RV32FC-only instruction that stores a single-precision floating-point value in floating-point register rs2 to memory. It computes an effective address by adding the zero-extended offset, scaled by 4, to the stack pointer, x2. It expands to fsw rs2, offset(x2).
+    code: |
+      offset = zero_extend(imm6) << 2
+      mem[x2 + offset] = rs2
+  C.FSDSP:
+    asm: c.fsdsp rs2, imm6
+    desc: C.FSDSP is an RV32DC/RV64DC-only instruction that stores a double-precision floating-point value in floating-point register rs2 to memory. It computes an effective address by adding the zero-extended offset, scaled by 8, to the stack pointer, x2. It expands to fsd rs2, offset(x2).
+    code: |
+      offset = zero_extend(imm6) << 3
+      mem[x2 + offset] = rs2
+  # Register-Based Loads and Stores
+  C.LW:
+    asm: c.lw rd', imm5(rs1')
+    desc: C.LW loads a 32-bit value from memory into register rd′. It computes an effective address by adding the zero-extended offset, scaled by 4, to the base address in register rs1′. It expands to lw rd′, offset(rs1′).
+    code: |
+      offset = zero_extend(imm5) << 2
+      rd' = mem[rs1' + offset]
+  C.LD:
+    only_base: [rv64, rv128]
+    asm: c.ld rd', imm5(rs1')
+    desc: C.LD is an RV64C/RV128C-only instruction that loads a 64-bit value from memory into register rd′. It computes an effective address by adding the zero-extended offset, scaled by 8, to the base address in register rs1′. It expands to ld rd′, offset(rs1′).
+    code: |
+      offset = zero_extend(imm5) << 3
+      rd' = mem[rs1' + offset]
+  C.LQ:
+    only_base: [rv128]
+    asm: c.lq rd', imm5(rs1')
+    desc: C.LQ is an RV128C-only instruction that loads a 128-bit value from memory into register rd ′. It computes an effective address by adding the zero-extended offset, scaled by 16, to the base address in register rs1 ′. It expands to lq rd ′, offset(rs1 ′).
+    code: |
+      offset = zero_extend(imm5) << 4
+      rd' = mem[rs1' + offset]
+  C.FLW:
+    only_base: [rv32]
+    asm: c.flw rd', imm5(rs1')
+    desc: C.FLW is an RV32FC-only instruction that loads a single-precision floating-point value from memory into floating-point register rd ′. It computes an effective address by adding the zero-extended offset, scaled by 4, to the base address in register rs1 ′. It expands to flw rd ′, offset(rs1 ′).
+    code: |
+      offset = zero_extend(imm5) << 2
+      rd' = mem[rs1' + offset]
+  C.FLD:
+    asm: c.fld rd', imm5(rs1')
+    desc: C.FLD is an RV32DC/RV64DC-only instruction that loads a double-precision floating-point value from memory into floating-point register rd ′. It computes an effective address by adding the zero-extended offset, scaled by 8, to the base address in register rs1 ′. It expands to fld rd ′, offset(rs1 ′).
+    code: |
+      offset = zero_extend(imm5) << 3
+      rd' = mem[rs1' + offset]
+  C.SW:
+    asm: c.sw rs2', imm5(rs1')
+    desc: C.SW stores a 32-bit value in register rs2 ′ to memory. It computes an effective address by adding the zero-extended offset, scaled by 4, to the base address in register rs1 ′. It expands to sw rs2 ′, offset(rs1 ′).
+    code: |
+      offset = zero_extend(imm5) << 2
+      mem[rs1' + offset] = rs2'
+  C.SD:
+    only_base: [rv64, rv128]
+    asm: c.sd rs2', imm5(rs1')
+    desc: C.SD is an RV64C/RV128C-only instruction that stores a 64-bit value in register rs2 ′ to memory. It computes an effective address by adding the zero-extended offset, scaled by 8, to the base address in register rs1 ′. It expands to sd rs2 ′, offset(rs1 ′).
+    code: |
+      offset = zero_extend(imm5) << 3
+      mem[rs1' + offset] = rs2'
+  C.SQ:
+    only_base: [rv128]
+    asm: c.sq rs2', imm5(rs1')
+    desc: C.SQ is an RV128C-only instruction that stores a 128-bit value in register rs2 ′ to memory. It computes an effective address by adding the zero-extended offset, scaled by 16, to the base address in register rs1 ′. It expands to sq rs2 ′, offset(rs1 ′).
+    code: |
+      offset = zero_extend(imm5) << 4
+      mem[rs1' + offset] = rs2'
+  C.FSW:
+    only_base: [rv32]
+    require: [f]
+    asm: c.fsw rs2', imm5(rs1')
+    desc: C.FSW is an RV32FC-only instruction that stores a single-precision floating-point value in floatingpoint register rs2 ′ to memory. It computes an effective address by adding the zero-extended offset, scaled by 4, to the base address in register rs1 ′. It expands to fsw rs2 ′, offset(rs1 ′).
+    code: |
+      offset = zero_extend(imm5) << 2
+      mem[rs1' + offset] = rs2'
+  C.FSD:
+    require: [d]
+    asm: c.fsd rs2', imm5(rs1')
+    desc: C.FSD is an RV32DC/RV64DC-only instruction that stores a double-precision floating-point value in floating-point register rs2 ′ to memory. It computes an effective address by adding the zeroextended offset, scaled by 8, to the base address in register rs1 ′. It expands to fsd rs2 ′, offset(rs1 ′).
+    code: |
+      offset = zero_extend(imm5) << 3
+      mem[rs1' + offset] = rs2'
+  # Control Transfer Instructions
+  C.J:
+    asm: c.j imm11
+    desc: C.J performs an unconditional control transfer. The offset is sign-extended and added to the pc to form the jump target address. C.J can therefore target a ±2 KiB range. C.J expands to jal x0, offset.
+    code: |
+      offset = sign_extend(imm11) << 1
+      new_pc = current_pc + offset
+  C.JAL:
+    only_base: [rv32]
+    asm: c.jal imm11
+    desc: C.JAL is an RV32C-only instruction that performs the same operation as C.J, but additionally writes the address of the instruction following the jump (pc+2) to the link register, x1. C.JAL expands to jal x1, offset.
+    code: |
+      offset = sign_extend(imm11) << 1
+      x1 = current_pc
+      new_pc = current_pc + offset
+  C.JR:
+    asm: c.jr rs1
+    desc: C.JR (jump register) performs an unconditional control transfer to the address in register rs1. C.JR expands to jalr x0, 0(rs1). C.JR is only valid when rs1̸=x0; the code point with rs1=x0 is reserved.
+    code: |
+      new_pc = rs1
+  C.JALR:
+    asm: c.jalr rs1
+    desc: C.JALR (jump and link register) performs the same operation as C.JR, but additionally writes the address of the instruction following the jump (pc+2) to the link register, x1. C.JALR expands to jalr x1, 0(rs1). C.JALR is only valid when rs1̸=x0; the code point with rs1=x0 corresponds to the C.EBREAK instruction.
+    code: |
+      x1 = current_pc
+      new_pc = rs1
+  C.BEQZ:
+    asm: c.beqz rs1', imm8
+    desc: C.BEQZ performs conditional control transfers. The offset is sign-extended and added to the pc to form the branch target address. It can therefore target a ±256 B range. C.BEQZ takes the branch if the value in register rs1 ′ is zero. It expands to beq rs1 ′, x0, offset.
+    code: |
+      if rs1' == 0:
+        offset = sign_extend(imm8) << 1
+        new_pc = current_pc + offset
+  C.BNEZ:
+    asm: c.bnez rs1', imm8
+    desc: C.BNEZ is defined analogously, but it takes the branch if rs1 ′ contains a nonzero value. It expands to bne rs1 ′, x0, offset.
+    code: |
+      if rs1' != 0:
+        offset = signe_extend(imm8) << 1
+        new_pc = current_pc + offset
+  #Integer Constant-Generation Instructions
+  C.LI:
+    asm: c.li rd, imm6
+    desc: C.LI loads the sign-extended 6-bit immediate, imm, into register rd. C.LI expands into addi rd, x0, imm. C.LI is only valid when rd̸=x0; the code points with rd=x0 encode HINTs.
+    code: rd = sign_extend(imm6)
+  C.LUI:
+    asm: c.lui rd, nzimm6
+    desc: C.LUI loads the non-zero 6-bit immediate field into bits 17–12 of the destination register, clears the bottom 12 bits, and sign-extends bit 17 into all higher bits of the destination. C.LUI expands into lui rd, nzimm. C.LUI is only valid when rd̸={x0, x2}, and when the immediate is not equal to zero. The code points with nzimm=0 are reserved; the remaining code points with rd=x0 are HINTs; and the remaining code points with rd=x2 correspond to the C.ADDI16SP instruction.
+    code: |
+      imm17 = nzimm6 << 12
+      rd = sign_extend(imm17)
+  # Integer Register-Immediate Operations
+  C.ADDI:
+    asm: c.addi rd, nzimm6
+    desc: C.ADDI adds the non-zero sign-extended 6-bit immediate to the value in register rd then writes the result to rd. C.ADDI expands into addi rd, rd, nzimm. C.ADDI is only valid when rd̸=x0 and nzimm̸=0. The code points with rd=x0 encode the C.NOP instruction; the remaining code points with nzimm=0 encode HINTs.
+    code: rd = rd + sign_extend(nzimm6)
+  C.ADDIW:
+    only_base: [rv64, rv128]
+    asm: c.addiw rd, imm6
+    desc: C.ADDIW is an RV64C/RV128C-only instruction that performs the same computation but produces a 32-bit result, then sign-extends result to 64 bits. C.ADDIW expands into addiw rd, rd, imm. The immediate can be zero for C.ADDIW, where this corresponds to sext.w rd. C.ADDIW is only valid when rd̸=x0; the code points with rd=x0 are reserved.
+    code: |
+      temp_32bit = rd_32bit + sign_textend(imm6)
+      rd = sign_textend(temp_32bit)
+  C.ADDI16SP:
+    asm: c.addi16sp x2, imm6
+    desc: C.ADDI16SP shares the opcode with C.LUI, but has a destination field of x2. C.ADDI16SP adds the non-zero sign-extended 6-bit immediate to the value in the stack pointer (sp=x2), where the immediate is scaled to represent multiples of 16 in the range (-512,496). C.ADDI16SP is used to adjust the stack pointer in procedure prologues and epilogues. It expands into addi x2, x2, nzimm. C.ADDI16SP is only valid when nzimm̸=0; the code point with nzimm=0 is reserved.
+    code: x2 = x2 + sign_extend(imm6 << 4)
+  C.ADDI4SPN:
+    asm:  c.addi4spn rd', x2, nzuimm8
+    desc: C.ADDI4SPN is a CIW-format instruction that adds a zero-extended non-zero immediate, scaled by 4, to the stack pointer, x2, and writes the result to rd ′. This instruction is used to generate pointers to stack-allocated variables, and expands to addi rd ′, x2, nzuimm. C.ADDI4SPN is only valid when nzuimm̸=0; the code points with nzuimm=0 are reserved.
+    code: |
+      rd' = x2 + zero_extend(nzuimm8 << 2)
+  C.SLLI:
+    asm: c.slli rd, shamt6
+    desc: |
+      C.SLLI is a CI-format instruction that performs a logical left shift of the value in register rd then writes the result to rd. The shift amount is encoded in the shamt field. For RV128C, a shift amount of zero is used to encode a shift of 64. C.SLLI expands into slli rd, rd, shamt, except for RV128C with shamt=0, which expands to slli rd, rd, 64.
+      For RV32C, shamt[5] must be zero; the code points with shamt[5]=1 are designated for custom extensions. For RV32C and RV64C, the shift amount must be non-zero; the code points with shamt=0 are HINTs. For all base ISAs, the code points with rd=x0 are HINTs, except those with shamt[5]=1 in RV32C.
+    code: rd = rd << shamt6
+  C.SRLI:
+    asm: c.srli rd, shamt6
+    desc: |
+      C.SRLI is a CB-format instruction that performs a logical right shift of the value in register rd ′ then writes the result to rd ′. The shift amount is encoded in the shamt field. For RV128C, a hift amount of zero is used to encode a shift of 64. Furthermore, the shift amount is sign-extended for RV128C, and so the legal shift amounts are 1–31, 64, and 96–127. C.SRLI expands into srli rd ′, d ′, shamt, except for RV128C with shamt=0, which expands to srli rd ′, rd ′, 64.
+      For RV32C, shamt[5] must be zero; the code points with shamt[5]=1 are designated for custom extensions. For RV32C and RV64C, the shift amount must be non-zero; the code points with shamt=0 are HINTs.
+    code: rd = rd >> shamt6
+  C.SRAI:
+    asm: c.srai rd, shamt6
+    desc: C.SRAI is defined analogously to C.SRLI, but instead performs an arithmetic right shift. C.SRAI expands to srai rd ′, rd ′, shamt.
+    code: rd = rd >>> shamt6
+  C.ANDI:
+    asm: c.andi rd', imm6
+    desc: C.ANDI is a CB-format instruction that computes the bitwise AND of the value in register rd ′ and the sign-extended 6-bit immediate, then writes the result to rd ′. C.ANDI expands to andi rd ′, rd ′, imm.
+    code: rd' = rd' & sign_extend(imm6)
+  # Integer Register-Register Operations
+  C.MV:
+    asm: c.mv rd, rs2
+    desc: C.MV copies the value in register rs2 into register rd. C.MV expands into add rd, x0, rs2. C.MV is only valid when rs2̸=x0; the code points with rs2=x0 correspond to the C.JR instruction. The code points with rs2̸=x0 and rd=x0 are HINTs.
+    code: rd = rs2
+  C.ADD:
+    asm: c.add rd, rs2
+    desc: C.ADD adds the values in registers rd and rs2 and writes the result to register rd. C.ADD expands into add rd, rd, rs2. C.ADD is only valid when rs2̸=x0; the code points with rs2=x0 correspond to the C.JALR and C.EBREAK instructions. The code points with rs2̸=x0 and rd=x0 are HINTs.
+    code: rd = rd + rs2
+  C.AND:
+    asm: c.and rd', rs2'
+    desc: C.AND computes the bitwise AND of the values in registers rd ′ and rs2 ′, then writes the result to register rd ′. C.AND expands into and rd ′, rd ′, rs2 ′.
+    code: rd' = rd' and rs2' 
+  C.OR:
+    asm: c.or rd', rs2'
+    desc: C.OR computes the bitwise OR of the values in registers rd ′ and rs2 ′, then writes the result to register rd ′. C.OR expands into or rd ′, rd ′, rs2 ′.
+    code: rd' = rd' or rs2'
+  C.XOR:
+    asm: c.xor rd', rs2'
+    desc: C.XOR computes the bitwise XOR of the values in registers rd ′ and rs2 ′, then writes the result to register rd ′. C.XOR expands into xor rd ′, rd ′, rs2 ′.
+    code: rd' = rd' xor rs2'
+  C.SUB:
+    asm: c.sub rd', rs2'
+    desc: C.SUB subtracts the value in register rs2 ′ from the value in register rd ′, then writes the result to register rd ′. C.SUB expands into sub rd ′, rd ′, rs2 ′.
+    code: rd' = rd' - rs2'
+  C.ADDW:
+    only_base: [rv64, rv128]
+    asm: c.addw rd', rs2'
+    desc: C.ADDW is an RV64C/RV128C-only instruction that adds the values in registers rd ′ and rs2 ′, then sign-extends the lower 32 bits of the sum before writing the result to register rd ′. C.ADDW expands into addw rd ′, rd ′, rs2 ′.
+    code: |
+      temp_32bit = lower_32bit(rd') + lower_32bit(rs2')
+      rd' = sign_extend(temp_32bit)
+  C.SUBW:
+    only_base: [rv64, rv128]
+    asm: c.subw rd', rs2'
+    desc: C.SUBW is an RV64C/RV128C-only instruction that subtracts the value in register rs2 ′ from the value in register rd ′, then sign-extends the lower 32 bits of the difference before writing the result to register rd ′. C.SUBW expands into subw rd ′, rd ′, rs2 ′.
+    code: |
+      temp_32bit = lower_32bit(rd') + lower_32bit(rs2')
+      rd' = sign_extend(temp_32bit)
 V:
   meta:
     version: "1.0"
