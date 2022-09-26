@@ -569,8 +569,8 @@ class KonataRenderer{
         let cycle = self.getCycleFromPixelPosX(x);
         let text = ""
         if (this.startPoint) {
-          const diffY = (this.hideFlushedOps ? op.rid : op.id) - this.startPos[0]
-          const diffX = cycle - this.startPos[1]
+          const diffY = (this.hideFlushedOps ? op.rid : op.id) - this.startPos[0] + 1;
+          const diffX = cycle - this.startPos[1] + 1;
           text += `IPC: ${(diffY / diffX).toFixed(2)} (${diffY} insns / ${diffX} cycle)<br>`
           this.endPoint = [x, y]
           this.change()
