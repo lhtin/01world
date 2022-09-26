@@ -106,7 +106,7 @@ const initKey = () => {
     const file = await fileHandle.getFile();
     currentApp.loadFile({
       size: file.size,
-      name: demo,
+      name: 'unknown',
       reader: file.stream().getReader(),
     })
   }
@@ -115,7 +115,7 @@ const initKey = () => {
     const file = await fileHandle.getFile();
     currentApp.loadDiffFile({
       size: file.size,
-      name: demo,
+      name: 'unknown',
       reader: file.stream().getReader(),
     })
   }
