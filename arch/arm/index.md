@@ -1,4 +1,25 @@
-# AArch64
+# ARM32
+
+| Register | Volatile? | Role |
+| -------- | --------- | ---- |
+| r0 | Volatile | Parameter, result, scratch register 1 |
+| r1 | Volatile | Parameter, result, scratch register 2 |
+| r2 | Volatile | Parameter, scratch register 3 |
+| r3 | Volatile | Parameter, scratch register 4 |
+| r4 | Non-volatile |  |
+| r5 | Non-volatile |  |
+| r6 | Non-volatile |  |
+| r7 | Non-volatile |  |
+| r8 | Non-volatile |  |
+| r9 | Non-volatile |  |
+| r10 | Non-volatile |  |
+| r11 | Non-volatile | Frame pointer |
+| r12 (IP) | Volatile | Intra-procedure-call scratch register |
+| r13 (SP) | Non-volatile | Stack pointer |
+| r14 (LR) | Non-volatile | Link register |
+| r15 (PC) | Non-volatile | Program counter |
+
+# ARM64
 
 - [ISA相关内容搜索](https://developer.arm.com/search)
 - [ARM C Language Extensions for SVE](https://developer.arm.com/documentation/100987/0000/)
