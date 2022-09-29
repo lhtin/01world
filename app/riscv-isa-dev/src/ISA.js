@@ -4,8 +4,7 @@ import jsyaml from "js-yaml"
 import { Decoder } from "./Decoder"
 
 const RISCV_EXTENSIONS = new Set([
-  "I", "M", "A", "F", "D", "Q", "C", "V",
-  "Zicsr", "Zifencei"
+  "I", "M", "A", "F", "D", "C",  "Zicsr", "Zifencei"
 ]);
 
 const G_EXTENSIONS = new Set([
@@ -214,7 +213,7 @@ const ISA = () => {
         </div>
       ))}
     </div>
-    <p>-march={formatExts(extSet)}</p>
+    {/* <p>-march={formatExts(extSet)}</p> */}
     <div className="card">
       <div className="card-header">Notations</div>
       <div className="card-body">
@@ -241,22 +240,24 @@ const ISA = () => {
               </h3>
               {extInfo.meta?.desc ? <div className="mt-2"><small>{extInfo.meta.desc}</small></div> : null}
           </div>
-          {extInfo.meta.notations ? <div className="card m-2">
-            <div className="card-header">Notations</div>
-            <div className="card-body">
-              <pre><code>{extInfo.meta.notations}</code></pre>
-            </div>
-          </div> : null}
           {extVisible[extInfo.name] === false 
             ? null 
-            : <ul className="list-group list-group-flush">
-                {extInfo.insns.map((info) => (
-                  <li key={info.name} className="list-group-item">
-                    <Instruction info={info} />
-                  </li>
-                ))}
-              </ul>}
-        </div>
+            : <>
+                {extInfo.meta.notations ? <div className="card m-2">
+                  <div className="card-header">Notations</div>
+                  <div className="card-body">
+                    <pre><code>{extInfo.meta.notations}</code></pre>
+                  </div>
+                </div> : null}
+                <ul className="list-group list-group-flush">
+                  {extInfo.insns.map((info) => (
+                    <li key={info.name} className="list-group-item">
+                      <Instruction info={info} />
+                    </li>
+                  ))}
+                </ul>
+              </>}
+          </div>
     )) : null}
   </div>
 };
