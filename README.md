@@ -42,6 +42,7 @@
     - [gdb](./tools/gdb.md)
     - [git](./tools/git.md)
     - [qemu](./tools/qemu.md)
+    - [binutils](./tools/binutils.md)
 
 ## Blog
 
