@@ -11,7 +11,7 @@ const G_EXTENSIONS = new Set([
   "I", "M", "A", "F", "D", "Zicsr", "Zifencei"
 ]);
 
-const isAll = (extSet) => extSet.size == RISCV_EXTENSIONS.size;
+const isAll = (extSet) => extSet.size === RISCV_EXTENSIONS.size;
 
 const hasG = (extSet) => Array.from(G_EXTENSIONS).every((ext) => extSet.has(ext));
 
@@ -101,13 +101,13 @@ const getISA = () => {
     })
 }
 
-const formatExts = (extSet) => {
-  const str = Array.from(extSet)
-    .sort((a, b) => a.length - b.length)
-    .map(ext => (ext.length > 1 ? `_` : '') + ext)
-    .join("");
-  return str.replace(new RegExp(`^_+`), "");
-};
+// const formatExts = (extSet) => {
+//   const str = Array.from(extSet)
+//     .sort((a, b) => a.length - b.length)
+//     .map(ext => (ext.length > 1 ? `_` : '') + ext)
+//     .join("");
+//   return str.replace(new RegExp(`^_+`), "");
+// };
 
 const Instruction = ({info}) => {
   return (
@@ -222,7 +222,7 @@ const ISA = () => {
     </div>
     <p><small>Note: The descriptions of the instructions are mostly from <a href="https://riscv.org/technical/specifications/">the RISC-V ISA specification</a>.</small></p>
 
-    <Decoder xlen={xlen}></Decoder>
+    <Decoder xlen={xlen === 'RV32' ? 32 : 64}></Decoder>
     {ISA
       ? Array.from(RISCV_EXTENSIONS).filter(ext => extSet.has(ext)).map(ext => ISA[xlen][ext]).map(extInfo => (
         <div key={extInfo.name} className="card my-2">

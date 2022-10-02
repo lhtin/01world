@@ -715,7 +715,7 @@ C:
         - the destination register and the first source register are identical, or
         - the registers used are the 8 most popular ones.
       
-      rd', rs1', rs2': use 3 bits for x8(0b000) ~ x15(0b111) or f8 ~ f15
+      rd', rs1', rs2': use 3 bits for x8(0b000) ~ x15(0b111) (s0, s1, a0~a5) or f8 ~ f15(fs0, fs1, fa0~fa5)
 
   # Stack-Pointer-Based Loads and Stores
   C.LWSP:

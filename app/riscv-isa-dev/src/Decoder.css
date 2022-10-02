@@ -5,6 +5,8 @@
 }
 
 .field-item {
-    border: 1px solid black;
+    border: 1px solid gray;
     border-width: 0 1px;
+    background-color: gray;
+    width: 0px;
 }

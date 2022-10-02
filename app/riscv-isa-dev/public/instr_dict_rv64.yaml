@@ -350,6 +350,318 @@ insns:
     - rs1
     - rs2
     - bimm12lo
+  c_add:
+    encoding: '----------------1001----------10'
+    extension:
+    - rv64_c
+    mask: '0xf003'
+    match: '0x9002'
+    variable_fields:
+    - rd_rs1
+    - c_rs2_n0
+  c_addi:
+    encoding: '----------------000-----------01'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x1'
+    variable_fields:
+    - rd_rs1_n0
+    - c_nzimm6lo
+    - c_nzimm6hi
+  c_addi16sp:
+    encoding: '----------------011-00010-----01'
+    extension:
+    - rv64_c
+    mask: '0xef83'
+    match: '0x6101'
+    variable_fields:
+    - c_nzimm10hi
+    - c_nzimm10lo
+  c_addi4spn:
+    encoding: '----------------000-----------00'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x0'
+    variable_fields:
+    - rd_p
+    - c_nzuimm10
+  c_addiw:
+    encoding: '----------------001-----------01'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x2001'
+    variable_fields:
+    - rd_rs1
+    - c_imm6lo
+    - c_imm6hi
+  c_addw:
+    encoding: '----------------100111---01---01'
+    extension:
+    - rv64_c
+    mask: '0xfc63'
+    match: '0x9c21'
+    variable_fields:
+    - rd_rs1_p
+    - rs2_p
+  c_and:
+    encoding: '----------------100011---11---01'
+    extension:
+    - rv64_c
+    mask: '0xfc63'
+    match: '0x8c61'
+    variable_fields:
+    - rd_rs1_p
+    - rs2_p
+  c_andi:
+    encoding: '----------------100-10--------01'
+    extension:
+    - rv64_c
+    mask: '0xec03'
+    match: '0x8801'
+    variable_fields:
+    - rd_rs1_p
+    - c_imm6hi
+    - c_imm6lo
+  c_beqz:
+    encoding: '----------------110-----------01'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xc001'
+    variable_fields:
+    - rs1_p
+    - c_bimm9lo
+    - c_bimm9hi
+  c_bnez:
+    encoding: '----------------111-----------01'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xe001'
+    variable_fields:
+    - rs1_p
+    - c_bimm9lo
+    - c_bimm9hi
+  c_ebreak:
+    encoding: '----------------1001000000000010'
+    extension:
+    - rv64_c
+    mask: '0xffff'
+    match: '0x9002'
+    variable_fields: []
+  c_j:
+    encoding: '----------------101-----------01'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xa001'
+    variable_fields:
+    - c_imm12
+  c_jalr:
+    encoding: '----------------1001-----0000010'
+    extension:
+    - rv64_c
+    mask: '0xf07f'
+    match: '0x9002'
+    variable_fields:
+    - c_rs1_n0
+  c_jr:
+    encoding: '----------------1000-----0000010'
+    extension:
+    - rv64_c
+    mask: '0xf07f'
+    match: '0x8002'
+    variable_fields:
+    - rs1_n0
+  c_ld:
+    encoding: '----------------011-----------00'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x6000'
+    variable_fields:
+    - rd_p
+    - rs1_p
+    - c_uimm8lo
+    - c_uimm8hi
+  c_ldsp:
+    encoding: '----------------011-----------10'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x6002'
+    variable_fields:
+    - rd_n0
+    - c_uimm9sphi
+    - c_uimm9splo
+  c_li:
+    encoding: '----------------010-----------01'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x4001'
+    variable_fields:
+    - rd
+    - c_imm6lo
+    - c_imm6hi
+  c_lui:
+    encoding: '----------------011-----------01'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x6001'
+    variable_fields:
+    - rd_n2
+    - c_nzimm18hi
+    - c_nzimm18lo
+  c_lw:
+    encoding: '----------------010-----------00'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x4000'
+    variable_fields:
+    - rd_p
+    - rs1_p
+    - c_uimm7lo
+    - c_uimm7hi
+  c_lwsp:
+    encoding: '----------------010-----------10'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x4002'
+    variable_fields:
+    - rd_n0
+    - c_uimm8sphi
+    - c_uimm8splo
+  c_mv:
+    encoding: '----------------1000----------10'
+    extension:
+    - rv64_c
+    mask: '0xf003'
+    match: '0x8002'
+    variable_fields:
+    - rd
+    - c_rs2_n0
+  c_nop:
+    encoding: '----------------000-00000-----01'
+    extension:
+    - rv64_c
+    mask: '0xef83'
+    match: '0x1'
+    variable_fields:
+    - c_nzimm6hi
+    - c_nzimm6lo
+  c_or:
+    encoding: '----------------100011---10---01'
+    extension:
+    - rv64_c
+    mask: '0xfc63'
+    match: '0x8c41'
+    variable_fields:
+    - rd_rs1_p
+    - rs2_p
+  c_sd:
+    encoding: '----------------111-----------00'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xe000'
+    variable_fields:
+    - rs1_p
+    - rs2_p
+    - c_uimm8hi
+    - c_uimm8lo
+  c_sdsp:
+    encoding: '----------------111-----------10'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xe002'
+    variable_fields:
+    - c_rs2
+    - c_uimm9sp_s
+  c_slli:
+    encoding: '----------------000-----------10'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x2'
+    variable_fields:
+    - rd_rs1_n0
+    - c_nzuimm6hi
+    - c_nzuimm6lo
+  c_srai:
+    encoding: '----------------100-01--------01'
+    extension:
+    - rv64_c
+    mask: '0xec03'
+    match: '0x8401'
+    variable_fields:
+    - rd_rs1_p
+    - c_nzuimm6lo
+    - c_nzuimm6hi
+  c_srli:
+    encoding: '----------------100-00--------01'
+    extension:
+    - rv64_c
+    mask: '0xec03'
+    match: '0x8001'
+    variable_fields:
+    - rd_rs1_p
+    - c_nzuimm6lo
+    - c_nzuimm6hi
+  c_sub:
+    encoding: '----------------100011---00---01'
+    extension:
+    - rv64_c
+    mask: '0xfc63'
+    match: '0x8c01'
+    variable_fields:
+    - rd_rs1_p
+    - rs2_p
+  c_subw:
+    encoding: '----------------100111---00---01'
+    extension:
+    - rv64_c
+    mask: '0xfc63'
+    match: '0x9c01'
+    variable_fields:
+    - rd_rs1_p
+    - rs2_p
+  c_sw:
+    encoding: '----------------110-----------00'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xc000'
+    variable_fields:
+    - rs1_p
+    - rs2_p
+    - c_uimm7lo
+    - c_uimm7hi
+  c_swsp:
+    encoding: '----------------110-----------10'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xc002'
+    variable_fields:
+    - c_rs2
+    - c_uimm8sp_s
+  c_xor:
+    encoding: '----------------100011---01---01'
+    extension:
+    - rv64_c
+    mask: '0xfc63'
+    match: '0x8c21'
+    variable_fields:
+    - rd_rs1_p
+    - rs2_p
   div:
     encoding: 0000001----------100-----0110011
     extension:
