@@ -72,6 +72,8 @@ const getISA = () => {
         Object.entries(info).forEach(([opcode, info]) => {
           if (opcode === "meta" || info.rv64_only) {
             return;
+          } else if (info.only_base && !info.only_base.includes('RV32')) {
+            return;
           }
           ISA.RV32[ext].insns.push(parse(opcode, info))
         })
@@ -79,6 +81,8 @@ const getISA = () => {
       // RV64
       Object.entries(obj).forEach(([ext, info]) => {
         if (ext === "HELPER" || ext === "RV32I") {
+          return;
+        } else if (info.only_base && !info.only_base.includes('RV64')) {
           return;
         } else if (ext === "RV64I") {
           ext = "I"
@@ -122,7 +126,7 @@ const Instruction = ({info}) => {
         {info['desc'] ? <div className="insn-desc">{info['desc'].split("\n").map((line, index) => (
           <div key={index} dangerouslySetInnerHTML={{__html: marked.parse(line)}}></div>
         ))}</div> : null}
-        {info['code'] ? <pre className="mt-2">
+        {info['code'] ? <pre className="gray-box mt-2">
           <code>{info['code']}</code>
         </pre> : null}
         {info['pseudos'].length > 0
@@ -138,7 +142,7 @@ const Instruction = ({info}) => {
                     <code>{info['real']}</code>
                   </div>
                   <div className="mt-2">{info['desc']}</div>
-                  {info['code'] ? <pre className="mt-2">
+                  {info['code'] ? <pre className="gray-box mt-2">
                     <code>{info['code']}</code>
                   </pre> : null}
                 </div>
@@ -213,16 +217,14 @@ const ISA = () => {
         </div>
       ))}
     </div>
-    {/* <p>-march={formatExts(extSet)}</p> */}
+    <Decoder xlen={xlen === 'RV32' ? 32 : 64}></Decoder>
     <div className="card">
       <div className="card-header">Notations</div>
       <div className="card-body">
-        <pre><code>{notation}</code></pre>
+        <pre className="gray-box"><code>{notation}</code></pre>
       </div>
     </div>
     <p><small>Note: The descriptions of the instructions are mostly from <a href="https://riscv.org/technical/specifications/">the RISC-V ISA specification</a>.</small></p>
-
-    <Decoder xlen={xlen === 'RV32' ? 32 : 64}></Decoder>
     {ISA
       ? Array.from(RISCV_EXTENSIONS).filter(ext => extSet.has(ext)).map(ext => ISA[xlen][ext]).map(extInfo => (
         <div key={extInfo.name} className="card my-2">
@@ -246,7 +248,7 @@ const ISA = () => {
                 {extInfo.meta.notations ? <div className="card m-2">
                   <div className="card-header">Notations</div>
                   <div className="card-body">
-                    <pre><code>{extInfo.meta.notations}</code></pre>
+                    <pre className="gray-box"><code>{extInfo.meta.notations}</code></pre>
                   </div>
                 </div> : null}
                 <ul className="list-group list-group-flush">

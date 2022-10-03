@@ -525,7 +525,7 @@ Zmmul: &id_zmmul
       rd_2xXLEN_bit = rs1 * unsigned(rs2)
       rd = upper_XLEN_bit(rd_2xXLEN_bit)
   MULW:
-    rv64_only: true
+    only_base: [RV64]
     asm: mulw rd, rs1, rs2
     desc: MULW is an RV64 instruction that multiplies the lower 32 bits of the source registers, placing the sign-extension of the lower 32 bits of the result into the destination register.
     code: |
@@ -560,7 +560,7 @@ M:
       REMU provides the unsigned remainder of the DIVU division operation.
       If division by zero, the remainder is rs1.
   DIVW:
-    rv64_only: true
+    only_base: [RV64]
     asm: divw rd, rs1, rs2
     desc: |
       DIVW is RV64 instructions that divide the lower 32 bits of rs1 by the lower 32 bits of rs2, treating it as signed integer, placing the 32-bit quotient in rd, sign-extended to 64 bits.
@@ -570,7 +570,7 @@ M:
       rd_32bit = lower_32bit(rs1) / lower_32bit(rs2)
       rd = sign_extend(rd_32bit)
   DIVUW:
-    rv64_only: true
+    only_base: [RV64]
     asm: divuw rd, rs1, rs2
     desc: |
       DIVUW is RV64 instructions that divide the lower 32 bits of rs1 by the lower 32 bits of rs2, treating it as unsigned integer, placing the 32-bit quotient in rd, sign-extended to 64 bits.
@@ -579,7 +579,7 @@ M:
       rd_32bit = unsigned(lower_32bit(rs1)) / unsigned(lower_32bit(rs2))
       rd = sign_extend(rd_32bit)
   REMW:
-    rv64_only: true
+    only_base: [RV64]
     asm: remw rd, rs1, rs2
     desc: |
       REMW is RV64 instructions that provides the signed remainder of the DIVW division operation and placing the remainder in rd, sign-extended to 64 bits. The sign of the result equals the sign of the dividend.
@@ -589,7 +589,7 @@ M:
       rd_32bit = lower_32bit(rs1) % lower_32bit(rs2)
       rd = sign_extend(rd_32bit)
   REMUW:
-    rv64_only: true
+    only_base: [RV64]
     asm: remuw rd, rs1, rs2
     desc: |
       REMUW is RV64 instructions that provides the unsigned remainder of the DIVW division operation and placing the remainder in rd, sign-extended to 64 bits.
@@ -613,13 +613,13 @@ A:
       SC.W conditionally writes a word in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd (sign-extend the value on RV64). Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
       SC.W can with aq, rl and aqrl suffix which mean acquire, release, acquire and release access ordering respectively. e.g. `sc.w.rl rd, (rs1)`
   LR.D:
-    rv64_only: true
+    only_base: [RV64]
     asm: lr.d rd, (rs1)
     desc: |
       LR.D loads a doubleword from the address in rs1, places the sign-extended value in rd, and registers a reservation set--a set of bytes that subsumes the bytes in the addressed doubleword.
       LR.D can with aq, rl and aqrl suffix which mean acquire, release, acquire and release access ordering respectively. e.g. `lr.d.aq rd, (rs1)`
   SC.D:
-    rv64_only: true
+    only_base: [RV64]
     asm: sc.d rd, rs2, (rs1)
     desc: |
       SC.D conditionally writes a doubleword in rs2 to the address in rs1. The SC.W succeeds only if the reservation is still valid and the reservation set contains the bytes being written. If the SC.W succeeds, the instruction writes the word in rs2 to memory, and it writes zero to rd. If the SC.W fails, the instruction does not write to memory, and it writes a nonzero value to rd. Regardless of success or failure, executing an SC.W instruction invalidates any reservation held by this hart.
@@ -725,21 +725,21 @@ C:
       offset = zero_extend(imm6) << 2
       rd = mem[x2 + offset]
   C.LDSP:
-    only_base: [rv64, rv128]
+    only_base: [RV64, RV128]
     asm: c.ldsp rd, imm6
     desc: C.LDSP is an RV64C/RV128C-only instruction that loads a 64-bit value from memory into register rd. It computes its effective address by adding the zero-extended offset, scaled by 8, to the stack pointer, x2. It expands to ld rd, offset(x2). C.LDSP is only valid when rd̸=x0; the code points with rd=x0 are reserved.
     code: |
       offset = zero_extend(imm6) << 3
       rd = mem[x2 + offset]
   C.LQSP:
-    only_base: [rv128]
+    only_base: [RV128]
     asm: c.lqsp rd, imm6
     desc: C.LQSP is an RV128C-only instruction that loads a 128-bit value from memory into register rd. It computes its effective address by adding the zero-extended offset, scaled by 16, to the stack pointer, x2. It expands to lq rd, offset(x2). C.LQSP is only valid when rd̸=x0; the code points with rd=x0 are reserved.
     code: |
       offset = zero_extend(imm6) << 4
       rd = mem[x2 + offset]
   C.FLWSP:
-    only_base: [rv32]
+    only_base: [RV32]
     asm: c.flwsp rd, imm6
     desc: C.FLWSP is an RV32FC-only instruction that loads a single-precision floating-point value from memory into floating-point register rd. It computes its effective address by adding the zero-extended offset, scaled by 4, to the stack pointer, x2. It expands to flw rd, offset(x2).
     code: |
@@ -758,21 +758,21 @@ C:
       offset = zero_extend(imm6) << 2
       mem[x2 + offset] = rs2
   C.SDSP:
-    only_base: [rv64, rv128]
+    only_base: [RV64, RV128]
     asm: c.sdsp rs2, imm6
     desc: C.SDSP is an RV64C/RV128C-only instruction that stores a 64-bit value in register rs2 to memory. It computes an effective address by adding the zero-extended offset, scaled by 8, to the stack pointer, x2. It expands to sd rs2, offset(x2).
     code: |
       offset = zero_extend(imm6) << 3
       mem[x2 + offset] = rs2
   C.SQSP:
-    only_base: [rv128]
+    only_base: [RV128]
     asm: c.sqsp rs2, imm6
     desc: C.SQSP is an RV128C-only instruction that stores a 128-bit value in register rs2 to memory. It computes an effective address by adding the zero-extended offset, scaled by 16, to the stack pointer, x2. It expands to sq rs2, offset(x2).
     code: |
       offset = zero_extend(imm6) << 4
       mem[x2 + offset] = rs2
   C.FSWSP:
-    only_base: [rv32]
+    only_base: [RV32]
     asm: c.fswsp rs2, imm6
     desc: C.FSWSP is an RV32FC-only instruction that stores a single-precision floating-point value in floating-point register rs2 to memory. It computes an effective address by adding the zero-extended offset, scaled by 4, to the stack pointer, x2. It expands to fsw rs2, offset(x2).
     code: |
@@ -792,21 +792,21 @@ C:
       offset = zero_extend(imm5) << 2
       rd' = mem[rs1' + offset]
   C.LD:
-    only_base: [rv64, rv128]
+    only_base: [RV64, RV128]
     asm: c.ld rd', imm5(rs1')
     desc: C.LD is an RV64C/RV128C-only instruction that loads a 64-bit value from memory into register rd′. It computes an effective address by adding the zero-extended offset, scaled by 8, to the base address in register rs1′. It expands to ld rd′, offset(rs1′).
     code: |
       offset = zero_extend(imm5) << 3
       rd' = mem[rs1' + offset]
   C.LQ:
-    only_base: [rv128]
+    only_base: [RV128]
     asm: c.lq rd', imm5(rs1')
     desc: C.LQ is an RV128C-only instruction that loads a 128-bit value from memory into register rd ′. It computes an effective address by adding the zero-extended offset, scaled by 16, to the base address in register rs1 ′. It expands to lq rd ′, offset(rs1 ′).
     code: |
       offset = zero_extend(imm5) << 4
       rd' = mem[rs1' + offset]
   C.FLW:
-    only_base: [rv32]
+    only_base: [RV32]
     asm: c.flw rd', imm5(rs1')
     desc: C.FLW is an RV32FC-only instruction that loads a single-precision floating-point value from memory into floating-point register rd ′. It computes an effective address by adding the zero-extended offset, scaled by 4, to the base address in register rs1 ′. It expands to flw rd ′, offset(rs1 ′).
     code: |
@@ -825,21 +825,21 @@ C:
       offset = zero_extend(imm5) << 2
       mem[rs1' + offset] = rs2'
   C.SD:
-    only_base: [rv64, rv128]
+    only_base: [RV64, RV128]
     asm: c.sd rs2', imm5(rs1')
     desc: C.SD is an RV64C/RV128C-only instruction that stores a 64-bit value in register rs2 ′ to memory. It computes an effective address by adding the zero-extended offset, scaled by 8, to the base address in register rs1 ′. It expands to sd rs2 ′, offset(rs1 ′).
     code: |
       offset = zero_extend(imm5) << 3
       mem[rs1' + offset] = rs2'
   C.SQ:
-    only_base: [rv128]
+    only_base: [RV128]
     asm: c.sq rs2', imm5(rs1')
     desc: C.SQ is an RV128C-only instruction that stores a 128-bit value in register rs2 ′ to memory. It computes an effective address by adding the zero-extended offset, scaled by 16, to the base address in register rs1 ′. It expands to sq rs2 ′, offset(rs1 ′).
     code: |
       offset = zero_extend(imm5) << 4
       mem[rs1' + offset] = rs2'
   C.FSW:
-    only_base: [rv32]
+    only_base: [RV32]
     require: [f]
     asm: c.fsw rs2', imm5(rs1')
     desc: C.FSW is an RV32FC-only instruction that stores a single-precision floating-point value in floatingpoint register rs2 ′ to memory. It computes an effective address by adding the zero-extended offset, scaled by 4, to the base address in register rs1 ′. It expands to fsw rs2 ′, offset(rs1 ′).
@@ -861,7 +861,7 @@ C:
       offset = sign_extend(imm11) << 1
       new_pc = current_pc + offset
   C.JAL:
-    only_base: [rv32]
+    only_base: [RV32]
     asm: c.jal imm11
     desc: C.JAL is an RV32C-only instruction that performs the same operation as C.J, but additionally writes the address of the instruction following the jump (pc+2) to the link register, x1. C.JAL expands to jal x1, offset.
     code: |
@@ -910,7 +910,7 @@ C:
     desc: C.ADDI adds the non-zero sign-extended 6-bit immediate to the value in register rd then writes the result to rd. C.ADDI expands into addi rd, rd, nzimm. C.ADDI is only valid when rd̸=x0 and nzimm̸=0. The code points with rd=x0 encode the C.NOP instruction; the remaining code points with nzimm=0 encode HINTs.
     code: rd = rd + sign_extend(nzimm6)
   C.ADDIW:
-    only_base: [rv64, rv128]
+    only_base: [RV64, RV128]
     asm: c.addiw rd, imm6
     desc: C.ADDIW is an RV64C/RV128C-only instruction that performs the same computation but produces a 32-bit result, then sign-extends result to 64 bits. C.ADDIW expands into addiw rd, rd, imm. The immediate can be zero for C.ADDIW, where this corresponds to sext.w rd. C.ADDIW is only valid when rd̸=x0; the code points with rd=x0 are reserved.
     code: |
@@ -971,19 +971,20 @@ C:
     desc: C.SUB subtracts the value in register rs2 ′ from the value in register rd ′, then writes the result to register rd ′. C.SUB expands into sub rd ′, rd ′, rs2 ′.
     code: rd' = rd' - rs2'
   C.ADDW:
-    only_base: [rv64, rv128]
+    only_base: [RV64, RV128]
     asm: c.addw rd', rs2'
     desc: C.ADDW is an RV64C/RV128C-only instruction that adds the values in registers rd ′ and rs2 ′, then sign-extends the lower 32 bits of the sum before writing the result to register rd ′. C.ADDW expands into addw rd ′, rd ′, rs2 ′.
     code: |
       temp_32bit = lower_32bit(rd') + lower_32bit(rs2')
       rd' = sign_extend(temp_32bit)
   C.SUBW:
-    only_base: [rv64, rv128]
+    only_base: [RV64, RV128]
     asm: c.subw rd', rs2'
     desc: C.SUBW is an RV64C/RV128C-only instruction that subtracts the value in register rs2 ′ from the value in register rd ′, then sign-extends the lower 32 bits of the difference before writing the result to register rd ′. C.SUBW expands into subw rd ′, rd ′, rs2 ′.
     code: |
       temp_32bit = lower_32bit(rd') + lower_32bit(rs2')
       rd' = sign_extend(temp_32bit)
+
 V:
   meta:
     version: "1.0"

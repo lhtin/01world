@@ -1,12 +1,72 @@
+.code-format {
+    overflow-x: auto;
+}
+
+.code-index {
+    color: gray;
+    font-size: 12px;
+}
+
+.code-value {
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.code-notation {
+    color: gray;
+    font-size: 12px;
+}
+
+.code-box {
+    border: 2px solid gray;
+    display: block;
+    margin: 0;
+}
+
+.field-item {
+    background-color: gray;
+    width: 2px;
+}
+
+
 .flex-col {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap
 }
 
-.field-item {
-    border: 1px solid gray;
-    border-width: 0 1px;
-    background-color: gray;
-    width: 0px;
+.flex-1 {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.flex-2 {
+    flex-grow: 2;
+    flex-basis: 0;
+}
+
+.flex-7 {
+    flex-grow: 7;
+    flex-basis: 0;
+}
+
+.flex-5 {
+    flex-grow: 5;
+    flex-basis: 0;
+}
+
+.flex-3 {
+    flex-grow: 3;
+    flex-basis: 0;
+}
+
+.flex-6 {
+    flex-grow: 6;
+    flex-basis: 0;
+}
+
+.flex-12 {
+    flex-grow: 12;
+    flex-basis: 0;
 }
