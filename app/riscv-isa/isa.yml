@@ -683,21 +683,292 @@ F:
   meta:
     version: "2.2"
     desc: "A Standard Extension for Single-Precision Floating-Point"
+    notations: |
+      Rounding Mode     Mnemonic      Meaning
+      =============     ========      =======
+      000               RNE           Round to Nearest, ties to Even
+      001               RTZ           Round towards Zero
+      010               RDN           Round Down (towards −∞)
+      011               RUP           Round Up (towards +∞)
+      100               RMM           Round to Nearest, ties to Max Magnitude
+      101                             Reserved for future use.
+      110                             Reserved for future use.
+      111               DYN           In instruction’s rm field, selects dynamic rounding mode;
+                                      In Rounding Mode register, reserved.
+  # 13.5 Single-Precision Load and Store Instructions
   FLW:
     asm: flw rd, imm12(rs1)
-    desc: The FLW instruction loads a single-precision floating-point value from memory into floating-point register rd.
+    desc: The FLW instruction loads a single-precision floating-point value from memory into floating-point register rd. FLW and FSW do not modify the bits being transferred; in particular, the payloads of non-canonical NaNs are preserved.
   FSW:
     asm: fsw rs2, imm12(rs1)
-    desc: FSW stores a single-precision value from floating-point register rs2 to memory.
+    desc: FSW stores a single-precision value from floating-point register rs2 to memory. FLW and FSW are only guaranteed to execute atomically if the effective address is naturally aligned.
+  # 13.6 Single-Precision Floating-Point Computational Instructions
   FADD.S:
-    asm: fadd.s rd, rs1, rs2
+    asm: fadd.s rd, rs1, rs2, rm
+    desc: FADD.S and FMUL.S perform single-precision floating-point addition and multiplication respectively, between rs1 and rs2.
+  FMUL.S:
+    asm: fadd.s rd, rs1, rs2, rm
+    desc: FADD.S and FMUL.S perform single-precision floating-point addition and multiplication respectively, between rs1 and rs2.
   FSUB.S:
-    asm: fsub.s rd, rs1, rs2
+    asm: fsub.s rd, rs1, rs2, rm
+    desc: FSUB.S performs the single-precision floating-point subtraction of rs2 from rs1.
+  FDIV.s:
+    asm: fdiv.s rd, rs1, rs2, rm
+    desc: FDIV.S performs the single-precision floating-point division of rs1 by rs2.
+  FSQRT.S:
+    asm: fsqrt.s rd, rs1, rm
+    desc: FSQRT.S computes the square root of rs1. In each case, the result is written to rd.
+  FMIN.S:
+    asm: fmin.s rd, rs1, rs2
+    desc: Floating-point minimum-number and maximum-number instructions FMIN.S and FMAX.S write, respectively, the smaller or larger of rs1 and rs2 to rd.
+  FMAX.S:
+    asm: fmax.s rd, rs1, rs2
+    desc: Floating-point minimum-number and maximum-number instructions FMIN.S and FMAX.S write, respectively, the smaller or larger of rs1 and rs2 to rd.
+  FMADD.S:
+    asm: fmadd.s rd, rs1, rs2, rs3, rm
+    desc: FMADD.S multiplies the values in rs1 and rs2, adds the value in rs3, and writes the final result to rd. FMADD.S computes (rs1×rs2)+rs3.
+  FMSUB.S:
+    asm: fmsub.s rd, rs1, rs2, rs3, rm
+    desc: FMSUB.S multiplies the values in rs1 and rs2, subtracts the value in rs3, and writes the final result to rd. FMSUB.S computes (rs1×rs2)-rs3.
+  FNMSUB.S:
+    asm: fnmsub.s rd, rs1, rs2, rs3, rm
+    desc: FNMSUB.S multiplies the values in rs1 and rs2, negates the product, adds the value in rs3, and writes the final result to rd. FNMSUB.S computes -(rs1×rs2)+rs3.
+  FNMADD.S:
+    asm: fnmadd.s rd, rs1, rs2, rs3, rm
+    desc: FNMADD.S multiplies the values in rs1 and rs2, negates the product, subtracts the value in rs3, and writes the final result to rd. FNMADD.S computes -(rs1×rs2)-rs3.
+  # 13.7 Single-Precision Floating-Point Conversion and Move Instructions
+  FCVT.W.S:
+    asm: fcvt.w.s rd, rs1, rm
+    desc: |
+      FCVT.W.S or FCVT.L.S converts a floating-point number in floating-point register rs1 to a signed 32-bit or 64-bit integer, respectively, in integer register rd.
+      For XLEN>32, FCVT.W[U].S sign-extends the 32-bit result to the destination register width.
+  FCVT.L.S:
+    only_base: [rv64]
+    asm: fcvt.l.s rd, rs1, rm
+    desc: FCVT.W.S or FCVT.L.S converts a floating-point number in floating-point register rs1 to a signed 32-bit or 64-bit integer, respectively, in integer register rd.
+  FCVT.S.W:
+    asm: fcvt.s.w rd, rs1, rm
+    desc: |
+      FCVT.S.W or FCVT.S.L converts a 32-bit or 64-bit signed integer, respectively, in integer register rs1 into a floating-point number in floating-point register rd.
+      A floating-point register can be initialized to floating-point positive zero using FCVT.S.W rd, x0, which will never set any exception flags.
+  FCVT.S.L:
+    only_base: [rv64]
+    asm: fcvt.s.l rd, rs1, rm
+    desc: FCVT.S.W or FCVT.S.L converts a 32-bit or 64-bit signed integer, respectively, in integer register rs1 into a floating-point number in floating-point register rd.
+  FCVT.WU.S:
+    asm: fcvt.wu.s rd, rs1, rm
+    desc: |
+      FCVT.WU.S, FCVT.LU.S, FCVT.S.WU, and FCVT.S.LU variants convert to or from unsigned integer values.
+      For XLEN>32, FCVT.W[U].S sign-extends the 32-bit result to the destination register width.
+  FCVT.LU.S:
+    only_base: [rv64]
+    asm: fcvt.lu.s rd, rs1, rm
+    desc: FCVT.WU.S, FCVT.LU.S, FCVT.S.WU, and FCVT.S.LU variants convert to or from unsigned integer values.
+  FCVT.S.WU:
+    asm: fcvt.s.wu rd, rs1, rm
+    desc: FCVT.WU.S, FCVT.LU.S, FCVT.S.WU, and FCVT.S.LU variants convert to or from unsigned integer values.
+  FCVT.S.LU:
+    only_base: [rv64]
+    asm: fcvt.s.lu rd, rs1, rm
+    desc: FCVT.WU.S, FCVT.LU.S, FCVT.S.WU, and FCVT.S.LU variants convert to or from unsigned integer values.
+  FSGNJ.S:
+    asm: fsgnj.s rd, rs1, rs2, rm
+    desc: Floating-point to floating-point sign-injection instructions, FSGNJ.S, FSGNJN.S, and FSGNJX.S, produce a result that takes all bits except the sign bit from rs1. For FSGNJ, the result’s sign bit is rs2’s sign bit.
+  FSGNJN.S:
+    asm: fsgnjn.s rd, rs1, rs2, rm
+    desc: Floating-point to floating-point sign-injection instructions, FSGNJ.S, FSGNJN.S, and FSGNJX.S, produce a result that takes all bits except the sign bit from rs1. For FSGNJN, the result’s sign bit is the opposite of rs2’s sign bit.
+  FSGNJX.S:
+    asm: fsgnjx.s rd, rs1, rs2, rm
+    desc: Floating-point to floating-point sign-injection instructions, FSGNJ.S, FSGNJN.S, and FSGNJX.S, produce a result that takes all bits except the sign bit from rs1. For FSGNJX, the result’s sign bit is the XOR of the sign bits of rs1 and rs2.
+  FMV.X.W:
+    asm: fmv.x.w rd, rs1
+    desc: FMV.X.W moves the single-precision value in floating-point register rs1 represented in IEEE 754-2008 encoding to the lower 32 bits of integer register rd. The bits are not modified in the transfer, and in particular, the payloads of non-canonical NaNs are preserved. For RV64, the higher 32 bits of the destination register are filled with copies of the floating-point number’s sign bit.
+  FMV.W.X:
+    asm: fmv.w.x rd, rs1
+    desc: FMV.W.X moves the single-precision value encoded in IEEE 754-2008 standard encoding from the lower 32 bits of integer register rs1 to the floating-point register rd. The bits are not modified in the transfer, and in particular, the payloads of non-canonical NaNs are preserved.
+  # 13.8 Single-Precision Floating-Point Compare Instructions
+  FEQ.S:
+    asm: feq.s rd, rs1, rs2
+    desc: |
+      Floating-point compare instructions (FEQ.S, FLT.S, FLE.S) perform the specified comparison between floating-point registers (rs1 = rs2, rs1 < rs2, rs1 ≤ rs2) writing 1 to the integer register rd if the condition holds, and 0 otherwise. 
+      FEQ.S performs a quiet comparison: it only sets the invalid operation exception flag if either input is a signaling NaN. For all three instructions, the result is 0 if either operand is NaN.
+  FLT.S:
+    asm: flt.s rd, rs1, rs2
+    desc: |
+      Floating-point compare instructions (FEQ.S, FLT.S, FLE.S) perform the specified comparison between floating-point registers (rs1 = rs2, rs1 < rs2, rs1 ≤ rs2) writing 1 to the integer register rd if the condition holds, and 0 otherwise. 
+      FLT.S and FLE.S perform what the IEEE 754-2008 standard refers to as signaling comparisons: that is, they set the invalid operation exception flag if either input is NaN. For all three instructions, the result is 0 if either operand is NaN.
+  FLE.S:
+    asm: fle.s rd, rs1, rs2
+    desc: |
+      Floating-point compare instructions (FEQ.S, FLT.S, FLE.S) perform the specified comparison between floating-point registers (rs1 = rs2, rs1 < rs2, rs1 ≤ rs2) writing 1 to the integer register rd if the condition holds, and 0 otherwise. 
+      FLT.S and FLE.S perform what the IEEE 754-2008 standard refers to as signaling comparisons: that is, they set the invalid operation exception flag if either input is NaN. For all three instructions, the result is 0 if either operand is NaN.
+  # 13.9 Single-Precision Floating-Point Classify Instruction
+  FCLASS.S:
+    asm: fclass.s rd, rs1
+    desc: |
+      The FCLASS.S instruction examines the value in floating-point register rs1 and writes to integer register rd a 10-bit mask that indicates the class of the floating-point number. The format of the mask is described below. The corresponding bit in rd will be set if the property is true and clear otherwise. All other bits in rd are cleared. Note that exactly one bit in rd will be set. FCLASS.S does not set the floating-point exception flags.
+
+      rd bit      Meaning
+      0           rs1 is −∞.
+      1           rs1 is a negative normal number.
+      2           rs1 is a negative subnormal number.
+      3           rs1 is −0.
+      4           rs1 is +0.
+      5           rs1 is a positive subnormal number.
+      6           rs1 is a positive normal number.
+      7           rs1 is +∞.
+      8           rs1 is a signaling NaN.
+      9           rs1 is a quiet NaN.
 
 D:
   meta:
     version: "2.2"
     desc: "double-precision floating-point instructions"
+    notations: |
+      Rounding Mode     Mnemonic      Meaning
+      =============     ========      =======
+      000               RNE           Round to Nearest, ties to Even
+      001               RTZ           Round towards Zero
+      010               RDN           Round Down (towards −∞)
+      011               RUP           Round Up (towards +∞)
+      100               RMM           Round to Nearest, ties to Max Magnitude
+      101                             Reserved for future use.
+      110                             Reserved for future use.
+      111               DYN           In instruction’s rm field, selects dynamic rounding mode;
+                                      In Rounding Mode register, reserved.
+  # 14.3 Double-Precision Load and Store Instructions
+  FLD:
+    asm: fld rd, imm12(rs1)
+    desc: |
+      The FLD instruction loads a double-precision floating-point value from memory into floating-point register rd.
+      FLD and FSD do not modify the bits being transferred; in particular, the payloads of non-canonical NaNs are preserved.
+  FSD:
+    asm: fsd rs2, imm12(rs1)
+    desc: |
+      FSD stores a double-precision value from the floating-point registers to memory.
+      FLD and FSD do not modify the bits being transferred; in particular, the payloads of non-canonical NaNs are preserved.
+  # 14.4 Double-Precision Floating-Point Computational Instructions
+  FADD.D:
+    asm: fadd.d rd, rs1, rs2, rm
+    desc: FADD.D and FMUL.D perform double-precision floating-point addition and multiplication respectively, between rs1 and rs2.
+  FMUL.D:
+    asm: fadd.d rd, rs1, rs2, rm
+    desc: FADD.D and FMUL.D perform double-precision floating-point addition and multiplication respectively, between rs1 and rs2.
+  FSUB.d:
+    asm: fsub.d rd, rs1, rs2, rm
+    desc: FSUB.D performs the double-precision floating-point subtraction of rs2 from rs1.
+  FDIV.d:
+    asm: fdiv.d rd, rs1, rs2, rm
+    desc: FDIV.D performs the double-precision floating-point division of rs1 by rs2.
+  FSQRT.D:
+    asm: fsqrt.d rd, rs1, rm
+    desc: FSQRT.D computes the square root of rs1. In each case, the result is written to rd.
+  FMIN.D:
+    asm: fmin.d rd, rs1, rs2
+    desc: Floating-point minimum-number and maximum-number instructions FMIN.D and FMAX.D write, respectively, the smaller or larger of rs1 and rs2 to rd.
+  FMAX.D:
+    asm: fmax.d rd, rs1, rs2
+    desc: Floating-point minimum-number and maximum-number instructions FMIN.D and FMAX.D write, respectively, the smaller or larger of rs1 and rs2 to rd.
+  FMADD.D:
+    asm: fmadd.d rd, rs1, rs2, rs3, rm
+    desc: FMADD.D multiplies the values in rs1 and rs2, adds the value in rs3, and writes the final result to rd. FMADD.D computes (rs1×rs2)+rs3.
+  FMSUB.D:
+    asm: fmsub.d rd, rs1, rs2, rs3, rm
+    desc: FMSUB.D multiplies the values in rs1 and rs2, subtracts the value in rs3, and writes the final result to rd. FMSUB.D computes (rs1×rs2)-rs3.
+  FNMSUB.D:
+    asm: fnmsub.d rd, rs1, rs2, rs3, rm
+    desc: FNMSUB.D multiplies the values in rs1 and rs2, negates the product, adds the value in rs3, and writes the final result to rd. FNMSUB.D computes -(rs1×rs2)+rs3.
+  FNMADD.D:
+    asm: fnmadd.d rd, rs1, rs2, rs3, rm
+    desc: FNMADD.D multiplies the values in rs1 and rs2, negates the product, subtracts the value in rs3, and writes the final result to rd. FNMADD.D computes -(rs1×rs2)-rs3.
+  # 14.5 Double-Precision Floating-Point Conversion and Move Instructions
+  FCVT.W.D:
+    asm: fcvt.w.d rd, rs1, rm
+    desc: |
+      FCVT.W.D or FCVT.L.D converts a double-precision floating-point number in floating-point register rs1 to a signed 32-bit or 64-bit integer, respectively, in integer register rd.
+      For RV64, FCVT.W[U].D sign-extends the 32-bit result.
+  FCVT.L.D:
+    only_base: [rv64]
+    asm: fcvt.l.d rd, rs1, rm
+    desc: FCVT.W.D or FCVT.L.D converts a floating-point number in floating-point register rs1 to a signed 32-bit or 64-bit integer, respectively, in integer register rd.
+  FCVT.D.W:
+    asm: fcvt.d.w rd, rs1, rm
+    desc: |
+      FCVT.D.W or FCVT.D.L converts a 32-bit or 64-bit signed integer, respectively, in integer register rs1 into a double-precision floating-point number in floating-point register rd.
+  FCVT.D.L:
+    only_base: [rv64]
+    asm: fcvt.d.l rd, rs1, rm
+    desc: FCVT.D.W or FCVT.D.L converts a 32-bit or 64-bit signed integer, respectively, in integer register rs1 into a double-precision floating-point number in floating-point register rd.
+  FCVT.WU.D:
+    asm: fcvt.wu.d rd, rs1, rm
+    desc: |
+      FCVT.WU.D, FCVT.LU.D, FCVT.D.WU, and FCVT.D.LU variants convert to or from unsigned integer values.
+      For RV64, FCVT.W[U].D sign-extends the 32-bit result.
+  FCVT.LU.D:
+    only_base: [rv64]
+    asm: fcvt.lu.d rd, rs1, rm
+    desc: FCVT.WU.D, FCVT.LU.D, FCVT.D.WU, and FCVT.D.LU variants convert to or from unsigned integer values.
+  FCVT.D.WU:
+    asm: fcvt.d.wu rd, rs1, rm
+    desc: FCVT.WU.D, FCVT.LU.D, FCVT.D.WU, and FCVT.D.LU variants convert to or from unsigned integer values.
+  FCVT.D.LU:
+    only_base: [rv64]
+    asm: fcvt.d.lu rd, rs1, rm
+    desc: FCVT.WU.D, FCVT.LU.D, FCVT.D.WU, and FCVT.D.LU variants convert to or from unsigned integer values.
+  FCVT.S.D:
+    asm: fcvt.s.d rd, rs1, rm
+    desc: The double-precision to single-precision and single-precision to double-precision conversion instructions, FCVT.S.D and FCVT.D.S, are encoded in the OP-FP major opcode space and both the source and destination are floating-point registers. The rs2 field encodes the datatype of the source, and the fmt field encodes the datatype of the destination. FCVT.S.D rounds according to the RM field; FCVT.D.S will never round.
+  FCVT.D.S:
+    asm: fcvt.d.s rd, rs1, rm
+    desc: The double-precision to single-precision and single-precision to double-precision conversion instructions, FCVT.S.D and FCVT.D.S, are encoded in the OP-FP major opcode space and both the source and destination are floating-point registers. The rs2 field encodes the datatype of the source, and the fmt field encodes the datatype of the destination. FCVT.S.D rounds according to the RM field; FCVT.D.S will never round.
+  FSGNJ.D:
+    asm: fsgnj.d rd, rs1, rs2, rm
+    desc: Floating-point to floating-point sign-injection instructions, FSGNJ.D, FSGNJN.D, and FSGNJX.D, produce a result that takes all bits except the sign bit from rs1. For FSGNJ, the result’s sign bit is rs2’s sign bit.
+  FSGNJN.D:
+    asm: fsgnjn.d rd, rs1, rs2, rm
+    desc: Floating-point to floating-point sign-injection instructions, FSGNJ.D, FSGNJN.D, and FSGNJX.D, produce a result that takes all bits except the sign bit from rs1. For FSGNJN, the result’s sign bit is the opposite of rs2’s sign bit.
+  FSGNJX.D:
+    asm: fsgnjx.d rd, rs1, rs2, rm
+    desc: Floating-point to floating-point sign-injection instructions, FSGNJ.D, FSGNJN.D, and FSGNJX.D, produce a result that takes all bits except the sign bit from rs1. For FSGNJX, the result’s sign bit is the XOR of the sign bits of rs1 and rs2.
+  FMV.X.D:
+    asm: fmv.x.d rd, rs1
+    desc: FMV.X.D moves the double-precision value in floating-point register rs1 represented in IEEE 754-2008 encoding to the lower 32 bits of integer register rd. The bits are not modified in the transfer, and in particular, the payloads of non-canonical NaNs are preserved. For RV64, the higher 32 bits of the destination register are filled with copies of the floating-point number’s sign bit.
+  FMV.D.X:
+    asm: fmv.d.x rd, rs1
+    desc: FMV.D.X moves the double-precision value encoded in IEEE 754-2008 standard encoding from the lower 32 bits of integer register rs1 to the floating-point register rd. The bits are not modified in the transfer, and in particular, the payloads of non-canonical NaNs are preserved.
+  # 14.6 Double-Precision Floating-Point Compare Instructions
+  FEQ.D:
+    asm: feq.d rd, rs1, rs2
+    desc: |
+      Floating-point compare instructions (FEQ.D, FLT.D, FLE.D) perform the specified comparison between floating-point registers (rs1 = rs2, rs1 < rs2, rs1 ≤ rs2) writing 1 to the integer register rd if the condition holds, and 0 otherwise. 
+      FEQ.D performs a quiet comparison: it only sets the invalid operation exception flag if either input is a signaling NaN. For all three instructions, the result is 0 if either operand is NaN.
+  FLT.D:
+    asm: flt.d rd, rs1, rs2
+    desc: |
+      Floating-point compare instructions (FEQ.D, FLT.D, FLE.D) perform the specified comparison between floating-point registers (rs1 = rs2, rs1 < rs2, rs1 ≤ rs2) writing 1 to the integer register rd if the condition holds, and 0 otherwise. 
+      FLT.D and FLE.D perform what the IEEE 754-2008 standard refers to as signaling comparisons: that is, they set the invalid operation exception flag if either input is NaN. For all three instructions, the result is 0 if either operand is NaN.
+  FLE.D:
+    asm: fle.d rd, rs1, rs2
+    desc: |
+      Floating-point compare instructions (FEQ.D, FLT.D, FLE.D) perform the specified comparison between floating-point registers (rs1 = rs2, rs1 < rs2, rs1 ≤ rs2) writing 1 to the integer register rd if the condition holds, and 0 otherwise. 
+      FLT.D and FLE.D perform what the IEEE 754-2008 standard refers to as signaling comparisons: that is, they set the invalid operation exception flag if either input is NaN. For all three instructions, the result is 0 if either operand is NaN.
+  # 14.7 Double-Precision Floating-Point Classify Instruction
+  FCLASS.D:
+    asm: fclass.d rd, rs1
+    desc: |
+      The FCLASS.D instruction examines the value in floating-point register rs1 and writes to integer register rd a 10-bit mask that indicates the class of the floating-point number. The format of the mask is described below. The corresponding bit in rd will be set if the property is true and clear otherwise. All other bits in rd are cleared. Note that exactly one bit in rd will be set. FCLASS.D does not set the floating-point exception flags.
+
+      rd bit      Meaning
+      0           rs1 is −∞.
+      1           rs1 is a negative normal number.
+      2           rs1 is a negative subnormal number.
+      3           rs1 is −0.
+      4           rs1 is +0.
+      5           rs1 is a positive subnormal number.
+      6           rs1 is a positive normal number.
+      7           rs1 is +∞.
+      8           rs1 is a signaling NaN.
+      9           rs1 is a quiet NaN.
 
 Q:
   meta:
