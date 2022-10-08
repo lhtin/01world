@@ -1,23 +1,40 @@
 # ARM32
 
-| Register | Volatile? | Role |
-| -------- | --------- | ---- |
-| r0 | Volatile | Parameter, result, scratch register 1 |
-| r1 | Volatile | Parameter, result, scratch register 2 |
-| r2 | Volatile | Parameter, scratch register 3 |
-| r3 | Volatile | Parameter, scratch register 4 |
-| r4 | Non-volatile |  |
-| r5 | Non-volatile |  |
-| r6 | Non-volatile |  |
-| r7 | Non-volatile |  |
-| r8 | Non-volatile |  |
-| r9 | Non-volatile |  |
-| r10 | Non-volatile |  |
-| r11 | Non-volatile | Frame pointer |
-| r12 (IP) | Volatile | Intra-procedure-call scratch register |
-| r13 (SP) | Non-volatile | Stack pointer |
-| r14 (LR) | Non-volatile | Link register |
-| r15 (PC) | Non-volatile | Program counter |
+### APCS register names and usage
+
+|Register|APCS name|APCS role                                        |
+|--------|---------|-------------------------------------------------|
+|r0      |a1       |argument 1/scratch register/result               |
+|r1      |a2       |argument 2/scratch register/result               |
+|r2      |a3       |argument 3/scratch register/result               |
+|r3      |a4       |argument 4/scratch register/result               |
+|r4      |v1       |register variable                                |
+|r5      |v2       |register variable                                |
+|r6      |v3       |register variable                                |
+|r7      |v4       |register variable                                |
+|r8      |v5       |register variable                                |
+|r9      |sb/v6    |static base/register variable                    |
+|r10     |sl/v7    |stack limit/stack chunk handle/register variable |
+|r11     |fp/v8    |frame pointer/register variable                  |
+|r12     |ip       |scratch register/new -sb in inter-link-unit calls|
+|r13     |sp       |lower end of the current stack frame             |
+|r14     |lr       |link register/scratch register                   |
+|r15     |pc       |program counter                                  |
+
+
+### VFP registers
+
+|Singles|Doubles|Quads   |Volatile?   |Role                                |
+|-------|-------|--------|------------|------------------------------------|
+|s0-s3  |d0-d1  |q0      |Volatile    |Parameters, result, scratch register|
+|s4-s7  |d2-d3  |q1      |Volatile    |Parameters, scratch register        |
+|s8-s11 |d4-d5  |q2      |Volatile    |Parameters, scratch register        |
+|s12-s15|d6-d7  |q3      |Volatile    |Parameters, scratch register        |
+|s16-s19|d8-d9  |q4      |Non-volatile|                                    |
+|s20-s23|d10-d11|q5      |Non-volatile|                                    |
+|s24-s27|d12-d13|q6      |Non-volatile|                                    |
+|s28-s31|d14-d15|q7      |Non-volatile|                                    |
+|       |d16-d31|q8-q15  |Volatile    |                                    |
 
 # ARM64
 
