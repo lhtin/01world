@@ -1,0 +1,9 @@
+#github {
+    position: fixed;
+    top: 0; right: 0;
+    z-index: 2;
+    text-align: center;
+    font-size: 12px;
+    padding: 5px;
+    background-color: white;
+}

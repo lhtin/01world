@@ -59,10 +59,12 @@
       #progress-bar::-webkit-progress-value {
         background-color: #0392cf;
       }
-      #open-file {
+      #wrap {
         position: fixed;
         top: 0; right: 0;
         z-index: 2;
+      }
+      #open-file {
         font-size: 12px;
         padding: 5px;
         background-color: white;
@@ -71,6 +73,15 @@
       }
       #open-file:hover {
         color: black;
+      }
+      #github {
+        margin-top: 5px;
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+        padding: 5px;
+        background-color: white;
       }
       #tool-tip {
         position: fixed;
@@ -128,7 +139,10 @@
   </head>
   <body>
     <progress id="progress-bar" max="1" value="0"></progress>
-    <div id="open-file">Open File</div>
+    <div id="wrap">
+      <div id="open-file">Open File</div>
+      <a id="github" href="https://github.com/lhtin/01world/tree/main/app/pipeview">GitHub</a>
+    </div>
     <div class="box">
       <div id="label-canvas-container">
         <canvas id="lable-canvas"></canvas>

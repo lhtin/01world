@@ -1,7 +1,7 @@
 import React from "react"
 import * as marked from "marked"
 import jsyaml from "js-yaml"
-import { Decoder } from "./Decoder"
+import { Decoder, Encoder } from "./Coder"
 
 const RISCV_EXTENSIONS = new Set([
   "I", "M", "A", "F", "D", "C",  "Zicsr", "Zifencei"
@@ -218,6 +218,7 @@ const ISA = () => {
       ))}
     </div>
     <Decoder xlen={xlen === 'RV32' ? 32 : 64}></Decoder>
+    <Encoder xlen={xlen === 'RV32' ? 32 : 64}></Encoder>
     <div className="card">
       <div className="card-header">Notations</div>
       <div className="card-body">

@@ -91,7 +91,8 @@ const asm_handlers = {
     }
 }
 
-const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext) => {
+const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, decoding = false) => {
+    if (ext.endsWith())
     const fields_key = variable_fields.join(' ')
     let format = null
     for (let item of Object.values(FORMAT_LIST)) {
@@ -105,38 +106,44 @@ const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext) => {
     }
     const obj = {
         ext: ext,
-        insn_code: format_code(insn_code),
+        insn_code: insn_code,
         fields_key: fields_key,
         format: format
     }
     if (obj.insn_code.length !== 16 && obj.insn_code.length !== 32) {
         return null
     }
-    let fieldMap = parseFields(obj.format.layout, insn_code, xlen)
-    let asm_temp = [...obj.format.asm.matchAll(/\{([^{}]+)\}/g)].map((m) => m[1])
-    let asm = obj.format.asm.replace('{insn_name}', insn_name)
-    for (let i = 0; i < asm_temp.length; i += 1) {
-        let n = asm_temp[i]
-        switch (n) {
-            case 'imm':
-            case 'uimm':
-                asm = asm.replace(`{${n}}`, fieldMap[n])
-                break;
-            case 'rm':
-                asm = asm.replace(`{${n}}`, getRoundingMode(fieldMap[n]))
-                break;
-            case '_aqrl_':
-                asm = asm.replace(`{${n}}`, asm_handlers[n](fieldMap))
-                break;
-            default:
-                asm = asm.replace(`{${n}}`, getABIReg(insn_name, fieldMap[n]))
+    if (decoding) {
+        let fieldMap = parseFields(obj.format.layout, Number.parseInt(insn_code, 2), xlen)
+        let asm_temp = [...obj.format.asm.matchAll(/\{([^{}]+)\}/g)].map((m) => m[1])
+        let asm = obj.format.asm.replace('{insn_name}', insn_name)
+        for (let i = 0; i < asm_temp.length; i += 1) {
+            let n = asm_temp[i]
+            switch (n) {
+                case 'imm':
+                case 'uimm':
+                    asm = asm.replace(`{${n}}`, fieldMap[n])
+                    break;
+                case 'rm':
+                    asm = asm.replace(`{${n}}`, getRoundingMode(fieldMap[n]))
+                    break;
+                case '_aqrl_':
+                    asm = asm.replace(`{${n}}`, asm_handlers[n](fieldMap))
+                    break;
+                default:
+                    asm = asm.replace(`{${n}}`, getABIReg(insn_name, fieldMap[n]))
+            }
         }
+        obj.asm = asm;
+    } else {
+        let asm = obj.format.asm.replace('{insn_name}', insn_name)
+        obj.asm = asm.replace(/\{|\}/g, '')
     }
-    obj.asm = asm;
     return obj;
 }
 
 export {
     parseInsn,
-    FORMAT_LIST
+    FORMAT_LIST,
+    format_code
 }

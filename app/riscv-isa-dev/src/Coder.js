@@ -1,7 +1,7 @@
 import jsyaml from "js-yaml"
 import React from "react"
-import "./Decoder.css"
-import { parseInsn } from './lib/Code'
+import "./Coder.css"
+import { parseInsn, format_code } from './lib/Code'
 
 const decode = (code_hex, instr_dict, xlen) => {
   const insn_code = Number.parseInt(code_hex, 16)
@@ -11,15 +11,21 @@ const decode = (code_hex, instr_dict, xlen) => {
     const mask = Number.parseInt(insn.mask, 16)
     if ((insn_code & mask) === match) {
       let insn_name = key.replace(/_/g, '.')
-      let info = parseInsn(insn_name, insn_code, insn.variable_fields, xlen, insn.extension[0])
-      if (!info) {
-        console.log(key, insn)
-        return info
-      }
+      let code = format_code(insn_code)
+      let info = parseInsn(insn_name, code, insn.variable_fields, xlen, insn.extension[0], true)
       return info
     }
   }
   return null
+}
+
+const encode = (insn_name, instr_dict, xlen) => {
+  for (let key of Object.keys(instr_dict.insns)) {
+    if (insn_name === key.replace(/_/g, '.')) {
+      const insn = instr_dict.insns[key]
+      return  parseInsn(insn_name, insn.encoding, insn.variable_fields, xlen, insn.extension[0])
+    }
+  }
 }
 
 const getInsnDict = (xlen) => {
@@ -43,7 +49,7 @@ const CodeFormat = ({ code, layout }) => {
         {[...Array(code_len).keys()].map((i) => {
           let j = code_len - 1 - i
           return <React.Fragment key={i}>
-            <div className="px-1 flex-1">{j}</div>
+            <div style={{flex: 1}}>{j}</div>
             {layout.find(info => info.low === j && j !== 0) ? <Bar /> : null}
           </React.Fragment>
         })}
@@ -53,7 +59,7 @@ const CodeFormat = ({ code, layout }) => {
           .map((a, i) => {
             let j = code_len - 1 - i
             return <React.Fragment key={i}>
-              <div className="px-1 flex-1">{a}</div>
+              <div style={{flex: 1}}>{a}</div>
               {layout.find(info => info.low === j && j !== 0) ? <Bar /> : null}
             </React.Fragment>
           })}
@@ -62,7 +68,7 @@ const CodeFormat = ({ code, layout }) => {
         {layout.map((field, i) => {
           return <React.Fragment key={i}>
             {i > 0 ? <Bar /> : null}
-            <div className={'flex-' + (field.high - field.low + 1)}>{field.name}</div>
+            <div style={{flex: (field.high - field.low + 1)}}>{field.name}</div>
           </React.Fragment>
         })}
       </code>
@@ -105,6 +111,38 @@ const Decoder = ({ xlen }) => {
   </div>
 }
 
+const Encoder = ({ xlen }) => {
+  const [insnDict, setInsnDict] = React.useState(null)
+  const [insnInfo, setInsnInfo] = React.useState(null)
+  const [name, setName] = React.useState('')
+  React.useEffect(() => {
+    getInsnDict(xlen).then(insnDict => {
+      // console.log(insnDict)
+      setInsnDict(insnDict)
+    })
+  }, [xlen])
+  React.useEffect(() => {
+    if (insnDict) {
+      setInsnInfo(encode(name || "addi", insnDict, xlen))
+    }
+  }, [name, insnDict, xlen])
+  return <div className="card my-2">
+    <div
+      className="card-header">
+      Encoder<input className="ms-2" placeholder="addi" value={name} onChange={(event) => {
+        setName(event.target.value)
+      }} />
+    </div>
+    {insnInfo ? <div className="card-body">
+      <p>extension: {insnInfo.ext}</p>
+      <p>assembly: <code>{insnInfo.asm}</code></p>
+      <p>layout: </p>
+      <CodeFormat code={insnInfo.insn_code} layout={insnInfo.format.layout} />
+    </div> : null}
+  </div>
+}
+
 export {
-  Decoder
+  Decoder,
+  Encoder
 }
