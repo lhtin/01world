@@ -84,6 +84,27 @@ const Decoder = ({ xlen }) => {
     getInsnDict(xlen).then(insnDict => {
       // console.log(insnDict)
       setInsnDict(insnDict)
+      /*
+      let xxx = {}
+      for (let key of Object.keys(insnDict.insns)) {
+        const insn = insnDict.insns[key]
+        if (!xxx[insn.extension[0]]) {
+          xxx[insn.extension[0]] = {}
+        }
+        if (!xxx[insn.extension[0]][insn.variable_fields.join('_')]) {
+          xxx[insn.extension[0]][insn.variable_fields.join('_')] = []
+        }
+        xxx[insn.extension[0]][insn.variable_fields.join('_')].push(key)
+      }
+
+      for (let ext of Object.keys(xxx)) {
+        console.log(ext)
+        console.log(Object.keys(xxx[ext]))
+        for (let key2 of Object.keys(xxx[ext])) {
+          console.log(key2, xxx[ext][key2])
+        }
+      }
+      */
     })
   }, [xlen])
   React.useEffect(() => {

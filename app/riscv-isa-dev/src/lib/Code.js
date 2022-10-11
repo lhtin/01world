@@ -92,7 +92,9 @@ const asm_handlers = {
 }
 
 const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, decoding = false) => {
-    if (ext.endsWith())
+    if (ext.endsWith("_c")) {
+        insn_code = insn_code.slice(-16)
+    }
     const fields_key = variable_fields.join(' ')
     let format = null
     for (let item of Object.values(FORMAT_LIST)) {
@@ -102,6 +104,7 @@ const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, decoding = 
         }
     }
     if (!format) {
+        console.log("fields_key", fields_key)
         return null
     }
     const obj = {
@@ -109,9 +112,6 @@ const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, decoding = 
         insn_code: insn_code,
         fields_key: fields_key,
         format: format
-    }
-    if (obj.insn_code.length !== 16 && obj.insn_code.length !== 32) {
-        return null
     }
     if (decoding) {
         let fieldMap = parseFields(obj.format.layout, Number.parseInt(insn_code, 2), xlen)
