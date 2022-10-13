@@ -1,5 +1,10 @@
 #!/bin/bash
 
+set -e
+set -u
+set -x
+set -o pipefail
+
 # ohmyzsh, zsh-autosuggestions, zsh-syntax-highlighting
 sh -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/ohmyzsh/-/raw/master/tools/install.sh)"
 git clone https://gitlab.com/lhtin-rivai/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
