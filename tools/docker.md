@@ -5,7 +5,8 @@ FROM ubuntu:18.04
 WORKDIR /home
 RUN apt-get update && apt-get install -y gcc g++ gperf bison flex texinfo help2man make libncurses5-dev \
   python3-dev autoconf automake libtool libtool-bin gawk wget bzip2 xz-utils unzip patch libstdc++6 rsync mingw-w64 \
-  vim git python3
+  vim git python3 \
+  zsh curl
 ```
 
 ```shell
