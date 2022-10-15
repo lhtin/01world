@@ -1,5 +1,3 @@
-import {FORMAT_LIST} from './CodeFormat'
-
 const getABIReg = (insn_name, r) => {
     if (insn_name.startsWith('f') || insn_name.startsWith('c.f')) {
         return [
@@ -91,23 +89,18 @@ const asm_handlers = {
     }
 }
 
-const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, decoding = false) => {
+const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, formatList, decoding = false) => {
     if (ext.endsWith("_c")) {
         insn_code = insn_code.slice(-16)
     }
-    const fields_key = variable_fields.join(' ')
-    let format = null
-    for (let item of Object.values(FORMAT_LIST)) {
-        if (item.ext.includes(ext)) {
-            format = item[fields_key]
-            break
-        }
-    }
+    const fields_key = variable_fields.join('_') || "_"
+    let format = formatList[ext][fields_key]
     if (!format) {
-        console.log("fields_key", fields_key)
+        console.log(`unknown fields_key ${fields_key} in ${ext}`)
         return null
     }
     const obj = {
+        insn_name,
         ext: ext,
         insn_code: insn_code,
         fields_key: fields_key,
@@ -142,8 +135,34 @@ const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, decoding = 
     return obj;
 }
 
+const decode = (code_hex, instr_dict, xlen, formatList) => {
+    const insn_code = Number.parseInt(code_hex, 16)
+    for (let key of Object.keys(instr_dict.insns)) {
+      const insn = instr_dict.insns[key]
+      const match = Number.parseInt(insn.match, 16)
+      const mask = Number.parseInt(insn.mask, 16)
+      if ((insn_code & mask) === match) {
+        let insn_name = key.replace(/_/g, '.')
+        let code = format_code(insn_code)
+        let info = parseInsn(insn_name, code, insn.variable_fields, xlen, insn.extension[0], formatList, true)
+        return info
+      }
+    }
+    return null
+  }
+  
+  const encode = (insn_name, instr_dict, xlen, formatList) => {
+    for (let key of Object.keys(instr_dict.insns)) {
+      if (insn_name === key.replace(/_/g, '.')) {
+        const insn = instr_dict.insns[key]
+        return  parseInsn(insn_name, insn.encoding, insn.variable_fields, xlen, insn.extension[0], formatList)
+      }
+    }
+  }
+
 export {
     parseInsn,
-    FORMAT_LIST,
-    format_code
+    format_code,
+    decode,
+    encode
 }

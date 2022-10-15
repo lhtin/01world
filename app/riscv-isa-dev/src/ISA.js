@@ -1,8 +1,8 @@
 import React from "react"
-import * as marked from "marked"
-import jsyaml from "js-yaml"
 import { Decoder, Encoder } from "./Coder"
-
+import { Instruction } from "./Instr"
+import { encode } from "./lib/Code";
+import { getFormatList, getInsnDict, getISA1 } from "./lib/Get";
 const RISCV_EXTENSIONS = new Set([
   "I", "M", "A", "F", "D", "C",  "Zicsr", "Zifencei"
 ]);
@@ -39,122 +39,6 @@ const toggle = (extSet, ext) => {
   }
 };
 
-const parse = (opcode, info) => {
-  return {
-    name: opcode,
-    ...info,
-    pseudos: Object.entries(info.pseudos || {}).map(([opcode, info]) => parse(opcode, info))
-  };
-};
-
-const getISA = () => {
-  return fetch('./isa.yml')
-    .then((res) => res.text())
-    .then((yml) => {
-      const obj = jsyaml.load(yml);
-      const ISA = {
-        RV32: {},
-        RV64: {},
-      }
-      // RV32
-      Object.entries(obj).forEach(([ext, info]) => {
-        if (ext === "HELPER" || ext === "RV64I") {
-          return;
-        } else if (ext === "RV32I") {
-          ext = "I"
-        }
-        ISA.RV32[ext] = {
-          name: ext,
-          meta: info["meta"],
-          insns: []
-        }
-        // console.log(info)
-        Object.entries(info).forEach(([opcode, info]) => {
-          if (opcode === "meta" || info.rv64_only) {
-            return;
-          } else if (info.only_base && !info.only_base.includes('RV32')) {
-            return;
-          }
-          ISA.RV32[ext].insns.push(parse(opcode, info))
-        })
-      })
-      // RV64
-      Object.entries(obj).forEach(([ext, info]) => {
-        if (ext === "HELPER" || ext === "RV32I") {
-          return;
-        } else if (info.only_base && !info.only_base.includes('RV64')) {
-          return;
-        } else if (ext === "RV64I") {
-          ext = "I"
-        }
-        ISA.RV64[ext] = {
-          name: ext,
-          meta: info["meta"],
-          insns: []
-        }
-        // console.log(info)
-        Object.entries(info).forEach(([opcode, info]) => {
-          if (opcode === "meta" || info.rv32_only) {
-            return;
-          }
-          ISA.RV64[ext].insns.push(parse(opcode, info))
-        })
-      })
-      // console.log(ISA)
-      return ISA
-    })
-}
-
-// const formatExts = (extSet) => {
-//   const str = Array.from(extSet)
-//     .sort((a, b) => a.length - b.length)
-//     .map(ext => (ext.length > 1 ? `_` : '') + ext)
-//     .join("");
-//   return str.replace(new RegExp(`^_+`), "");
-// };
-
-const Instruction = ({info}) => {
-  return (
-    <div className="insn my-2">
-      <div className="asm">
-        <strong><code>{info['asm']}</code></strong>
-      </div>
-      {info['real'] ? <div className="mt-2">
-          <code>{info['real']}</code>
-        </div> : null}
-      <div className="mt-2">
-        {info['desc'] ? <div className="insn-desc">{info['desc'].split("\n").map((line, index) => (
-          <div key={index} dangerouslySetInnerHTML={{__html: marked.parse(line)}}></div>
-        ))}</div> : null}
-        {info['code'] ? <pre className="gray-box mt-2">
-          <code>{info['code']}</code>
-        </pre> : null}
-        {info['pseudos'].length > 0
-          ? <div className="mt-2">
-          <div><strong>Pseudoinstructions:</strong></div>
-          <div className="mt-2 ms-2">
-            {info['pseudos'].map((info, index) => (
-                <div key={info.name} className="mt-4">
-                  <div className="asm">
-                    <strong><code>{info['asm']}</code></strong>
-                  </div>
-                  <div className="mt-2">
-                    <code>{info['real']}</code>
-                  </div>
-                  <div className="mt-2">{info['desc']}</div>
-                  {info['code'] ? <pre className="gray-box mt-2">
-                    <code>{info['code']}</code>
-                  </pre> : null}
-                </div>
-              ))}
-            </div>
-          </div>
-          : null}
-      </div>
-    </div>
-  )
-}
-
 const notation = `\
   rd, rs1, rs2: [x0, x31]
          imm12: [-2^11, 2^11-1] i.e. [-2048, 2047]
@@ -169,13 +53,21 @@ sign_extend(x): sign extend x to XLEN bits number
 const ISA = () => {
   const [xlen, setXLEN] = React.useState("RV32");
   const [ISA, setISA] = React.useState(null);
+  const [insnDict, setInsnDict] = React.useState(null)
+  const [formatList, setFormatList] = React.useState(null)
   const [extVisible, setExtVisible] = React.useState({});
   const [extSet, setExtSet] = React.useState(new Set(G_EXTENSIONS));
   React.useEffect(() => {
-    getISA().then(ISA => {
-      setISA(ISA);
+    Promise.all([
+      getInsnDict(xlen),
+      getFormatList(),
+      getISA1()
+    ]).then(([insnDict, formatList, ISA]) => {
+      setInsnDict(insnDict)
+      setFormatList(formatList)
+      setISA(ISA)
     })
-  }, []);
+  }, [xlen])
   if (!ISA) {
     return null;
   }
@@ -217,8 +109,8 @@ const ISA = () => {
         </div>
       ))}
     </div>
-    <Decoder xlen={xlen === 'RV32' ? 32 : 64}></Decoder>
-    <Encoder xlen={xlen === 'RV32' ? 32 : 64}></Encoder>
+    <Decoder xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList}></Decoder>
+    <Encoder xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList} ISA={ISA}></Encoder>
     <div className="card">
       <div className="card-header">Notations</div>
       <div className="card-body">
@@ -255,7 +147,7 @@ const ISA = () => {
                 <ul className="list-group list-group-flush">
                   {extInfo.insns.map((info) => (
                     <li key={info.name} className="list-group-item">
-                      <Instruction info={info} />
+                      <Instruction info={info} insnInfo={encode(info.name.toLowerCase(), insnDict, xlen, formatList)} />
                     </li>
                   ))}
                 </ul>

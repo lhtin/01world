@@ -452,6 +452,47 @@ insns:
     mask: '0xffff'
     match: '0x9002'
     variable_fields: []
+  c_fld:
+    encoding: '----------------001-----------00'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x2000'
+    variable_fields:
+    - rd_p
+    - rs1_p
+    - c_uimm8lo
+    - c_uimm8hi
+  c_fldsp:
+    encoding: '----------------001-----------10'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0x2002'
+    variable_fields:
+    - rd
+    - c_uimm9sphi
+    - c_uimm9splo
+  c_fsd:
+    encoding: '----------------101-----------00'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xa000'
+    variable_fields:
+    - rs1_p
+    - rs2_p
+    - c_uimm8lo
+    - c_uimm8hi
+  c_fsdsp:
+    encoding: '----------------101-----------10'
+    extension:
+    - rv64_c
+    mask: '0xe003'
+    match: '0xa002'
+    variable_fields:
+    - c_rs2
+    - c_uimm9sp_s
   c_j:
     encoding: '----------------101-----------01'
     extension:
@@ -662,6 +703,66 @@ insns:
     variable_fields:
     - rd_rs1_p
     - rs2_p
+  csrrc:
+    encoding: '-----------------011-----1110011'
+    extension:
+    - rv64_zicsr
+    mask: '0x707f'
+    match: '0x3073'
+    variable_fields:
+    - rd
+    - rs1
+    - csr
+  csrrci:
+    encoding: '-----------------111-----1110011'
+    extension:
+    - rv64_zicsr
+    mask: '0x707f'
+    match: '0x7073'
+    variable_fields:
+    - rd
+    - csr
+    - zimm
+  csrrs:
+    encoding: '-----------------010-----1110011'
+    extension:
+    - rv64_zicsr
+    mask: '0x707f'
+    match: '0x2073'
+    variable_fields:
+    - rd
+    - rs1
+    - csr
+  csrrsi:
+    encoding: '-----------------110-----1110011'
+    extension:
+    - rv64_zicsr
+    mask: '0x707f'
+    match: '0x6073'
+    variable_fields:
+    - rd
+    - csr
+    - zimm
+  csrrw:
+    encoding: '-----------------001-----1110011'
+    extension:
+    - rv64_zicsr
+    mask: '0x707f'
+    match: '0x1073'
+    variable_fields:
+    - rd
+    - rs1
+    - csr
+  csrrwi:
+    encoding: '-----------------101-----1110011'
+    extension:
+    - rv64_zicsr
+    mask: '0x707f'
+    match: '0x5073'
+    variable_fields:
+    - rd
+    - csr
+    - zimm
   div:
     encoding: 0000001----------100-----0110011
     extension:
@@ -968,6 +1069,16 @@ insns:
     - fm
     - pred
     - succ
+    - rs1
+    - rd
+  fence_i:
+    encoding: '-----------------001-----0001111'
+    extension:
+    - rv64_zifencei
+    mask: '0x707f'
+    match: '0x100f'
+    variable_fields:
+    - imm12
     - rs1
     - rd
   feq_d:
@@ -1866,160 +1977,3 @@ insns:
     - rd
     - rs1
     - imm12
-meta:
-  amoop: &id016
-  - 31
-  - 27
-  aq: &id020
-  - 26
-  - 26
-  aqrl: &id007
-  - 26
-  - 25
-  bimm12hi: &id008
-  - 31
-  - 25
-  bimm12lo: &id003
-  - 11
-  - 7
-  bs:
-  - 31
-  - 30
-  c_bimm9hi: &id004
-  - 12
-  - 10
-  c_bimm9lo: &id001
-  - 6
-  - 2
-  c_imm12:
-  - 12
-  - 2
-  c_imm6hi: &id002
-  - 12
-  - 12
-  c_imm6lo: *id001
-  c_nzimm10hi: *id002
-  c_nzimm10lo: *id001
-  c_nzimm18hi: *id002
-  c_nzimm18lo: *id001
-  c_nzimm6hi: *id002
-  c_nzimm6lo: *id001
-  c_nzuimm10:
-  - 12
-  - 5
-  c_nzuimm5: *id001
-  c_nzuimm6hi: *id002
-  c_nzuimm6lo: *id001
-  c_rs1_n0: *id003
-  c_rs2: *id001
-  c_rs2_n0: *id001
-  c_uimm10sp_s: &id006
-  - 12
-  - 7
-  c_uimm10sphi: *id002
-  c_uimm10splo: *id001
-  c_uimm7hi: *id004
-  c_uimm7lo: &id005
-  - 6
-  - 5
-  c_uimm8hi: *id004
-  c_uimm8lo: *id005
-  c_uimm8sp_s: *id006
-  c_uimm8sphi: *id002
-  c_uimm8splo: *id001
-  c_uimm9hi: *id004
-  c_uimm9lo: *id005
-  c_uimm9sp_s: *id006
-  c_uimm9sphi: *id002
-  c_uimm9splo: *id001
-  csr: &id009
-  - 31
-  - 20
-  fm:
-  - 31
-  - 28
-  funct2: *id007
-  funct3: &id011
-  - 14
-  - 12
-  funct7: *id008
-  imm12: *id009
-  imm12hi: *id008
-  imm12lo: *id003
-  imm2:
-  - 21
-  - 20
-  imm20: &id010
-  - 31
-  - 12
-  imm3:
-  - 22
-  - 20
-  imm4: &id012
-  - 23
-  - 20
-  imm5: &id014
-  - 24
-  - 20
-  imm6: &id018
-  - 25
-  - 20
-  jimm20: *id010
-  nf:
-  - 31
-  - 29
-  opcode:
-  - 6
-  - 0
-  pred:
-  - 27
-  - 24
-  rc:
-  - 29
-  - 25
-  rd: *id003
-  rd_n0: *id003
-  rd_n2: *id003
-  rd_p: &id015
-  - 4
-  - 2
-  rd_rs1: *id003
-  rd_rs1_n0: *id003
-  rd_rs1_p: &id013
-  - 9
-  - 7
-  rl: &id019
-  - 25
-  - 25
-  rm: *id011
-  rnum: *id012
-  rs1: &id017
-  - 19
-  - 15
-  rs1_n0: *id003
-  rs1_p: *id013
-  rs2: *id014
-  rs2_p: *id015
-  rs3: *id016
-  rt: *id017
-  shamt:
-  - 26
-  - 20
-  shamtd: *id018
-  shamtw: *id014
-  shamtw4: *id012
-  simm5: *id017
-  succ: *id012
-  vd: *id003
-  vm: *id019
-  vs1: *id017
-  vs2: *id014
-  vs3: *id003
-  wd: *id020
-  zimm: *id017
-  zimm10:
-  - 29
-  - 20
-  zimm11:
-  - 30
-  - 20

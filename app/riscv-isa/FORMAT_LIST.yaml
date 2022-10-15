@@ -1,5 +1,5 @@
-rv32_i: {
-    rd_rs1_rs2: &rd_rs1_rs2 {
+rv32_i: &rv32_i {
+    rd_rs1_rs2: {
         layout: [
             { name: "funct7", high: 31, low: 25 },
             { name: "rs2", high: 24, low: 20, },
@@ -10,7 +10,7 @@ rv32_i: {
         ],
         asm: "{insn_name} {rd}, {rs1}, {rs2}"
     },
-    rd_rs1_imm12: &rd_rs1_imm12 {
+    rd_rs1_imm12: {
         layout: [
             { name: "imm[11:0]", high: 31, low: 20 },
             { name: "rs1", high: 19, low: 15, },
@@ -20,18 +20,15 @@ rv32_i: {
         ],
         asm: "{insn_name} {rd}, {rs1}, {imm}"
     },
-    imm12hi_rs1_rs2_imm12lo: &imm12hi_rs1_rs2_imm12lo {
+    rd_imm20: {
         layout: [
-            { name: "imm[11:5]", high: 31, low: 25 },
-            { name: "rs2", high: 24, low: 20, },
-            { name: "rs1", high: 19, low: 15, },
-            { name: "funct3", high: 14, low: 12, },
-            { name: "imm[4:0]", high: 11, low: 7, },
+            { name: "imm[31:12]", high: 31, low: 12, },
+            { name: "rd", high: 11, low: 7, },
             { name: "opcode", high: 6, low: 0 }
         ],
-        asm: "{insn_name} {rs2}, {imm}({rs1})"
+        asm: "{insn_name} {rd}, {imm}"
     },
-    bimm12hi_rs1_rs2_bimm12lo: &bimm12hi_rs1_rs2_bimm12lo {
+    bimm12hi_rs1_rs2_bimm12lo: {
         layout: [
             { name: "imm[12|10:5]", high: 31, low: 25 },
             { name: "rs2", high: 24, low: 20, },
@@ -42,23 +39,17 @@ rv32_i: {
         ],
         asm: "{insn_name} {rs1}, {rs2}, {imm}"
     },
-    rd_imm20: &rd_imm20 {
+    _: {
         layout: [
-            { name: "imm[31:12]", high: 31, low: 12, },
+            { name: "funct12", high: 31, low: 20 },
+            { name: "rs1", high: 19, low: 15, },
+            { name: "funct3", high: 14, low: 12, },
             { name: "rd", high: 11, low: 7, },
             { name: "opcode", high: 6, low: 0 }
         ],
-        asm: "{insn_name} {rd}, {imm}"
+        asm: "{insn_name}"
     },
-    rd_jimm20: &rd_jimm20 {
-        layout: [
-            { name: "imm[20|10:1|11|19:12]", high: 31, low: 12, },
-            { name: "rd", high: 11, low: 7, },
-            { name: "opcode", high: 6, low: 0 }
-        ],
-        asm: "{insn_name} {rd}, {imm}"
-    },
-    fm_pred_succ_rs1_rd: &fm_pred_succ_rs1_rd {
+    fm_pred_succ_rs1_rd: {
         layout: [
             { name: "fm", high: 31, low: 28},
             { name: "pred", high: 27, low: 24},
@@ -69,6 +60,25 @@ rv32_i: {
             { name: "opcode", high: 6, low: 0 }
         ],
         asm: "{insn_name} {pred}, {succ}"
+    },
+    rd_jimm20: {
+        layout: [
+            { name: "imm[20|10:1|11|19:12]", high: 31, low: 12, },
+            { name: "rd", high: 11, low: 7, },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}"
+    },
+    imm12hi_rs1_rs2_imm12lo: {
+        layout: [
+            { name: "imm[11:5]", high: 31, low: 25 },
+            { name: "rs2", high: 24, low: 20, },
+            { name: "rs1", high: 19, low: 15, },
+            { name: "funct3", high: 14, low: 12, },
+            { name: "imm[4:0]", high: 11, low: 7, },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name} {rs2}, {imm}({rs1})"
     },
     rd_rs1_shamtw: {
         layout: [
@@ -81,105 +91,93 @@ rv32_i: {
         ],
         asm: "{insn_name} {rd}, {uimm}"
     },
-    _: {
+}
+rv32_m: *rv32_i
+rv32_f: &rv32_f {
+    rd_rs1_rs2_rm: {
         layout: [
-            { name: "funct12", high: 31, low: 20 },
+            { name: "funct5", high: 31, low: 27 },
+            { name: "fmt", high: 26, low: 25 },
+            { name: "rs2", high: 24, low: 20, },
             { name: "rs1", high: 19, low: 15, },
-            { name: "funct3", high: 14, low: 12, },
+            { name: "rm", high: 14, low: 12, },
             { name: "rd", high: 11, low: 7, },
             { name: "opcode", high: 6, low: 0 }
         ],
-        asm: "{insn_name}"
-    }
+        asm: "{insn_name} {rd}, {rs1}, {rs2}, {rm}"
+    },
+    rd_rs1: {
+        layout: [
+            { name: "funct5", high: 31, low: 27 },
+            { name: "fmt", high: 26, low: 25 },
+            { name: "rs2", high: 24, low: 20 },
+            { name: "rs1", high: 19, low: 15, },
+            { name: "rm", high: 14, low: 12 },
+            { name: "rd", high: 11, low: 7, },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {rs1}"
+    },
+    rd_rs1_rm: {
+        layout: [
+            { name: "funct5", high: 31, low: 27 },
+            { name: "fmt", high: 26, low: 25 },
+            { name: "rs2", high: 24, low: 20 },
+            { name: "rs1", high: 19, low: 15, },
+            { name: "rm", high: 14, low: 12 },
+            { name: "rd", high: 11, low: 7, },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {rs1}, {rm}"
+    },
+    rd_rs1_rs2: {
+        layout: [
+            { name: "funct5", high: 31, low: 27 },
+            { name: "fmt", high: 26, low: 25 },
+            { name: "rs2", high: 24, low: 20, },
+            { name: "rs1", high: 19, low: 15, },
+            { name: "rm", high: 14, low: 12},
+            { name: "rd", high: 11, low: 7, },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {rs1}, {rs2}"
+    },
+    rd_rs1_imm12: {
+        layout: [
+            { name: "imm[11:0]", high: 31, low: 20 },
+            { name: "rs1", high: 19, low: 15, },
+            { name: "width", high: 14, low: 12, },
+            { name: "rd", high: 11, low: 7, },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}({rs1})"
+    },
+    rd_rs1_rs2_rs3_rm: {
+        layout: [
+            { name: "rs3", high: 31, low: 27 },
+            { name: "fmt", high: 26, low: 25 },
+            { name: "rs2", high: 24, low: 20 },
+            { name: "rs1", high: 19, low: 15 },
+            { name: "rm", high: 14, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {rs1}, {rs2}, {rs3}, {rm}"
+    },
+    imm12hi_rs1_rs2_imm12lo: {
+        layout: [
+            { name: "imm[11:5]", high: 31, low: 25 },
+            { name: "rs2", high: 24, low: 20, },
+            { name: "rs1", high: 19, low: 15, },
+            { name: "width", high: 14, low: 12, },
+            { name: "imm[4:0]", high: 11, low: 7, },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name} {rs2}, {imm}({rs1})"
+    },
 }
-rv32_m: *rv32_i,
-
-rv32_f: {
-    'rd_rs1_imm12': {
-            layout: [
-                { name: 'imm[11:0]', high: 31, low: 20 },
-                { name: 'rs1', high: 19, low: 15, },
-                { name: 'width', high: 14, low: 12, },
-                { name: 'rd', high: 11, low: 7, },
-                { name: 'opcode', high: 6, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {imm}({rs1})'
-        },
-        'imm12hi_rs1_rs2_imm12lo': {
-            layout: [
-                { name: 'imm[11:5]', high: 31, low: 25 },
-                { name: 'rs2', high: 24, low: 20, },
-                { name: 'rs1', high: 19, low: 15, },
-                { name: 'width', high: 14, low: 12, },
-                { name: 'imm[4:0]', high: 11, low: 7, },
-                { name: 'opcode', high: 6, low: 0 }
-            ],
-            asm: '{insn_name} {rs2}, {imm}({rs1})'
-        },
-        'rd_rs1_rs2_rm': {
-            layout: [
-                { name: 'funct5', high: 31, low: 27 },
-                { name: 'fmt', high: 26, low: 25 },
-                { name: 'rs2', high: 24, low: 20, },
-                { name: 'rs1', high: 19, low: 15, },
-                { name: 'rm', high: 14, low: 12, },
-                { name: 'rd', high: 11, low: 7, },
-                { name: 'opcode', high: 6, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {rs1}, {rs2}, {rm}'
-        },
-        'rd_rs1_rm': {
-            layout: [
-                { name: 'funct5', high: 31, low: 27 },
-                { name: 'fmt', high: 26, low: 25 },
-                { name: 'rs2', high: 24, low: 20 },
-                { name: 'rs1', high: 19, low: 15, },
-                { name: 'rm', high: 14, low: 12 },
-                { name: 'rd', high: 11, low: 7, },
-                { name: 'opcode', high: 6, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {rs1}, {rm}'
-        },
-        'rd_rs1_rs2': {
-            layout: [
-                { name: 'funct5', high: 31, low: 27 },
-                { name: 'fmt', high: 26, low: 25 },
-                { name: 'rs2', high: 24, low: 20, },
-                { name: 'rs1', high: 19, low: 15, },
-                { name: 'rm', high: 14, low: 12},
-                { name: 'rd', high: 11, low: 7, },
-                { name: 'opcode', high: 6, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {rs1}, {rs2}'
-        },
-        'rd_rs1_rs2_rs3_rm': {
-            layout: [
-                { name: "rs3", high: 31, low: 27 },
-                { name: 'fmt', high: 26, low: 25 },
-                { name: 'rs2', high: 24, low: 20 },
-                { name: 'rs1', high: 19, low: 15 },
-                { name: 'rm', high: 14, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'opcode', high: 6, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {rs1}, {rs2}, {rs3}, {rm}'
-        },
-        'rd_rs1': {
-            layout: [
-                { name: 'funct5', high: 31, low: 27 },
-                { name: 'fmt', high: 26, low: 25 },
-                { name: 'rs2', high: 24, low: 20 },
-                { name: 'rs1', high: 19, low: 15, },
-                { name: 'rm', high: 14, low: 12 },
-                { name: 'rd', high: 11, low: 7, },
-                { name: 'opcode', high: 6, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {rs1}'
-        }
-}
-rv32_d: *rv32_f,
-
-rv32_a: {
+rv32_d: *rv32_f
+rv32_a: &rv32_a {
         rd_rs1_aq_rl: {
             layout: [
                 { name: "funct5", high: 31, low: 27 },
@@ -207,307 +205,235 @@ rv32_a: {
             asm: "{insn_name}{_aqrl_} {rd}, {rs1}, ({rs2})",
         },
 }
-
 rv32_c: &rv32_c {
-    rd_rs1_c_rs2_n0: {},
-        'rd_rs1_n0_c_nzimm6lo_c_nzimm6hi': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'imm[5]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'imm[4:0]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
+    rd_rs1_c_rs2_n0: {
+        layout: [
+                { name: "funct4", high: 15, low: 12 },
+                { name: "rd", high: 11, low: 7 },
+                { name: "rs2", high: 6, low: 2 },
+                { name: "op", high: 1, low: 0 }
             ],
-            asm: '{insn_name} {rd}, {imm}'
-        },
-        'c_nzimm10hi_c_nzimm10lo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'imm[9]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7, vlaue: 2 },
-                { name: 'imm[4|6|8:7|5]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {imm}'
-        },
-                'rd_p_c_nzuimm10': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5:4|9:6|2|3]', high: 12, low: 5 },
-                { name: 'rd_p', high: 4, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd_p}, {uimm}'
-        },
-                'rd_rs1_p_rs2_p': {
-            layout: [
-                { name: 'funct6', high: 15, low: 10 },
-                { name: 'rd_p', high: 9, low: 7 },
-                { name: 'funct2', hight: 6, low: 5 },
-                { name: 'rs2_p', high: 4, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd_p}, {rs2_p}'
-        },
-                'rd_rs1_p_c_imm6hi_c_imm6lo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'imm[5]', high: 12, low: 12 },
-                { name: 'funct2', high: 11, low: 10 },
-                { name: 'rd_p', high: 9, low: 7 },
-                { name: 'imm[4:0]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd_p}, {imm}'
-        },
-                'rs1_p_c_bimm9lo_c_bimm9hi': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'imm[8|4:3]', high: 12, low: 10 },
-                { name: 'rs1_p', high: 9, low: 7 },
-                { name: 'imm[7:6|2:1|5]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rs1_p}, {imm}'
-        },
-                'c_imm12': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'imm[11|4|9:8|10|6|7|3:1|5]', high: 12, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {imm}'
-        },
-        c_rs1_n0: {},
-                'rs1_n0': {
-            layout: [
-                { name: 'funct4', high: 15, low: 12 },
-                { name: 'rs1', high: 11, low: 7 },
-                { name: 'rs2', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rs1}'
-        },
-                'rd_c_imm6lo_c_imm6hi': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'imm[5]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'imm[4:0]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {imm}'
-        },
-         'rd_n2_c_nzimm18hi_c_nzimm18lo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'imm[17]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'imm[16:12]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {imm}'
-        },
-        'rd_p_rs1_p_c_uimm7lo_c_uimm7hi': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5:3]', high: 12, low: 10 },
-                { name: 'rs1_p', high: 9, low: 7 },
-                { name: 'uimm[2|6]', high: 6, low: 5 },
-                { name: 'rd_p', high: 4, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd_p}, {uimm}({rs1_p})'
-        },
-               'rd_n0_c_uimm8sphi_c_uimm8splo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'uimm[4:2|7:6]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {uimm}'
-        },
-        'rd_c_rs2_n0': {
-            layout: [
-                { name: 'funct4', high: 15, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'rs2', high: 6, low: 2, not_value: [0] },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {rs2}'
-        },
-        c_nzimm6hi_c_nzimm6lo: {},
-        rd_rs1_n0_c_nzuimm6lo: {},
-        rd_rs1_p_c_nzuimm5: {},
-        'rs1_p_rs2_p_c_uimm7lo_c_uimm7hi': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5:3]', high: 12, low: 10 },
-                { name: 'rs1_p', high: 9, low: 7 },
-                { name: 'uimm[2|6]', high: 6, low: 5 },
-                { name: 'rs2_p', high: 4, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rs2_p}, {uimm}({rs1_p})'
-        },
-        'c_rs2_c_uimm8sp_s': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5:2|7:6]', high: 12, low: 7 },
-                { name: 'r2', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rs2}, {uimm}'
-        },
-        _: {}
-
+            asm: "{insn_name} {rd}, {rs2}"
+    },
+    rd_rs1_n0_c_nzimm6lo_c_nzimm6hi: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "imm[5]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "imm[4:0]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}"
+    },
+    c_nzimm10hi_c_nzimm10lo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "imm[9]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7, vlaue: 2 },
+            { name: "imm[4|6|8:7|5]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}"
+    },
+    rd_p_c_nzuimm10: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5:4|9:6|2|3]", high: 12, low: 5 },
+            { name: "rd_p", high: 4, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd_p}, {uimm}"
+    },
+    rd_rs1_p_rs2_p: {
+        layout: [
+            { name: "funct6", high: 15, low: 10 },
+            { name: "rd_p", high: 9, low: 7 },
+            { name: "funct2", hight: 6, low: 5 },
+            { name: "rs2_p", high: 4, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd_p}, {rs2_p}"
+    },
+    rd_rs1_p_c_imm6hi_c_imm6lo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "imm[5]", high: 12, low: 12 },
+            { name: "funct2", high: 11, low: 10 },
+            { name: "rd_p", high: 9, low: 7 },
+            { name: "imm[4:0]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd_p}, {imm}"
+    },
+    rs1_p_c_bimm9lo_c_bimm9hi: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "imm[8|4:3]", high: 12, low: 10 },
+            { name: "rs1_p", high: 9, low: 7 },
+            { name: "imm[7:6|2:1|5]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rs1_p}, {imm}"
+    },
+    _: {
+        layout: [
+            { name: "funct4", high: 15, low: 12},
+            { name: "zero", high: 11, low: 2 },
+            { name: "op", high: 1, low: 0}
+        ]
+    },
+    c_imm12: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "imm[11|4|9:8|10|6|7|3:1|5]", high: 12, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {imm}"
+    },
+    c_rs1_n0: &c_rs1_n0 {
+        layout: [
+            { name: "funct4", high: 15, low: 12},
+            { name: "rs1", high: 11, low: 7},
+            { name: "rs2", high: 6, low: 2},
+            { name: "op", high: 1, low: 0}
+        ],
+        asm: "{insn_name} {rs1}"
+    },
+    rs1_n0: *c_rs1_n0,
+    rd_c_imm6lo_c_imm6hi: &rd_c_imm6lo_c_imm6hi {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "imm[5]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "imm[4:0]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}"
+    },
+    rd_n2_c_nzimm18hi_c_nzimm18lo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "imm[17]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "imm[16:12]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}"
+    },
+    rd_p_rs1_p_c_uimm7lo_c_uimm7hi: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5:3]", high: 12, low: 10 },
+            { name: "rs1_p", high: 9, low: 7 },
+            { name: "uimm[2|6]", high: 6, low: 5 },
+            { name: "rd_p", high: 4, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd_p}, {uimm}({rs1_p})"
+    },
+    rd_n0_c_uimm8sphi_c_uimm8splo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "uimm[4:2|7:6]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {uimm}"
+    },
+    rd_c_rs2_n0: {
+        layout: [
+            { name: "funct4", high: 15, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "rs2", high: 6, low: 2, not_value: [0] },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {rs2}"
+    },
+    c_nzimm6hi_c_nzimm6lo: {
+        <<: *rd_c_imm6lo_c_imm6hi,
+        asm: "{insn_name}"
+    },
+    rd_rs1_n0_c_nzuimm6lo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "shamt[5]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "shamt[4:0]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}"
+    },
+    rd_rs1_p_c_nzuimm5: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "shamt[5]", high: 12, low: 12 },
+            { name: "funct2", high: 11, low: 10},
+            { name: "rd_p", high: 9, low: 7 },
+            { name: "shamt[4:0]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}"
+    },
+    rs1_p_rs2_p_c_uimm7lo_c_uimm7hi: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5:3]", high: 12, low: 10 },
+            { name: "rs1_p", high: 9, low: 7 },
+            { name: "uimm[2|6]", high: 6, low: 5 },
+            { name: "rs2_p", high: 4, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rs2_p}, {uimm}({rs1_p})"
+    },
+    c_rs2_c_uimm8sp_s: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5:2|7:6]", high: 12, low: 7 },
+            { name: "r2", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rs2}, {uimm}"
+    },
 }
-
-
-rv32_zicsr: {
-    'rd_rs1_csr': {
+rv32_zicsr: &rv32_zicsr {
+    "rd_rs1_csr": {
             layout: [
-                { name: 'csr', high: 31, low: 20 },
-                { name: 'rs1', high: 19, low: 15, },
-                { name: 'funct3', high: 14, low: 12, },
-                { name: 'rd', high: 11, low: 7, },
-                { name: 'opcode', high: 6, low: 0 }
+                { name: "csr", high: 31, low: 20 },
+                { name: "rs1", high: 19, low: 15, },
+                { name: "funct3", high: 14, low: 12, },
+                { name: "rd", high: 11, low: 7, },
+                { name: "opcode", high: 6, low: 0 }
             ],
-            asm: '{insn_name} {rd}, {rs1}',
+            asm: "{insn_name} {rd}, {rs1}",
         },
-        'rd_csr_zimm': {
+        "rd_csr_zimm": {
             layout: [
-                { name: 'csr', high: 31, low: 20 },
-                { name: 'uimm[4:0]', high: 19, low: 15, },
-                { name: 'funct3', high: 14, low: 12, },
-                { name: 'rd', high: 11, low: 7, },
-                { name: 'opcode', high: 6, low: 0 }
+                { name: "csr", high: 31, low: 20 },
+                { name: "uimm[4:0]", high: 19, low: 15, },
+                { name: "funct3", high: 14, low: 12, },
+                { name: "rd", high: 11, low: 7, },
+                { name: "opcode", high: 6, low: 0 }
             ],
-            asm: '{insn_name} {rd}, {uimm}',
+            asm: "{insn_name} {rd}, {uimm}",
         }
 }
-
-rv32_zifencei: {},
-
-
-
-rv64_c: {
-    <<: *rv32_c,
-
- 
-        'rd_n0_c_uimm9sphi_c_uimm9splo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'uimm[4:3|8:6]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {uimm}'
-        },
-        'rd_c_uimm8sphi_c_uimm8splo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'uimm[4:2|7:6]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {uimm}'
-        },
-        'rd_c_uimm9sphi_c_uimm9splo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'uimm[4:3|8:6]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {uimm}'
-        },
-        'c_rs2_c_uimm9sp_s': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5:3|8:6]', high: 12, low: 7 },
-                { name: 'r2', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rs2}, {uimm}'
-        },
-        'rd_p_rs1_p_c_uimm8lo_c_uimm8hi': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5:3]', high: 12, low: 10 },
-                { name: 'rs1_p', high: 9, low: 7 },
-                { name: 'uimm[7:6]', high: 6, low: 5 },
-                { name: 'rd_p', high: 4, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd_p}, {uimm}({rs1_p})'
-        },
-        
-        'rs1_p_rs2_p_c_uimm8hi_c_uimm8lo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5:3]', high: 12, low: 10 },
-                { name: 'rs1_p', high: 9, low: 7 },
-                { name: 'uimm[7:6]', high: 6, low: 5 },
-                { name: 'rs2_p', high: 4, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rs2_p}, {uimm}({rs1_p})'
-        },
-        'rd_rs1_c_imm6lo_c_imm6hi': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'imm[5]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7 },
-                { name: 'imm[4:0]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {imm}'
-        },
-
-
-        'rd_rs1_n0_c_nzuimm6hi_c_nzuimm6lo': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5]', high: 12, low: 12 },
-                { name: 'rd', high: 11, low: 7, not_value: [0] },
-                { name: 'uimm[4:0]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd}, {uimm}'
-        },
-        'rd_rs1_p_c_nzuimm6lo_c_nzuimm6hi': {
-            layout: [
-                { name: 'funct3', high: 15, low: 13 },
-                { name: 'uimm[5]', high: 12, low: 12 },
-                { name: 'funct2', high: 11, low: 10 },
-                { name: 'rd_p', high: 9, low: 7 },
-                { name: 'uimm[4:0]', high: 6, low: 2 },
-                { name: 'op', high: 1, low: 0 }
-            ],
-            asm: '{insn_name} {rd_p}, {uimm}'
-        },
-
-        
-
-},
-
-
+rv32_zifencei: &rv32_zifencei {
+    imm12_rs1_rd: {
+        layout: [
+            { name: "imm[11:0]", high: 31, low: 20 },
+            { name: "rs1", high: 19, low: 15, },
+            { name: "funct3", high: 14, low: 12, },
+            { name: "rd", high: 11, low: 7, },
+            { name: "opcode", high: 6, low: 0 }
+        ],
+        asm: "{insn_name}"
+    }
+}
 
 rv64_i: {
-    rd_rs1_rs2: *rd_rs1_rs2,
-    rd_rs1_imm12: *rd_rs1_imm12,
-    imm12hi_rs1_rs2_imm12lo: *imm12hi_rs1_rs2_imm12lo,
-    bimm12hi_rs1_rs2_bimm12lo: *bimm12hi_rs1_rs2_bimm12lo,
-    rd_imm20: *rd_imm20,
-    rd_jimm20: *rd_jimm20,
-    fm_pred_succ_rs1_rd: *fm_pred_succ_rs1_rd,
-    rd_rs1_shamtw: {
+    <<: *rv32_i,
+    rd_rs1_shamtd: {
         layout: [
             { name: "funct6", high: 31, low: 26 },
             { name: "uimm", high: 25, low: 20, },
@@ -519,3 +445,105 @@ rv64_i: {
         asm: "{insn_name} {rd}, {uimm}"
     }
 }
+rv64_m: *rv32_i
+rv64_f: *rv32_f
+rv64_d: *rv32_f
+rv64_a: *rv32_a
+rv64_c: {
+    <<: *rv32_c,
+    rd_rs1_c_imm6lo_c_imm6hi: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "imm[5]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "imm[4:0]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {imm}"
+    },
+    rd_p_rs1_p_c_uimm8lo_c_uimm8hi: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5:3]", high: 12, low: 10 },
+            { name: "rs1_p", high: 9, low: 7 },
+            { name: "uimm[7:6]", high: 6, low: 5 },
+            { name: "rd_p", high: 4, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd_p}, {uimm}({rs1_p})"
+    },
+    rd_c_uimm9sphi_c_uimm9splo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "uimm[4:3|8:6]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {uimm}"
+    },
+    rs1_p_rs2_p_c_uimm8lo_c_uimm8hi: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5:3]", high: 12, low: 10 },
+            { name: "rs1_p", high: 9, low: 7 },
+            { name: "uimm[7:6]", high: 6, low: 5 },
+            { name: "rs2_p", high: 4, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd_p}, {uimm}({rs1_p})"
+    },
+    c_rs2_c_uimm9sp_s: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5:3|8:6]", high: 12, low: 7 },
+            { name: "r2", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rs2}, {uimm}"
+    },
+    rd_n0_c_uimm9sphi_c_uimm9splo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7 },
+            { name: "uimm[4:3|8:6]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {uimm}"
+    },
+    rs1_p_rs2_p_c_uimm8hi_c_uimm8lo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5:3]", high: 12, low: 10 },
+            { name: "rs1_p", high: 9, low: 7 },
+            { name: "uimm[7:6]", high: 6, low: 5 },
+            { name: "rs2_p", high: 4, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rs2_p}, {uimm}({rs1_p})"
+    },
+    rd_rs1_n0_c_nzuimm6hi_c_nzuimm6lo: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5]", high: 12, low: 12 },
+            { name: "rd", high: 11, low: 7, not_value: [0] },
+            { name: "uimm[4:0]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd}, {uimm}"
+    },
+    rd_rs1_p_c_nzuimm6lo_c_nzuimm6hi: {
+        layout: [
+            { name: "funct3", high: 15, low: 13 },
+            { name: "uimm[5]", high: 12, low: 12 },
+            { name: "funct2", high: 11, low: 10 },
+            { name: "rd_p", high: 9, low: 7 },
+            { name: "uimm[4:0]", high: 6, low: 2 },
+            { name: "op", high: 1, low: 0 }
+        ],
+        asm: "{insn_name} {rd_p}, {uimm}"
+    },
+}
+rv64_zicsr: *rv32_zicsr
+rv64_zifencei: *rv32_zifencei
