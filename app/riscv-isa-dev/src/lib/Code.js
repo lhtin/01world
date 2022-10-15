@@ -28,7 +28,7 @@ const format_code = (code) => {
     return bin
 }
 
-const parseFields = (layout, code, xlen) => {
+const parseFields = (layout, code) => {
     let fieldCodeMap = {}
     let filedInfoMap = {}
     for (let field of layout) {
@@ -89,7 +89,7 @@ const asm_handlers = {
     }
 }
 
-const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, formatList, decoding = false) => {
+const parseInsn = (insn_name, insn_code, variable_fields, ext, formatList, decoding = false) => {
     if (ext.endsWith("_c")) {
         insn_code = insn_code.slice(-16)
     }
@@ -107,7 +107,7 @@ const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, formatList,
         format: format
     }
     if (decoding) {
-        let fieldMap = parseFields(obj.format.layout, Number.parseInt(insn_code, 2), xlen)
+        let fieldMap = parseFields(obj.format.layout, Number.parseInt(insn_code, 2))
         let asm_temp = [...obj.format.asm.matchAll(/\{([^{}]+)\}/g)].map((m) => m[1])
         let asm = obj.format.asm.replace('{insn_name}', insn_name)
         for (let i = 0; i < asm_temp.length; i += 1) {
@@ -135,7 +135,7 @@ const parseInsn = (insn_name, insn_code, variable_fields, xlen, ext, formatList,
     return obj;
 }
 
-const decode = (code_hex, instr_dict, xlen, formatList) => {
+const decode = (code_hex, instr_dict, formatList) => {
     const insn_code = Number.parseInt(code_hex, 16)
     for (let key of Object.keys(instr_dict.insns)) {
       const insn = instr_dict.insns[key]
@@ -144,24 +144,23 @@ const decode = (code_hex, instr_dict, xlen, formatList) => {
       if ((insn_code & mask) === match) {
         let insn_name = key.replace(/_/g, '.')
         let code = format_code(insn_code)
-        let info = parseInsn(insn_name, code, insn.variable_fields, xlen, insn.extension[0], formatList, true)
+        let info = parseInsn(insn_name, code, insn.variable_fields, insn.extension[0], formatList, true)
         return info
       }
     }
     return null
   }
   
-  const encode = (insn_name, instr_dict, xlen, formatList) => {
+  const encode = (insn_name, instr_dict, formatList) => {
     for (let key of Object.keys(instr_dict.insns)) {
       if (insn_name === key.replace(/_/g, '.')) {
         const insn = instr_dict.insns[key]
-        return  parseInsn(insn_name, insn.encoding, insn.variable_fields, xlen, insn.extension[0], formatList)
+        return  parseInsn(insn_name, insn.encoding, insn.variable_fields, insn.extension[0], formatList)
       }
     }
   }
 
 export {
-    parseInsn,
     format_code,
     decode,
     encode

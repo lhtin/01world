@@ -69,7 +69,7 @@ const getISA1 = () => {
 }
 
 const getInsnDict = (xlen) => {
-    return fetch(`./instr_dict_${xlen.toLowerCase()}.yaml`)
+    return fetch(`./instr_dict_rv${xlen}.yaml`)
       .then((res) => res.text())
       .then((yml) => {
         const obj = jsyaml.load(yml)

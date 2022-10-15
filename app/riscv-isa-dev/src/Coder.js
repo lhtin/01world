@@ -4,14 +4,14 @@ import { Instruction } from "./Instr"
 import { encode, decode } from './lib/Code'
 import { CodeFormater } from "./CodeFormater"
 
-const Decoder = ({ insnDict, formatList, xlen }) => {
+const Decoder = ({ insnDict, formatList }) => {
   const [hex, setHex] = React.useState('')
   const [insnInfo, setInsnInfo] = React.useState(null)
   React.useEffect(() => {
     if (insnDict && formatList) {
-      setInsnInfo(decode(hex || "0x258513", insnDict, xlen, formatList))
+      setInsnInfo(decode(hex || "0x258513", insnDict, formatList))
     }
-  }, [hex, insnDict, xlen, formatList])
+  }, [hex, insnDict, formatList])
   // console.log(insnInfo)
   return <div className="card my-2">
     <div
@@ -35,9 +35,9 @@ const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen, canFull = fal
   const [name, setName] = React.useState(insnName)
   React.useEffect(() => {
     if (insnDict && formatList) {
-      setInsnInfo(encode(name || "addi", insnDict, xlen, formatList))
+      setInsnInfo(encode(name || "addi", insnDict, formatList))
     }
-  }, [name, insnDict, xlen, formatList])
+  }, [name, insnDict, formatList])
   return <div className="card my-2">
     <div
       className="card-header d-flex">
@@ -49,7 +49,8 @@ const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen, canFull = fal
       {canFull 
         ? <button onClick={() => {
           const query = new URLSearchParams(window.location.search)
-          query.append("insn_name", name || "addi")
+          query.set("insn_name", name || "addi")
+          query.set("xlen", xlen)
           window.location.search = query.toString()
         }} type="button" className="btn btn-outline-primary btn-sm">Full Screen</button> 
         : null}

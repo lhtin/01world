@@ -52,7 +52,8 @@ sign_extend(x): sign extend x to XLEN bits number
 `
 
 const ISA = () => {
-  const [xlen, setXLEN] = React.useState("RV32");
+  const query = new URLSearchParams(window.location.search)
+  const [xlen, setXLEN] = React.useState(query.get("xlen") ? Number(query.get("xlen")) : 32);
   const [ISA, setISA] = React.useState(null);
   const [insnDict, setInsnDict] = React.useState(null)
   const [formatList, setFormatList] = React.useState(null)
@@ -69,17 +70,21 @@ const ISA = () => {
       setISA(ISA)
     })
   }, [xlen])
+  React.useEffect(() => {
+    const url = new URL(window.location);
+    url.searchParams.set('xlen', xlen);
+    window.history.pushState({}, '', url);
+  }, [xlen])
   if (!ISA) {
     return null;
   }
-  const query = new URLSearchParams(window.location.search)
   if (query.has("insn_name")) {
     return <div className="container">
       <Back onClick={() => {
         query.delete("insn_name")
         window.location.search = query.toString()
       }} desc={"Home"} />
-      <Encoder insnName={query.get("insn_name")} xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList} ISA={ISA}></Encoder>
+      <Encoder insnName={query.get("insn_name")} xlen={xlen} insnDict={insnDict} formatList={formatList} ISA={ISA}></Encoder>
     </div>
   }
   return <div className="container">
@@ -87,13 +92,13 @@ const ISA = () => {
     <div className="row row-no-gutters my-2">
       <div className="col-xs-4 col-md-2">
         <label>
-          <input className="me-2" type="radio" checked={xlen === "RV32"} onChange={() => setXLEN("RV32")} />
+          <input className="me-2" type="radio" checked={xlen === 32} onChange={() => setXLEN(32)} />
           RV32
         </label>
       </div>
       <div className="col-xs-4 col-md-2">
         <label>
-          <input className="me-2" type="radio" checked={xlen === "RV64"} onChange={() => setXLEN("RV64")} />
+          <input className="me-2" type="radio" checked={xlen === 64} onChange={() => setXLEN(64)} />
           RV64
         </label>
       </div>
@@ -115,13 +120,13 @@ const ISA = () => {
         <div className="me-4" key={ext}>
           <label>
             <input type="checkbox" className="me-2" checked={extSet.has(ext)} onChange={() => setExtSet(toggle(extSet, ext))} />
-            {ext} ({ISA[xlen][ext].insns.length})
+            {ext} ({ISA["RV" + xlen][ext].insns.length})
           </label>
         </div>
       ))}
     </div>
-    <Decoder xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList}></Decoder>
-    <Encoder xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList} ISA={ISA} canFull={true}></Encoder>
+    <Decoder xlen={xlen} insnDict={insnDict} formatList={formatList}></Decoder>
+    <Encoder xlen={xlen} insnDict={insnDict} formatList={formatList} ISA={ISA} canFull={true}></Encoder>
     <div className="card">
       <div className="card-header">Notations</div>
       <div className="card-body">
@@ -130,7 +135,7 @@ const ISA = () => {
     </div>
     <p><small>Note: The descriptions of the instructions are mostly from <a href="https://riscv.org/technical/specifications/">the RISC-V ISA specification</a>.</small></p>
     {ISA
-      ? Array.from(RISCV_EXTENSIONS).filter(ext => extSet.has(ext)).map(ext => ISA[xlen][ext]).map(extInfo => (
+      ? Array.from(RISCV_EXTENSIONS).filter(ext => extSet.has(ext)).map(ext => ISA["RV" + xlen][ext]).map(extInfo => (
         <div key={extInfo.name} className="card my-2">
           <div
             className="card-header"
@@ -158,7 +163,7 @@ const ISA = () => {
                 <ul className="list-group list-group-flush">
                   {extInfo.insns.map((info) => (
                     <li key={info.name} className="list-group-item">
-                      <Instruction info={info} insnInfo={encode(info.name.toLowerCase(), insnDict, xlen, formatList)} />
+                      <Instruction info={info} insnInfo={encode(info.name.toLowerCase(), insnDict, formatList)} />
                     </li>
                   ))}
                 </ul>
