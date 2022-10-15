@@ -29,7 +29,7 @@ const Decoder = ({ insnDict, formatList, xlen }) => {
   </div>
 }
 
-const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen }) => {
+const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen, canFull = false }) => {
   const [insnInfo, setInsnInfo] = React.useState(null)
   const isa = Object.values(ISA["RV" + xlen]).map((item) => item.insns).flat()
   const [name, setName] = React.useState(insnName)
@@ -40,10 +40,19 @@ const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen }) => {
   }, [name, insnDict, xlen, formatList])
   return <div className="card my-2">
     <div
-      className="card-header">
-      Encoder<input className="ms-2" placeholder="addi" value={name} onChange={(event) => {
-        setName(event.target.value)
-      }} />
+      className="card-header d-flex">
+      <div className="flex-1">
+        Encoder<input className="ms-2" placeholder="addi" value={name} onChange={(event) => {
+          setName(event.target.value)
+        }} />
+      </div>
+      {canFull 
+        ? <button onClick={() => {
+          const query = new URLSearchParams(window.location.search)
+          query.append("insn_name", name || "addi")
+          window.location.search = query.toString()
+        }} type="button" className="btn btn-outline-primary btn-sm">Full Screen</button> 
+        : null}
     </div>
     {insnInfo ? <>
       <div className="card-body">

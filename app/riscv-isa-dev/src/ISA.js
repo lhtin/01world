@@ -1,5 +1,6 @@
 import React from "react"
 import { Decoder, Encoder } from "./Coder"
+import { Back } from "./components/Back";
 import { Instruction } from "./Instr"
 import { encode } from "./lib/Code";
 import { getFormatList, getInsnDict, getISA1 } from "./lib/Get";
@@ -73,7 +74,13 @@ const ISA = () => {
   }
   const query = new URLSearchParams(window.location.search)
   if (query.has("insn_name")) {
-    return <Encoder insnName={query.get("insn_name")} xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList} ISA={ISA}></Encoder>
+    return <div className="container">
+      <Back onClick={() => {
+        query.delete("insn_name")
+        window.location.search = query.toString()
+      }} desc={"Home"} />
+      <Encoder insnName={query.get("insn_name")} xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList} ISA={ISA}></Encoder>
+    </div>
   }
   return <div className="container">
     <h1 className="row row-no-gutters">List of RISC-V Instructions</h1>
@@ -114,7 +121,7 @@ const ISA = () => {
       ))}
     </div>
     <Decoder xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList}></Decoder>
-    <Encoder xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList} ISA={ISA}></Encoder>
+    <Encoder xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList} ISA={ISA} canFull={true}></Encoder>
     <div className="card">
       <div className="card-header">Notations</div>
       <div className="card-body">
