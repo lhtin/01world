@@ -71,6 +71,10 @@ const ISA = () => {
   if (!ISA) {
     return null;
   }
+  const query = new URLSearchParams(window.location.search)
+  if (query.has("insn_name")) {
+    return <Encoder insnName={query.get("insn_name")} xlen={xlen === 'RV32' ? 32 : 64} insnDict={insnDict} formatList={formatList} ISA={ISA}></Encoder>
+  }
   return <div className="container">
     <h1 className="row row-no-gutters">List of RISC-V Instructions</h1>
     <div className="row row-no-gutters my-2">

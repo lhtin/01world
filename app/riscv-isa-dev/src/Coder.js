@@ -29,10 +29,10 @@ const Decoder = ({ insnDict, formatList, xlen }) => {
   </div>
 }
 
-const Encoder = ({ insnDict, formatList, ISA, xlen }) => {
+const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen }) => {
   const [insnInfo, setInsnInfo] = React.useState(null)
   const isa = Object.values(ISA["RV" + xlen]).map((item) => item.insns).flat()
-  const [name, setName] = React.useState('')
+  const [name, setName] = React.useState(insnName)
   React.useEffect(() => {
     if (insnDict && formatList) {
       setInsnInfo(encode(name || "addi", insnDict, xlen, formatList))
