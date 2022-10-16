@@ -4,9 +4,10 @@ import { Instruction } from "./Instr"
 import { encode, decode } from './lib/Code'
 import { CodeFormater } from "./CodeFormater"
 
-const Decoder = ({ insnDict, formatList }) => {
+const Decoder = ({ insnDict, formatList, hiddenDetail = false}) => {
   const [hex, setHex] = React.useState('')
   const [insnInfo, setInsnInfo] = React.useState(null)
+  const [hidden, setHidden] = React.useState(hiddenDetail)
   React.useEffect(() => {
     if (insnDict && formatList) {
       setInsnInfo(decode(hex || "0x258513", insnDict, formatList))
@@ -15,12 +16,16 @@ const Decoder = ({ insnDict, formatList }) => {
   // console.log(insnInfo)
   return <div className="card my-2">
     <div
-      className="card-header">
-      Decoder<input className="ms-2" placeholder="0x258513" value={hex} onChange={(event) => {
+      className="card-header d-flex align-items-center" onClick={() => {
+        setHidden(!hidden)
+      }}>
+      <span>Decoder</span>
+      <input className="ms-2" placeholder="0x258513" value={hex} onChange={(event) => {
         setHex(event.target.value)
       }} />
+      <span style={{transform: hidden ? "rotate(0deg)" : "rotate(90deg)"}} className="ms-2 icon-expand"></span>
     </div>
-    {insnInfo ? <div className="card-body">
+    {(insnInfo && !hidden) ? <div className="card-body">
       <p>extension: {insnInfo.ext}</p>
       <p>assembly: <code>{insnInfo.asm}</code></p>
       <p>layout: </p>
@@ -29,10 +34,11 @@ const Decoder = ({ insnDict, formatList }) => {
   </div>
 }
 
-const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen, canFull = false }) => {
+const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen, canFull = false, hiddenDetail = false }) => {
   const [insnInfo, setInsnInfo] = React.useState(null)
   const isa = Object.values(ISA["RV" + xlen]).map((item) => item.insns).flat()
   const [name, setName] = React.useState(insnName)
+  const [hidden, setHidden] = React.useState(hiddenDetail)
   React.useEffect(() => {
     if (insnDict && formatList) {
       setInsnInfo(encode(name || "addi", insnDict, formatList))
@@ -41,12 +47,16 @@ const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen, canFull = fal
   return <div className="card my-2">
     <div
       className="card-header d-flex">
-      <div className="flex-1">
-        Encoder<input className="ms-2" placeholder="addi" value={name} onChange={(event) => {
+      <div className="flex-1 d-flex align-items-center" onClick={() => {
+        setHidden(!hidden)
+      }}>
+        <span>Encoder</span>
+        <input className="ms-2" placeholder="addi" value={name} onChange={(event) => {
           setName(event.target.value)
         }} />
+        <span style={{transform: hidden ? "rotate(0deg)" : "rotate(90deg)"}} className="ms-2 icon-expand"></span>
       </div>
-      {canFull 
+      {(canFull && !hidden)
         ? <button onClick={() => {
           const query = new URLSearchParams(window.location.search)
           query.set("insn_name", name || "addi")
@@ -55,7 +65,7 @@ const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen, canFull = fal
         }} type="button" className="btn btn-outline-primary btn-sm">Full Screen</button> 
         : null}
     </div>
-    {insnInfo ? <>
+    {(insnInfo && !hidden) ? <>
       <div className="card-body">
         <p>extension: {insnInfo.ext}</p>
         <Instruction info={isa.find((item) => item.name.toLowerCase() === insnInfo.insn_name)} insnInfo={insnInfo} />

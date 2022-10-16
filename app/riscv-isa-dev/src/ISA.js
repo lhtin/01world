@@ -125,8 +125,8 @@ const ISA = () => {
         </div>
       ))}
     </div>
-    <Decoder xlen={xlen} insnDict={insnDict} formatList={formatList}></Decoder>
-    <Encoder xlen={xlen} insnDict={insnDict} formatList={formatList} ISA={ISA} canFull={true}></Encoder>
+    <Decoder hiddenDetail={true} xlen={xlen} insnDict={insnDict} formatList={formatList}></Decoder>
+    <Encoder hiddenDetail={true} xlen={xlen} insnDict={insnDict} formatList={formatList} ISA={ISA} canFull={true}></Encoder>
     <div className="card">
       <div className="card-header">Notations</div>
       <div className="card-body">
