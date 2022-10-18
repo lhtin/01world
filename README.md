@@ -12,6 +12,25 @@
 - 概念逐步深入：What、How、Why
 - 逐步过滤和抽象：Data（数据） --> Information（信息） --> Knowledge（知识） --> Wisdom（智慧）
 
+## Blog
+
+- GCC系列——自动向量化
+- GCC系列——Gimple优化
+- GCC系列——RTL优化
+- GCC系列——指令调度
+- GCC系列——寄存器分配
+- GCC系列——IR介绍（Gimple、RTL）
+- GCC系列——编译过程介绍
+- RISC-V中寻址模式总结及链接器实现
+- RISC-V函数栈帧及GCC实现
+- [CoreMark中的ee_u32类型对指令数的影响（使用RV64GC指令集）](./blog/coremark-unsigned-signed-perf-on-rv64.md)（2022-8-3）
+- [软硬件接口之内存模型及RISC-V内存模型介绍](./blog/memory-model.md)（2022-5-17）
+
+## Apps
+
+- [RISC-V ISA指令速览及编解码展示](./app/riscv-isa)
+- [Pipeline Viewer (Fork from Konata Project)](./app/pipeview)
+
 ## 知识树
 
 > 注：随着新知识的加入，原有的知识树结构会进行更新调整
@@ -43,18 +62,6 @@
     - [git](./tools/git.md)
     - [qemu](./tools/qemu.md)
     - [binutils](./tools/binutils.md)
-
-## Blog
-
-- RISC-V中寻址模式总结及链接器实现
-- RISC-V函数栈帧及GCC实现
-- [CoreMark中的ee_u32类型对指令数的影响（使用RV64GC指令集）](./blog/coremark-unsigned-signed-perf-on-rv64.md)（2022-8-3）
-- [软硬件接口之内存模型及RISC-V内存模型介绍](./blog/memory-model.md)（2022-5-17）
-
-## Apps
-
-- [RISC-V ISA指令速览及编解码展示](./app/riscv-isa)
-- [Pipeline Viewer (Fork from Konata Project)](./app/pipeview)
 
 
 
