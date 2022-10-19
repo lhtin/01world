@@ -27,7 +27,7 @@
 - GCC系列——IR介绍（Gimple、RTL）
 - GCC系列——编译过程介绍
 - RISC-V函数栈帧及GCC实现
-- [RISC-V中寻址模式总结及链接器实现](./blog/riscv-addressing-mode-and-relocation-relaxation.md)
+- [RISC-V中寻址模式总结及链接器实现](./blog/riscv-addressing-mode-and-relocation-relaxation.md)（2022-10-19）
 - [CoreMark中的ee_u32类型对指令数的影响（使用RV64GC指令集）](./blog/coremark-unsigned-signed-perf-on-rv64.md)（2022-8-3）
 - [软硬件接口之内存模型及RISC-V内存模型介绍](./blog/memory-model.md)（2022-5-17）
 
