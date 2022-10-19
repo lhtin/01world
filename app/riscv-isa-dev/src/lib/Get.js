@@ -38,14 +38,13 @@ const getISA1 = () => {
             } else if (info.only_base && !info.only_base.includes('RV32')) {
               return;
             }
+            if (info.only_base) console.log(info.only_base)
             ISA.RV32[ext].insns.push(parse(opcode, info))
           })
         })
         // RV64
         Object.entries(obj).forEach(([ext, info]) => {
           if (ext === "HELPER" || ext === "RV32I") {
-            return;
-          } else if (info.only_base && !info.only_base.includes('RV64')) {
             return;
           } else if (ext === "RV64I") {
             ext = "I"
@@ -59,7 +58,10 @@ const getISA1 = () => {
           Object.entries(info).forEach(([opcode, info]) => {
             if (opcode === "meta" || info.rv32_only) {
               return;
+            } else if (info.only_base && !info.only_base.includes('RV64')) {
+              return;
             }
+            if (info.only_base) console.log(info.only_base)
             ISA.RV64[ext].insns.push(parse(opcode, info))
           })
         })

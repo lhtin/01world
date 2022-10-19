@@ -248,7 +248,7 @@ rv32_c: &rv32_c {
         layout: [
             { name: "funct6", high: 15, low: 10 },
             { name: "rd_p", high: 9, low: 7 },
-            { name: "funct2", hight: 6, low: 5 },
+            { name: "funct2", high: 6, low: 5 },
             { name: "rs2_p", high: 4, low: 2 },
             { name: "op", high: 1, low: 0 }
         ],

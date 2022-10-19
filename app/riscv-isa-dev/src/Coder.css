@@ -78,3 +78,7 @@
     transition: transform 0.35s ease;
     transform-origin: 0.5em 50%;
 }
+
+.icon-expand:hover {
+    cursor: pointer;
+}

@@ -16,14 +16,14 @@ const Decoder = ({ insnDict, formatList, hiddenDetail = false}) => {
   // console.log(insnInfo)
   return <div className="card my-2">
     <div
-      className="card-header d-flex align-items-center" onClick={() => {
-        setHidden(!hidden)
-      }}>
+      className="card-header d-flex align-items-center">
       <span>Decoder</span>
       <input className="ms-2" placeholder="0x258513" value={hex} onChange={(event) => {
         setHex(event.target.value)
       }} />
-      <span style={{transform: hidden ? "rotate(0deg)" : "rotate(90deg)"}} className="ms-2 icon-expand"></span>
+      <span style={{transform: hidden ? "rotate(0deg)" : "rotate(90deg)"}} className="ms-2 icon-expand" onClick={() => {
+        setHidden(!hidden)
+      }}></span>
     </div>
     {(insnInfo && !hidden) ? <div className="card-body">
       <p>extension: {insnInfo.ext}</p>
@@ -47,14 +47,14 @@ const Encoder = ({ insnName = '', insnDict, formatList, ISA, xlen, canFull = fal
   return <div className="card my-2">
     <div
       className="card-header d-flex">
-      <div className="flex-1 d-flex align-items-center" onClick={() => {
-        setHidden(!hidden)
-      }}>
+      <div className="flex-1 d-flex align-items-center">
         <span>Encoder</span>
         <input className="ms-2" placeholder="addi" value={name} onChange={(event) => {
           setName(event.target.value)
         }} />
-        <span style={{transform: hidden ? "rotate(0deg)" : "rotate(90deg)"}} className="ms-2 icon-expand"></span>
+        <span style={{transform: hidden ? "rotate(0deg)" : "rotate(90deg)"}} className="ms-2 icon-expand" onClick={() => {
+        setHidden(!hidden)
+      }}></span>
       </div>
       {(canFull && !hidden)
         ? <button onClick={() => {
