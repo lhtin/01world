@@ -15,7 +15,28 @@ const getABIReg = (insn_name, r) => {
 }
 
 const getRoundingMode = (rm) => {
-    return ['RNE', 'RTZ', 'RDN', 'RUP', 'RMN', '', '', 'DYN'][rm]
+    if (rm === 0b111) {
+        return ""
+    }
+    return ", " + (['RNE', 'RTZ', 'RDN', 'RUP', 'RMN', '', '', 'DYN'][rm])
+}
+
+const getMask = (vm, no) => {
+    if (no === "nm") {
+        return (vm ? "" : ", v0")
+    }
+    return (vm ? "" : ", v0.t")
+}
+
+const getImm = (imm, type) => {
+    if (type === "vtype") {
+        let vlmul = ["m1", "m2", "m4", "m8", , "mf8", "mf4", "mf2"][imm & 0b111]
+        let vsew = ["e8", "e16", "e32", "e64"][(imm >> 3) & 0b111]
+        let vta = ((imm >> 6) & 0b1) ? "ta" : "tu"
+        let vma = ((imm >> 7) & 0b1) ? "ma": "mu"
+        return `${vsew}, ${vlmul}, ${vta}, ${vma}`
+    }
+    return imm
 }
 
 const format_code = (code) => {
@@ -111,20 +132,25 @@ const parseInsn = (insn_name, insn_code, variable_fields, ext, formatList, decod
         let asm_temp = [...obj.format.asm.matchAll(/\{([^{}]+)\}/g)].map((m) => m[1])
         let asm = obj.format.asm.replace('{insn_name}', insn_name)
         for (let i = 0; i < asm_temp.length; i += 1) {
-            let n = asm_temp[i]
+            let ns = asm_temp[i].split(":")
+            let n = ns[0]
+            let n2 = ns[1]
             switch (n) {
                 case 'imm':
                 case 'uimm':
-                    asm = asm.replace(`{${n}}`, fieldMap[n])
+                    asm = asm.replace(`{${n}}`, getImm(fieldMap[n], n2))
                     break;
                 case 'rm':
                     asm = asm.replace(`{${n}}`, getRoundingMode(fieldMap[n]))
                     break;
+                case 'vm':
+                    asm = asm.replace(`{${n}}`, getMask(n, n2))
+                    break
                 case '_aqrl_':
                     asm = asm.replace(`{${n}}`, asm_handlers[n](fieldMap))
                     break;
                 default:
-                    asm = asm.replace(`{${n}}`, getABIReg(insn_name, fieldMap[n]))
+                    asm = asm.replace(`{${n}}`, getABIReg(insn_name, fieldMap[n], n))
             }
         }
         obj.asm = asm;
@@ -144,6 +170,7 @@ const decode = (code_hex, instr_dict, formatList) => {
       if ((insn_code & mask) === match) {
         let insn_name = key.replace(/_/g, '.')
         let code = format_code(insn_code)
+        console.log(insn)
         let info = parseInsn(insn_name, code, insn.variable_fields, insn.extension[0], formatList, true)
         return info
       }

@@ -5,7 +5,7 @@ import { Instruction } from "./Instr"
 import { encode } from "./lib/Code";
 import { getFormatList, getInsnDict, getISA1 } from "./lib/Get";
 const RISCV_EXTENSIONS = new Set([
-  "I", "M", "A", "F", "D", "C",  "Zicsr", "Zifencei"
+  "I", "M", "A", "F", "D", "C", "V", "Zicsr", "Zifencei"
 ]);
 
 const G_EXTENSIONS = new Set([
@@ -68,6 +68,25 @@ const ISA = () => {
       setInsnDict(insnDict)
       setFormatList(formatList)
       setISA(ISA)
+
+      let xxx = {}
+      for (let key of Object.keys(insnDict.insns)) {
+        const insn = insnDict.insns[key]
+        if (!xxx[insn.extension[0]]) {
+          xxx[insn.extension[0]] = {}
+        }
+        if (!xxx[insn.extension[0]][insn.variable_fields.join('_')]) {
+          xxx[insn.extension[0]][insn.variable_fields.join('_')] = []
+        }
+        xxx[insn.extension[0]][insn.variable_fields.join('_')].push(key)
+      }
+      for (let ext of Object.keys(xxx)) {
+        console.log(ext)
+        console.log(Object.keys(xxx[ext]))
+        for (let key2 of Object.keys(xxx[ext])) {
+          console.log(key2, xxx[ext][key2])
+        }
+      }
     })
   }, [xlen])
   React.useEffect(() => {
