@@ -479,7 +479,8 @@ R_RISCV_CALL 的 Relaxation 过程可以从binutils的源码中看到，源代�
 
 - 如果立即数的范围为 VALID_CJTYPE_IMM 并且支持压缩指令集C扩展，则将其优化成 `c.j` 或者 `c.jal`
 - 如果立即数的范围为 VALID_JTYPE_IMM，则优化成 `jal`
-- 如果立即数的范围在 imm12，则优化成 `jalr imm12(x0)`
+- 如果立即数的范围为 imm12，则优化成 `jalr imm12(x0)`
+- 其它情况下，不进行 Relaxation
 
 ```c
 /* https://github.com/bminor/binutils-gdb/blob/master/bfd/elfnn-riscv.c#L4171 */
