@@ -565,7 +565,7 @@ _bfd_riscv_relax_call (bfd *abfd, asection *sec, asection *sym_sec,
 
 ## 总结
 
-Relocation的存在是因为编译和链接过程是分开进行的，需要有一个机制在两者之间进行信息传递（也就是在ELF中包含Relocation段）。Relaxation的存在是跟RISC-V的指令集架构有关系，正式因为RISC-V寻址范围受限，才有必要通过Relaxation来显式的告诉链接器主动减少不必要的指令，从而优化程序的性能和Code Size。
+Relocation的存在是因为编译和链接过程是分开进行的，需要有一个机制在两者之间进行信息传递（也就是在ELF中包含Relocation段），告诉链接器如何修正地址。Relaxation的存在是跟RISC-V的指令集架构有关系，正是因为RISC-V寻址范围受限，才有必要通过Relaxation来显式的告诉链接器主动减少不必要的指令，从而优化程序的性能和Code Size。
 
 ## 参考
 
