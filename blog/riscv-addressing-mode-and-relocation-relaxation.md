@@ -483,7 +483,7 @@ R_RISCV_CALL 的 Relaxation 过程可以从binutils的源码中看到，源代�
 - 其它情况下，不进行 Relaxation
 
 ```c
-/* https://github.com/bminor/binutils-gdb/blob/master/bfd/elfnn-riscv.c#L4171 */
+/* 源代码在线地址：https://github.com/bminor/binutils-gdb/blob/4ed07377e47addf4dd0594ac5b16d7e4cdb19436/bfd/elfnn-riscv.c#L4171 */
 
 /* Relax AUIPC + JALR into JAL.  */
 
