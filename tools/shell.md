@@ -20,3 +20,4 @@
 - decompress:
   - `.deb`: `ar -vx xxx.deb` 里面会有data.tar.zst文件，使用下面的方式解压
   - `.tar.zst`: 'zstd -d xxx.tar.zst && tar -xf xxx.tar`
+- `ldd` 查看程序所以来的动态库
