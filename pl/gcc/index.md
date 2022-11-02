@@ -56,6 +56,12 @@
       int insn_uid;
     } u2;
   }
+  
+  ## rtl-ssa
+  pretty_printer pp;
+  pp.buffer->stream = stderr;
+  crtl->ssa->print(&pp);
+  pp_flush(&pp);
   ```
 
 ## Passes
