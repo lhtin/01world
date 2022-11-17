@@ -3,6 +3,7 @@
 ## 更新regression testcase
 
 - `cd build && ninja check-llvm` 运行全部的回归测试
+- 查看用例失败原因，确认是否是正常的：`./build/bin/llvm-lit -v llvm/test/CodeGen/RISCV/rvv/vsetvli-insert-crossbb.ll  | less`
 - 更新测试用例：`./llvm/utils/update_llc_test_checks.py --llc-binary build/bin/llc llvm/test/CodeGen/RISCV/rvv/vslide1down-rv32.ll`
 - 运行更新后的测试用例：`./build/bin/llvm-lit llvm/test/CodeGen/RISCV/rvv/vslide1down-rv32.ll`
 
