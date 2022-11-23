@@ -1,6 +1,6 @@
 # CoreMark中的ee_u32类型对指令数的影响（使用RV64GC指令集）
 
-在SiFive的CoreMark仓库中，有一个很有意思的[提交](https://github.com/sifive/benchmark-coremark/commit/287f632b3e1fa3d9ea87e03a30d33ed6c1184485#diff-28044a0559f6c2d014a958735e1b39485e9ae40bcb7a2f1478663da59b855905L102)，将ee_u32的原始类型由`unsigned int`改为`signed int`（后文统一使用`uint32_t`和`int32_t`表示）。使用RV64GC指令集时，这个改动导致指令数从 363781 降到了 308973 （编译参数 `-O2 -fno-builtin`），指令数降幅到达15%，但是当使用RV32GC指令集时，指令数仅从 308105 变到 308097，几乎没有变化。为什么这个小改动会导致在RV64上出现如此大的降幅呢？为什么又只在RV64上才会出现如此大的差距呢？下面就来分析分析。
+在SiFive的CoreMark仓库中，有一个很有意思的[提交](https://github.com/sifive/benchmark-coremark/commit/287f632b3e1fa3d9ea87e03a30d33ed6c1184485#diff-28044a0559f6c2d014a958735e1b39485e9ae40bcb7a2f1478663da59b855905L102)，将ee_u32的原始类型由`unsigned int`改为`signed int`（后文统一使用`uint32_t`和`int32_t`表示）。使用RV64GC指令集时，这个改动导致指令数从 363781 降到了 308973 （编译参数 `-O2 -fno-builtin`），指令数降幅达到15%，但是当使用RV32GC指令集时，指令数仅从 308105 变到 308097，几乎没有变化。为什么这个小改动会导致在RV64上出现如此大的降幅呢？为什么又只在RV64上才会出现如此大的差距呢？下面就来分析分析。
 
 ## 导致差异的代码片段
 
