@@ -12,9 +12,10 @@
 - `-H`: 打印源文件依赖的头文件树
 - `-fno-common`: 不把未初始化的全局变量放到COMMON块中处理
 - `-fdump-tree-all-all`： all后面加上all可以dump更多的调试信息出来，方便理解pass的情况
+- `-fdump-tree-optimized-gimple`: dump出来的格式可以通过-fgimple重新编译
 - `-fdump-rtl-all`、`-fdump-rtl-all-graph`： 首先生成dump file，然后根据dump file生成对应的.dot文件，然后通过`dot -O -Tpng xxx.dot`生成png图片
 - `-save-temps`： 将中间文件，比如编译可执行程序时，将预处理后的结果（`.i`）、汇编结果（`.s`）和目标文件（`.o`）保存起来
-- `-dumpdir dir`： 表示将生成的文件放到`dir`目录中，比如上面三个参数生成的文件：`-fdump-tree-all -fdump-rtl-all -save-temps -dumpdir dir`
+- `-dumpdir dir/`： 表示将生成的文件放到`dir`目录中，注意需要`/`在结尾，不过没有则是表示在生成的dump文件名前面加`dir-`前缀。比如上面三个参数生成的文件：`-fdump-tree-all -fdump-rtl-all -save-temps -dumpdir dir`
 - `fno-builtin`：告诉编译器不要识别不带`__builtin_`前缀的builtin方法，也就是说把它当作普通方法对待
 - `-nostdlib`：链接时不默认链接标准库，比如libc、libgcc等。
 - `-v`： 打印GCC driver实际调用的各个阶段的程序。
