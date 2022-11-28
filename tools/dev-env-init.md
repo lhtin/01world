@@ -47,7 +47,7 @@
     Host key verification failed.
     fatal: Could not read from remote repository.
 
-  删除对应的~/.ssh/known_hosts:42行，或者使用`ssh-keygen -R ip`删除cache
+  删除对应的~/.ssh/known_hosts:42行，或者使用`ssh-keygen -R ip`删除cached key
   ```
 
 ## oh-my-zsh配置
