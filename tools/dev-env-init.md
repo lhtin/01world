@@ -29,6 +29,25 @@
   
   # 5. 如果没有免密，加-v看下debug日志，有可能服务器不支持使用public key登录
   ssh xxx -v
+  
+  ## 问题一：REMOTE HOSTIDENTIFICATION HAS CHANGED
+  error message: 
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+    Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+    It is also possible that a host key has just been changed.
+    The fingerprint for the ECDSA key sent by the remote host is
+    SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxx.
+    Please contact your system administrator.
+    Add correct host key in ~/.ssh/known_hosts to get rid of this message.
+    Offending ECDSA key in ~/.ssh/known_hosts:42
+    ECDSA host key for [{ip}]:{port} has changed and you have requested strict checking.
+    Host key verification failed.
+    fatal: Could not read from remote repository.
+
+  删除对应的~/.ssh/known_hosts:42行，或者使用`ssh-keygen -R ip`删除cache
   ```
 
 ## oh-my-zsh配置
