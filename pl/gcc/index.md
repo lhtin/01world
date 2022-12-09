@@ -37,6 +37,9 @@
   
   # basic_block
   call gimple_dump_bb(stderr, bb, 0, 0)
+  
+  # function
+  call dump_function_to_file(cfun->decl, stderr, TDF_DETAILS)
   ```
 
 - print-rtl.h
