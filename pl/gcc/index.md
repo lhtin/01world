@@ -1,20 +1,8 @@
 # GCC 笔记
 
-## GCC options
-
-[./options.md](./options.md)
-
-## GCC开发的坑
-
-- 头文件的改动，不会触发引用到该头文件的c文件重新编译，会导致代码不更新。解决方法是手动改下每个include该头文件的c文件或者重新完整编译。
-- error: unrecognizable insn 错误
-  - 可能是因为没有找到合适的pattern，一般是在vregs pass中出错
-    - 自定义的pattern的寻找是通过mode和unspec进行的，如果某个指定了mode的参数的predicate支持(const_int 0)，则有可能在GET_MODE的时候返回VOID mode，进而无法匹配到pattern
-  - 可能是constraint没有匹配的，虽然predicate过了。一般在reload pass中出错
-
 ## 调试
 
-- `gcc hello.c -v` 找到cc1的命令，因为gcc是一个wrapper，实际调用cc1进行编译。当然前提是编译时使用`-O0 -g`编译的。
+- `gcc hello.c -v` 找到cc1的命令，因为gcc是一个wrapper，实际调用cc1进行编译。当然前提是编译GCC时使用`-O0 -g`编译的。
 - `gdb --args /usr/local/libexec/gcc/x86_64-pc-linux-gnu/7.5.0/cc1 -quiet -v hello.c -quiet -dumpbase hello.c -mtune=generic -march=x86-64 -auxbase hello -version -o /tmp/ccJgWTK3.s` 调试cc1
 
 ### 打印
@@ -67,15 +55,14 @@
   pp_flush(&pp);
   ```
 
-## Passes
+## GCC options
 
-### cfgexpand.c（gimple -> rtl)
+[./options.md](./options.md)
 
-```
-pass_expand::execute (function *fun) // 以函数为单位
-  expand_gimple_basic_block // 对每个基本块进行展开
-  	expand_gimple_tailcall
-  	expand_gimple_stmt
-  	  expand_call_stmt // 调用展开
-  	    expand_internal_call // gcc内部函数调用
-```
+## GCC开发的坑
+
+- 头文件的改动，不会触发引用到该头文件的c文件重新编译，会导致代码不更新。解决方法是手动改下每个include该头文件的c文件或者重新完整编译。
+- error: unrecognizable insn 错误
+  - 可能是因为没有找到合适的pattern，一般是在vregs pass中出错
+    - 自定义的pattern的寻找是通过mode和unspec进行的，如果某个指定了mode的参数的predicate支持(const_int 0)，则有可能在GET_MODE的时候返回VOID mode，进而无法匹配到pattern
+  - 可能是constraint没有匹配的，虽然predicate过了。一般在reload pass中出错
