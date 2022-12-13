@@ -1,4 +1,5 @@
 theme: jekyll-theme-cayman
-markdown: kramdown
+highlighter: rouge
 kramdown:
-    math_engine: katex
+  math_engine: mathjax
+  syntax_highlighter: rouge
