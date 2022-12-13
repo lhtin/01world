@@ -88,48 +88,20 @@ This table summarizes how the hardware and software affect performance:
 ### Defining Performance
 
 - **response time**: Also called **execution time**. The total time required for the computer to complete a task, including disk accesses, memory accesses, I/O activities, operating system overhead, CPU execution time, and so on.
-  $$
-  \frac{Seconds}{Program}=\frac{Instructions}{Program}*\frac{Clock\ cycles}{Instruction}*\frac{Seconds}{Clock\ cycle}
-  $$
 
-  $$
-  CPU\ time=Instruction\ count*Clock\ cycles\ per\ instruction(CPI)*Clock\ cycle\ time
-  $$
+$$
+\frac{Seconds}{Program}=\frac{Instructions}{Program}\times \frac{Clock\ cycles}{Instruction}\times \frac{Seconds}{Clock\ cycle}
+$$
 
-  
-
-  
+$$
+CPU\ time=Instruction\ count\times Clock\ cycles\ per\ instruction(CPI)\times Clock\ cycle\ time
+$$
 
 - **throughput**: Also called **bandwidth**. Another measure of performance, it is the number of tasks completed per unit time.
 
-
 $$
-Performance_X = \frac{1}{Execution \ time_X}
+Performance_X=\frac{1}{Execution \ time_X}
 $$
-
-
-
-![image-20210717153929167](index.assets/image-20210717153929167.png)
-
-![image-20210718005023603](index.assets/image-20210718005023603.png)
-
-![image-20210718005420681](index.assets/image-20210718005420681.png)
-
-![image-20210718005952569](index.assets/image-20210718005952569.png)
-
-![image-20210718155437463](index.assets/image-20210718155437463.png)
-
-![image-20210718155842969](index.assets/image-20210718155842969.png)
-
-
-
-
-
-x + (-x) = 10000000 = 2^n
-
-2^n - (-x)
-
-
 
 ### 术语
 
@@ -152,46 +124,3 @@ x + (-x) = 10000000 = 2^n
 ### 读错的英文单词
 
 queue，procedure，parameter，
-
-
-
-
-
-test:
-
-```
-C code:
-int fact (int n)
-{
-  if (n < 1) return (1);
-  else return (n * fact(n − 1));
-}
-
-RISC-V code:
-fact:
-  addi sp, sp, -8
-  sw x1, 4(sp)
-  sw x10, 0(sp)
-  addi x5, x10, -1
-	bge x5, x0, L1
-
-	addi x10, x0, 1 
-	addi sp, sp, 8 
-	// 返回
-	jalr x0, 0(x1)
-L1: 
-	// n - 1
-	addi x10, x10, -1
-	jal x1, fact
-
-	// x6 = fact(n - 1)
-	addi x6, x10, 0
-	lw x10, 0(sp) 
-	lw x1, 4(sp) 
-	addi sp, sp, 8
-	// n * fact(n - 1)
-	mul x10, x10, x6
-	// 返回
-	jalr x0, 0(x1)
-```
-
