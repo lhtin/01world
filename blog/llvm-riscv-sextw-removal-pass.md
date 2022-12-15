@@ -4,7 +4,7 @@
 >
 > Testcase: https://github.com/llvm/llvm-project/blob/3e7dad22f111b9256e79dcb9cdb1c21ff0fd73dc/llvm/test/CodeGen/RISCV/sextw-removal.ll
 
-该Pass用于移除RV64中多余的sext.w指令（比如`setx.w a, b`），根据b寄存器的def情况，分以下几种情况（isSignExtendedW）：
+该Pass用于移除RV64中多余的sext.w指令（即`setx.w a, b`），根据b寄存器的def情况，分以下几种情况（isSignExtendedW）：
 
 1. 如果b的高63:32位与第31位相同，则sext.w指令可以省去，包括以下指令（isSignExtendingOpW）：
    - 包括`ADDIW b, c, imm`等计算低32位然后进行扩展的指令
