@@ -25,7 +25,7 @@
 
 Def的使用情况（hasAllWUsers）分如下几种情况：
 
-- use指令为所有计算低32位然后符号扩展的指令（包括`ADDIW|ADDW|...`）时满足条件
+- use指令中所有输入操作数都是只有低32位参与运算的指令（包括`ADDIW|ADDW|...`）时满足条件
 - use指令为`SLLI d, b, imm`且imm>=32 或者 `ANDI d, b, imm`且imm在[0x0, 0x7FF] 或者 `ORI d, b, imm`且imm在[0x800, 0xFFF]时，则继续递归检查d的use
 - use指令为`SLL|BSET|BCLR|BINV`时
     - 如果是第二个参数，则只会使用低6bits，满足要求
