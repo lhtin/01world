@@ -1,8 +1,8 @@
 # LLVM 中的 riscv-sextw-removal Pass 分析
 
-> Pass代码快照：https://github.com/llvm/llvm-project/blob/3e7dad22f111b9256e79dcb9cdb1c21ff0fd73dc/llvm/lib/Target/RISCV/RISCVSExtWRemoval.cpp
+> 该Pass对应的代码快照：https://github.com/llvm/llvm-project/blob/3e7dad22f111b9256e79dcb9cdb1c21ff0fd73dc/llvm/lib/Target/RISCV/RISCVSExtWRemoval.cpp
 >
-> Testcase: https://github.com/llvm/llvm-project/blob/3e7dad22f111b9256e79dcb9cdb1c21ff0fd73dc/llvm/test/CodeGen/RISCV/sextw-removal.ll
+> 对应的Testcase: https://github.com/llvm/llvm-project/blob/3e7dad22f111b9256e79dcb9cdb1c21ff0fd73dc/llvm/test/CodeGen/RISCV/sextw-removal.ll
 
 该Pass用于移除RV64中多余的sext.w指令（即`setx.w a, b`），根据b寄存器的def情况，分以下几种情况（isSignExtendedW）：
 
