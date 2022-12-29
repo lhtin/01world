@@ -8,9 +8,9 @@
 
 1. 如果b的高63:32位与第31位相同，则sext.w指令可以省去，包括以下指令（isSignExtendingOpW）：
    - 包括`ADDIW b, c, imm`等计算低32位然后进行扩展的指令
-   - `SRAI b, c, uimm`且uimm >= 32（保证符号位第63位被移动到了第31位及以下，因此高63:31位跟符号位一致）
+   - `SRAI b, c, uimm`且uimm >= 32（保证符号位第63位被移动到了第31位及以下，因此63:31的值全相同）
    - `SRLI b, c, uimm`且uimm > 32（保证63:31全为0）
-   - `ADDI b, c, imm`且c为x0寄存器（因此b的值为imm做符号扩展）
+   - `ADDI b, c, imm`且c为x0寄存器（因此b的值为imm做符号扩展，63:31的值全为imm的符号位的值）
    - `ANDI b, c, imm`且imm在[0x0, 0x7FF]范围（保证c和imm做按位与时高63:31位全为0）
    - `ORI b, c, imm`且imm在[0x800, 0xFFF]范围（保证c和imm做按位或时高63:31位全为1）
    - `COPY b, c`且c为x0寄存器时，高63:31位全为0
