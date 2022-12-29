@@ -41,6 +41,7 @@
     - 指令集架构
       - [RISC-V](./arch/risc-v/index.md)
       - [ARM](./arch/arm/index.md)
+      - [x86-64](./arch/x86-64/index.md)
   - 编程语言
     - C/C++
       - [GCC](./pl/gcc/index.md)
