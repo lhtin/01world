@@ -57,6 +57,65 @@
   pp_flush(&pp);
   ```
 
+
+## match.pd笔记
+
+> [gccint对应章节](https://gcc.gnu.org/onlinedocs/gccint/Match-and-Simplify.html)
+
+作用：匹配一段gimple，当其满足指定条件是，转换成另外一段gimple。
+
+示例：
+
+```txt
+2078  /* X + Y < Y is the same as X < 0 when there is no overflow.  */
+2079  (for op (lt le gt ge)
+2080   (simplify
+2081    (op:c (plus:c@2 @0 @1) @1)
+2082    (if (ANY_INTEGRAL_TYPE_P (TREE_TYPE (@0))
+2083         && TYPE_OVERFLOW_UNDEFINED (TREE_TYPE (@0))
+2084         && !TYPE_OVERFLOW_SANITIZED (TREE_TYPE (@0))
+2085         && (CONSTANT_CLASS_P (@0) || single_use (@2)))
+2086     (op @0 { build_zero_cst (TREE_TYPE (@0)); }))))
+```
+
+- `plus:c@2` 表示op表达式的第一个操作数是一个plus表达式，其值绑定到@2（方便后面引用）
+
+### 如何调试match.pd中的内容
+
+1. 在build目录的gimple-match.cc中，搜索2086，也就是上面示例中的最后一行所在的行号，就可找到以下生成的内容。可以看到if中的条件被copy过去了。
+2. 给gimple_simplify_403打上断点。如果进来了则进行逐步调试，如果没有进来说明前面的条件都没有满足，进入步骤3。
+3. 搜索gimple_simplify_403被调用的地方，根据调试的gimple代码在合适的位置打上断点。这一步需要你熟悉`(op:c (plus:c@2 @0 @1) @1)`这一段的含义。这一段的时候是说首先找到op表达式（即`lt, le, gt, ge`）然后判断其参数个数位2个，其第一个参数的定义是一个plus表达式，包含两个参数。如果参数个数不对，判断不通过。如果plus的第二个参数@1和op的第二个参数@1不等，判断也是不通过，不会调用gimple_simplify_403。
+
+```c
+static bool
+gimple_simplify_403 (gimple_match_op *res_op, gimple_seq *seq,
+                 tree (*valueize)(tree) ATTRIBUTE_UNUSED,
+                 const tree ARG_UNUSED (type), tree *ARG_UNUSED (captures)
+, const enum tree_code ARG_UNUSED (op))
+{
+/* #line 2082 "/path/to/gcc-root/gcc/match.pd" */
+  if (ANY_INTEGRAL_TYPE_P (TREE_TYPE (captures[1]))
+ && TYPE_OVERFLOW_UNDEFINED (TREE_TYPE (captures[1]))
+ && !TYPE_OVERFLOW_SANITIZED (TREE_TYPE (captures[1]))
+ && (CONSTANT_CLASS_P (captures[1]) || single_use (captures[0]))
+)
+    {
+      gimple_seq *lseq = seq;
+      if (__builtin_expect (!dbg_cnt (match), 0)) goto next_after_fail1354;
+      if (__builtin_expect (dump_file && (dump_flags & TDF_FOLDING), 0)) fprintf (dump_file, "Applying pattern %s:%d, %s:%d\n", "match.pd", 2086, __FILE__, __LINE__);
+      {
+	res_op->set_op (op, type, 2);
+	res_op->ops[0] = captures[1];
+	res_op->ops[1] =  build_zero_cst (TREE_TYPE (captures[1]));
+	res_op->resimplify (lseq, valueize);
+	return true;
+      }
+next_after_fail1354:;
+    }
+  return false;
+}
+```
+
 ## GCC options
 
 [./options.md](./options.md)
