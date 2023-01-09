@@ -78,7 +78,17 @@
 2086     (op @0 { build_zero_cst (TREE_TYPE (@0)); }))))
 ```
 
-- `plus:c@2` 表示op表达式的第一个操作数是一个plus表达式，其值绑定到@2（方便后面引用）
+- 待匹配的gimple：`(op:c (plus:c@2 @0 @1) @1)`
+- 指定条件：
+	```
+		(ANY_INTEGRAL_TYPE_P (TREE_TYPE (@0))
+		 && TYPE_OVERFLOW_UNDEFINED (TREE_TYPE (@0))
+		 && !TYPE_OVERFLOW_SANITIZED (TREE_TYPE (@0))
+		 && (CONSTANT_CLASS_P (@0) || single_use (@2))
+	```
+- 新的gimple：`(op @0 { build_zero_cst (TREE_TYPE (@0)); })`
+
+注：`plus:c@2` 表示op表达式的第一个操作数是一个plus表达式，其值绑定到@2（方便后面引用）
 
 ### 如何调试match.pd中的内容
 
