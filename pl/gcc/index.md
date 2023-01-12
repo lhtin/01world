@@ -127,6 +127,10 @@ next_after_fail1354:;
 }
 ```
 
+## GCC passes
+
+[./passes.md](./passes.md)
+
 ## GCC options
 
 [./options.md](./options.md)
