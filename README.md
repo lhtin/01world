@@ -10,13 +10,14 @@
 ## Blog
 
 - GCC系列——自动向量化
-- GCC系列——Gimple优化
-- GCC系列——RTL优化
+- GCC系列——Gimple 优化
+- GCC系列——RTL 优化
 - GCC系列——指令调度
 - GCC系列——寄存器分配
-- GCC系列——IR介绍（Gimple、RTL）
+- GCC系列——IR 介绍（Gimple、RTL）
 - GCC系列——编译过程介绍
-- RISC-V函数栈帧及GCC实现
+- RISC-V 函数栈帧及GCC实现
+- C 语言中的 Integer Promotion 规范笔记
 - [LLVM 中的 riscv-sextw-removal Pass 分析](./blog/llvm-riscv-sextw-removal-pass.md)（2022-12-15）
 - [RISC-V中寻址模式总结及链接器实现](./blog/riscv-addressing-mode-and-relocation-relaxation.md)（2022-10-19）
 - [CoreMark中的ee_u32类型对指令数的影响（使用RV64GC指令集）](./blog/coremark-unsigned-signed-perf-on-rv64.md)（2022-8-3）
