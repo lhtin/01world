@@ -20,3 +20,28 @@
   - `git stash show -p stash@{0}` 展示第0个stash（即最近一个stash）中的改动内容
   - `git stash show stash@{0}` 展示第0个stash中的文件改动列表
   - `git stash drop stash@{1}` 丢弃第1个stash
+
+## Send Patchs
+
+.gitconfig
+
+```
+[user]
+email = lehua.ding@rivai.ai
+name = Lehua Ding
+
+[sendemail]
+  smtpUser = lehua.ding@rivai.ai
+  smtpPass = <your email password>
+  smtpServer = <your smtp server domain>
+  smtpServerPort = <your smtp server port>
+  smtpEncryption = tls
+  suppresscc = self
+```
+
+- `mkdir patchs && cd patchs`
+- `git format-patch -1`
+- `../contrib/mklog.py xxx.patch` 生成ChangeLog
+- `vim xxx.patch` 修改xxx.patch，将前一步输出的ChangeLog copy进去，同时添加patch的描述
+- `git send-email xxx.patch --to xxx --cc xxx` 发送邮件到对应的邮件列表
+
