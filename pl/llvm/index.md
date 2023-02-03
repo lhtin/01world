@@ -1,5 +1,9 @@
 # LLVM
 
+## 调试LLVM
+
+- `ninja tools/llc/install` 只编译和安装llc，增量编译的时候更快
+
 ## 更新regression testcase
 
 - `cd build && ninja check-llvm` 运行全部的回归测试
@@ -17,7 +21,3 @@
 
 - `clang --target=riscv32-unknow-elf -march=rv32gc_v1p0 slide1up.c -c` 编译目标文件，不依赖gnu-toolchain
 - `clang --gcc-toolchain=/path/to/riscv64 --sysroot=/path/to/riscv64/sysroot --target=riscv64-unknow-linux-gnu -march=rv64gc_v1p0 --static hello.c` 编译可执行文件
-
-## 调试LLVM
-
-- `ninja tools/llc/install` 只编译和安装llc，增量编译的时候更快
