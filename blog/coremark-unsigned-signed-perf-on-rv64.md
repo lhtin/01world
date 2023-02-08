@@ -207,7 +207,7 @@ matrix_add_const_signed(int32_t N, char *A, char val)
 
 ## ARM64和x86-64指令集的表现
 
-对于ARM64指令集，如果禁掉ivopts pass的话（编译参数 `-O2 -fno-ivopts`），循环部分的指令数并没有差距。核心原因是 `ldrb` 和 `strb` 经过了精心设计，支持32位和64位寄存器直接相加得到内存地址，并且相加前可以指定32位操作数如何扩展为64位（uxtw表示无符号扩展，sxtw表示有符号扩展，[在线地址](https://godbolt.org/z/dohh7M8eT)）：
+对于ARM64指令集，如果禁掉ivopts pass的话（编译参数 `-O2 -fno-ivopts`），循环部分的指令数并没有差距。核心原因是 `ldrb` 和 `strb` 经过了精心设计，支持32位和64位寄存器直接相加得到内存地址（32位寄存器为w5，64位寄存器为x1），并且相加前可以指定32位操作数如何扩展为64位（uxtw表示无符号扩展，sxtw表示有符号扩展，[在线地址](https://godbolt.org/z/dohh7M8eT)）：
 
 ```asm
 matrix_add_const_unsigned:
