@@ -127,6 +127,38 @@ next_after_fail1354:;
 }
 ```
 
+## 添加TARGET HOOKS
+
+1. 修改如下文件添加新target hook
+```
+/* targhooks.h */
++extern rtx default_forward_src (rtx, rtx, rtx)
+
+/* targhooks.cc */
++/* The default implementation of TARGET_FORWARD_SRC */
++rtx
++default_forward_src (rtx dest, rtx src, rtx_insn *dest_insn)
++{
++  return src;
++}
+
+/* target.def */
++DEFHOOK
++(forward_src,
++ "Returns the real src to forward. Use for UNSPEC insn, for STANDARD operator,\n\
++you should return src.",
++ rtx, (rtx dest, rtx src, rtx_insn *dest_insn), default_forward_src)
+
+/* tm.texi.in */
++@hook TARGET_FORWARD_SRC
+```
+2. 构建，会报如下错误，提醒你将新生成的tm.texi复制到源代码中去
+```
+Verify that you have permission to grant a GFDL license for all
+new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi, then copy it to /path/to/gcc/doc/tm.texi.
+```
+3. 再次构建
+
 ## GCC passes
 
 [./passes.md](./passes.md)
