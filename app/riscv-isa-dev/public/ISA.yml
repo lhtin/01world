@@ -441,10 +441,10 @@ RV64I: &id_rv64i
     asm: sw rs2, imm12(rs1)
     desc: SW stores the 32-bit value from the low bits of register rs2 to memory.
   SH:
-    asm: sd rs2, imm12(rs1)
+    asm: sh rs2, imm12(rs1)
     desc: SH stores the 16-bit value from the low bits of register rs2 to memory.
   SB:
-    asm: sd rs2, imm12(rs1)
+    asm: sb rs2, imm12(rs1)
     desc: SB stores the 8-bit value from the low bits of register rs2 to memory.
 
 Zicsr:
