@@ -63,7 +63,7 @@
 
 > [gccint对应章节](https://gcc.gnu.org/onlinedocs/gccint/Match-and-Simplify.html)
 
-作用：匹配一段gimple，当其满足指定条件是，转换成另外一段gimple。
+作用：匹配一段gimple，当其满足指定条件时，转换成另外一段gimple。
 
 示例：
 
