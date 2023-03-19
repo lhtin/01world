@@ -11,7 +11,7 @@
 
 ## 内存模型简介
 
-内存模型（memory model or memory consistency model）是一种软件与硬件之间的接口，包含一系列的规则。**这些规则规定了在多线程程序（多个独立的执行体，多线程）的运行过程中，共享内存访问指令（LOAD和STORE）的行为，或者说规定LOAD指令可以返回哪些值**。这些规则越宽松（也就是说运行时的可能顺序越多），允许的处理器优化就越多，同时在该模型上编程就越复杂。如何在这两者之间选择一个平衡点是关键。经过多年发展，业界提出了多个内存模型。本文主要介绍几种在工业界使用的内存模型，包括sequential consistency model（SC）、total store ordering model（TSO）和release consistency model（RC）。这三个内存模型，规则越来越宽松。其中x86-64处理器实现的是STO内存模型，RISC-V则提供STO和RC两种内存模型选择。
+内存模型（memory model or memory consistency model）是一种软件与硬件之间的接口，包含一系列的规则。**这些规则规定了在多线程程序（多个独立的执行体，多线程）的运行过程中，共享内存访问指令（LOAD和STORE）的行为，或者说规定LOAD指令可以返回哪些值**。这些规则越宽松（也就是说运行时的可能顺序越多），允许的处理器优化就越多，同时在该模型上编程就越复杂。如何在这两者之间选择一个平衡点是关键。经过多年发展，业界提出了多个内存模型。本文主要介绍几种在工业界使用的内存模型，包括sequential consistency model（SC）、total store ordering model（TSO）和release consistency model（RC）。这三种内存模型，规则越来越宽松。其中x86-64处理器实现的是STO内存模型，RISC-V则提供STO和RC两种内存模型选择。
 
 ### Sequential Consistency Model
 
