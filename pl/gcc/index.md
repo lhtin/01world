@@ -2,6 +2,31 @@
 
 ## 调试
 
+.gdbinit 配置如下
+
+```
+set history filename ~/.gdb_history
+set history save on
+
+set print address on
+set print object on
+set print array on
+set print array-indexes on
+set print symbol on
+set print pretty on
+
+set auto-load safe-path /
+
+# https://sourceware.org/gdb/wiki/STLSupport
+# svn co svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python
+python
+  import sys
+  sys.path.insert(0, '/work/home/lding/python-gdb')
+  from libstdcxx.v6.printers import register_libstdcxx_printers
+  register_libstdcxx_printers (None)
+end
+```
+
 - 调试方式1：`gcc hello.c -wrapper gdb,--args`
 - 调试方式2：
   1. `gcc hello.c -v` 找到cc1的命令，因为gcc是一个wrapper，实际调用cc1进行编译。当然前提是编译GCC时使用`-O0 -g3`编译的。
