@@ -20,10 +20,10 @@ set auto-load safe-path /
 # https://sourceware.org/gdb/wiki/STLSupport
 # svn co svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python
 python
-  import sys
-  sys.path.insert(0, '/work/home/lding/python-gdb')
-  from libstdcxx.v6.printers import register_libstdcxx_printers
-  register_libstdcxx_printers (None)
+import sys
+sys.path.insert(0, '/work/home/lding/python-gdb')
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers (None)
 end
 ```
 
