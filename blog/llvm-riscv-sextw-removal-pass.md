@@ -6,7 +6,7 @@
 
 该Pass用于移除RV64中多余的sext.w指令（即`setx.w a, b`），根据b寄存器的def情况，分以下几种情况（isSignExtendedW）：
 
-1. 如果b的高63:32位与第31位相同，则sext.w指令可以省去，包括以下指令（isSignExtendingOpW）：
+1. 如果b的高63:32位与第31位相同（从第0位开始数），则sext.w指令可以省去，包括以下指令（isSignExtendingOpW）：
    - 包括`ADDIW b, c, imm`等计算低32位然后进行扩展的指令
    - `SRAI b, c, uimm`且uimm >= 32（保证符号位第63位被移动到了第31位及以下，因此63:31的值全相同）
    - `SRLI b, c, uimm`且uimm > 32（保证63:31全为0）
