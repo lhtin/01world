@@ -107,11 +107,11 @@ C源代码如下（[在线地址](https://godbolt.org/z/h33naE7W5)）：
 
 #include <stdarg.h>
 
-void f(long long arg1, int arg2);
+void f(long long a);
 
-void long_args(int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, long long arg8, int arg9)
+void long_args(int a1, int a2, int a3, int a4, int a5, int a6, int a7, long long a8, int a9)
 {
-  f(arg8, arg9);
+  f(a8);
 }
 
 int va_sum(int args_num, ...)
@@ -119,7 +119,7 @@ int va_sum(int args_num, ...)
   int sum = 0;
   va_list ap;
   va_start(ap, args_num);
-  for (int i = 0; i < args_num; i += 1)
+  for (int i = args_num; i > 0; i--)
   {
     int arg = va_arg(ap, int);
     sum = sum + arg;
@@ -130,7 +130,7 @@ int va_sum(int args_num, ...)
 
 int main()
 {
-  long long *data = (long long *)__builtin_alloca(sizeof(long long));
+  long long *data = (long long*)__builtin_alloca(sizeof(long long));
   *data = 0x900000008ll;
   long_args(1, 2, 3, 4, 5, 6, 7, *data, 10);
   va_sum(8, 1, 2, 3, 4, 5, 6, 7, 8);
@@ -140,7 +140,118 @@ int main()
 生成的汇编如下（注意`-O0`编译参数会将所有的参数和局部变量存储到栈上，在更高优化等级上会被优化，但是传参的方式会保持一致）：
 
 ```
-TODO
+long_args:
+        addi    sp,sp,-64
+        sw      ra,44(sp)
+        sw      s0,40(sp)
+        addi    s0,sp,48
+        sw      a0,-20(s0)
+        sw      a1,-24(s0)
+        sw      a2,-28(s0)
+        sw      a3,-32(s0)
+        sw      a4,-36(s0)
+        sw      a5,-40(s0)
+        sw      a6,-44(s0)
+        sw      a7,12(s0)
+        lw      a0,12(s0)
+        lw      a1,16(s0)
+        call    f
+        nop
+        lw      ra,44(sp)
+        lw      s0,40(sp)
+        addi    sp,sp,64
+        jr      ra
+va_sum:
+        addi    sp,sp,-80
+        sw      s0,44(sp)
+        addi    s0,sp,48
+        sw      a0,-36(s0)
+        sw      a1,4(s0)
+        sw      a2,8(s0)
+        sw      a3,12(s0)
+        sw      a4,16(s0)
+        sw      a5,20(s0)
+        sw      a6,24(s0)
+        sw      a7,28(s0)
+        sw      zero,-20(s0)
+        addi    a5,s0,32
+        sw      a5,-40(s0)
+        lw      a5,-40(s0)
+        addi    a5,a5,-28
+        sw      a5,-32(s0)
+        lw      a5,-36(s0)
+        sw      a5,-24(s0)
+        j       .L3
+.L4:
+        lw      a5,-32(s0)
+        addi    a4,a5,4
+        sw      a4,-32(s0)
+        lw      a5,0(a5)
+        sw      a5,-28(s0)
+        lw      a4,-20(s0)
+        lw      a5,-28(s0)
+        add     a5,a4,a5
+        sw      a5,-20(s0)
+        lw      a5,-24(s0)
+        addi    a5,a5,-1
+        sw      a5,-24(s0)
+.L3:
+        lw      a5,-24(s0)
+        bgt     a5,zero,.L4
+        lw      a5,-20(s0)
+        mv      a0,a5
+        lw      s0,44(sp)
+        addi    sp,sp,80
+        jr      ra
+main:
+        addi    sp,sp,-48
+        sw      ra,44(sp)
+        sw      s0,40(sp)
+        addi    s0,sp,48
+        addi    sp,sp,-16
+        addi    a5,sp,8
+        addi    a5,a5,15
+        srli    a5,a5,4
+        slli    a5,a5,4
+        sw      a5,-20(s0)
+        lw      a3,-20(s0)
+        li      a4,8
+        li      a5,9
+        sw      a4,0(a3)
+        sw      a5,4(a3)
+        lw      a5,-20(s0)
+        lw      a4,0(a5)
+        lw      a5,4(a5)
+        li      a3,10
+        sw      a3,4(sp)
+        sw      a5,0(sp)
+        mv      a7,a4
+        li      a6,7
+        li      a5,6
+        li      a4,5
+        li      a3,4
+        li      a2,3
+        li      a1,2
+        li      a0,1
+        call    long_args
+        li      a5,8
+        sw      a5,0(sp)
+        li      a7,7
+        li      a6,6
+        li      a5,5
+        li      a4,4
+        li      a3,3
+        li      a2,2
+        li      a1,1
+        li      a0,8
+        call    va_sum
+        li      a5,0
+        mv      a0,a5
+        addi    sp,s0,-48
+        lw      ra,44(sp)
+        lw      s0,40(sp)
+        addi    sp,sp,48
+        jr      ra
 ```
 
 汇编分析：
