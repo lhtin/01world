@@ -56,6 +56,12 @@ end
   # function
   call dump_function_to_file(cfun->decl, stderr, TDF_DETAILS)
   # 还有TDF_DETAILS，TDF_LINENO等flags可以添加
+
+  # 打印函数
+  p function_name(cfun->decl->function_decl.f)
+  
+  # 打印data-flow信息
+  call df_dump(stderr)
   ```
 
 - print-rtl.h
