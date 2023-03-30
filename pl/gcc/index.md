@@ -34,6 +34,8 @@ end
 
 ### 打印
 
+一般来说，GCC会给常见的数据结构增加debug(data)方法用于打印其内容，所以尽可能优先尝试`call debug(data)`命令。
+
 - print-tree.h
 
   ```
