@@ -61,6 +61,7 @@ end
 
   # 打印函数
   p function_name(cfun->decl->function_decl.f)
+  b xxx if $_streq(function_name(cfun->decl->function_decl.f), "main")
   
   # 打印data-flow信息
   call df_dump(stderr)
