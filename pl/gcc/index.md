@@ -32,6 +32,18 @@ end
   1. `gcc hello.c -v` 找到cc1的命令，因为gcc是一个wrapper，实际调用cc1进行编译。当然前提是编译GCC时使用`-O0 -g3`编译的。
   2. `gdb --args /path/to/cc1 -quiet -v hello.c -quiet -dumpbase hello.c -mtune=generic -march=x86-64 -auxbase hello -version -o /tmp/ccJgWTK3.s` 调试cc1
 
+### Bootstrap
+
+```
+   old gcc ----> stage1 gcc ----> stage2 gcc
+     |
+     |
+     v
+stage1 gcc ----> stage2 gcc ----> stage3 gcc
+```
+
+证明stage1 gcc和stage2 gcc两个同样gcc代码编译出来的gcc是否完全等价，也其实就是在证明old gcc和stage1 gcc编译出来的程序执行结果是否等价（新老版本的gcc代码功能上是等价的）。为了证明stage1 gcc和stage2 gcc是否完全等价，可以通过让他们编译一个程序，然后比较他们的程序的二进制是否完全一样。这里选择的程序是gcc自己。用stage1 gcc编译出来的gcc叫stage2 gcc，用stage2 gcc编译出来的gcc叫stage3 gcc。
+
 ### 打印
 
 一般来说，GCC会给常见的数据结构增加debug(data)方法用于打印其内容，所以尽可能优先尝试`call debug(data)`命令。
