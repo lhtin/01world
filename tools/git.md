@@ -4,7 +4,7 @@
 
 ```
 [core]
-        filemode = true # 提交时包含文件得可执行权限属性
+        filemode = true # 提交时包含文件的可执行权限属性
 ```
 
 ## 常用命令
