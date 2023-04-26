@@ -40,7 +40,7 @@ name = Lehua Ding
 ```
 
 - `mkdir patchs && cd patchs`
-- `git format-patch -1`
+- `git format-patch -1 HEAD` 最近一个或者 `git format-patch commit_id1..commit_id2`
 - `../contrib/mklog.py xxx.patch` 生成ChangeLog
 - `vim xxx.patch` 修改xxx.patch，将前一步输出的ChangeLog copy进去，同时添加patch的描述
 - `git send-email xxx.patch --to xxx --cc xxx` 发送邮件到对应的邮件列表
