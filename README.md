@@ -59,6 +59,7 @@
   - 工具箱
     - [little tools](./tools/little-tools.md)
     - [dev-env-init](./tools/dev-env-init.md)
+    - [Graphviz](./tools/graphviz.md)
     - [shell](./tools/shell.md)
     - [vim](./tools/vim.md)
     - [make](./tools/make.md)
