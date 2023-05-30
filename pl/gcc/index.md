@@ -48,15 +48,12 @@ stage1 gcc ----> stage2 gcc ----> stage3 gcc
 
 一般来说，GCC会给常见的数据结构增加debug(data)方法用于打印其内容，所以尽可能优先尝试`call debug(data)`命令。
 
-- print-tree.h
+- print-tree.h, gimple-pretty-print.h, print-rtl.h
 
   ```
+  # tree
   call debug_tree(decl) # 打印tree的信息
-  ```
 
-- gimple-pretty-print.h
-
-  ```
   # gimple*
   call print_gimple_stmt(stderr, stmt, 0, 0)
   call print_generic_expr(stderr, from, 0)
@@ -70,6 +67,9 @@ stage1 gcc ----> stage2 gcc ----> stage3 gcc
   # function
   call dump_function_to_file(cfun->decl, stderr, TDF_DETAILS)
   # 还有TDF_DETAILS，TDF_LINENO等flags可以添加
+  
+  # basic block
+  call debug (BASIC_BLOCK_FOR_FN (cfun, 1))
 
   # 打印函数
   p function_name(cfun->decl->function_decl.f)
@@ -77,14 +77,10 @@ stage1 gcc ----> stage2 gcc ----> stage3 gcc
   
   # 打印data-flow信息
   call df_dump(stderr)
-  ```
 
-- print-rtl.h
-
-  ```
   # rtx
   # 打印单个rtx
-  call print_rtl_single(stderr, last)
+  call debug (rtx)
   # 打印rtx列表
   # get_insns() 获取当前的rtx list
   call print_rtl(stderr, get_insns())
