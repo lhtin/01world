@@ -72,6 +72,7 @@
     - [git](./tools/git.md)
     - [qemu](./tools/qemu.md)
     - [binutils](./tools/binutils.md)
+    - [Python3](./tools/python3.md)
 
 
 
