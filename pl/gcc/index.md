@@ -18,10 +18,9 @@ set print pretty on
 set auto-load safe-path /
 
 # https://sourceware.org/gdb/wiki/STLSupport
-# svn co svn://gcc.gnu.org/svn/gcc/trunk/libstdc++-v3/python
 python
 import sys
-sys.path.insert(0, '/work/home/lding/python-gdb')
+sys.path.insert(0, '{gcc_root}/libstdc++-v3/python')
 from libstdcxx.v6.printers import register_libstdcxx_printers
 register_libstdcxx_printers (None)
 end
@@ -216,3 +215,29 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
   - 可能是因为没有找到合适的pattern，一般是在vregs pass中出错
     - 自定义的pattern的寻找是通过mode和unspec进行的，如果某个指定了mode的参数的predicate支持(const_int 0)，则有可能在GET_MODE的时候返回VOID mode，进而无法匹配到pattern
   - 可能是constraint没有匹配的，虽然predicate过了。一般在reload pass中出错
+
+## GCC test
+
+- AArch64
+  - 准备dejagnu
+    - `git clone git://git.savannah.gnu.org/dejagnu.git`
+    - modify /path/to/dejagnu/baseboards/aarch64-sim.exp
+      ```diff
+      -set_board_info ldflags "[libgloss_link_flags] [newlib_link_flags] -specs=rdimon.specs"
+      +set_board_info ldflags "[libgloss_link_flags] [newlib_link_flags] -static"
+      ```
+  - 准备qemu
+    - `git clone https://gitlab.com/qemu-project/qemu.git`
+    - `mkdir build && cd build && ../configure --target-list=aarch64-linux-user --prefix=/path/to/install`
+    - `make -j && make install -j`
+    - `cp /path/to/install/bin/qemu-aarch64 /path/to/install/bin/`
+  - 运行gcc测试
+    - add bellow code to site.exp
+      ```
+      if ![info exists boards_dir] {
+        set boards_dir {}
+      }
+      lappend boards_dir /path/to/dejagnu/baseboards
+      ```
+    - `SIM=qemu-aarch64 RUNTESTFLAGS="--target_board=aarch64-sim" make check -j`
+  
