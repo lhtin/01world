@@ -238,7 +238,7 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
         set boards_dir {}
       }
       lappend boards_dir /path/to/dejagnu/baseboards
-      set SIM "qemu-aarch64"
+      set SIM "qemu-aarch64 -L /path/to/build-gcc/sysroot"
       ```
     - `make check RUNTESTFLAGS="--target_board=aarch64-sim" -j`
   
