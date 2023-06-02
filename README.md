@@ -53,6 +53,7 @@
       - [GCC](./pl/gcc/index.md)
       - [LLVM](./pl/llvm/index.md)
       - [Some C/C++ Codes](./pl/c-codes.md)
+      - [C/C++ Note](./pl/cc-note.md)
   - 操作系统
     - 操作系统理论
     - 实现
