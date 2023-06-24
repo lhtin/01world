@@ -3,3 +3,11 @@ highlighter: rouge
 kramdown:
   math_engine: mathjax
   syntax_highlighter: rouge
+plugins:
+	- jekyll-toc
+toc:
+ min_level: 1
+ max_level: 6
+ list_class: toc
+ list_class: toc__list
+ sublist_class: toc__sublist
