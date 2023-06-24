@@ -19,9 +19,8 @@
 - GCC系列——编译过程介绍
 - C 语言中的 Integer Promotion 规范笔记
 -->
-- Microarchitecture: Virtual Memory
-- Microarchitecture: Cache
 - GCC系列-寄存器分配
+- [Microarchitecture: Cache And Virtual Memory](./blog/cache-and-virtual-memory.md)（2023-6-24）
 - [GCC系列-RISC-V 函数栈帧及GCC实现](./blog/riscv-function-frame.md)（2023-3-19）
 - [LLVM 中的 riscv-sextw-removal Pass 分析](./blog/llvm-riscv-sextw-removal-pass.md)（2022-12-15）
 - [RISC-V中寻址模式总结及链接器实现](./blog/riscv-addressing-mode-and-relocation-relaxation.md)（2022-10-19）
