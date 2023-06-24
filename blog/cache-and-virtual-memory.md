@@ -141,10 +141,10 @@ __________________|__________________|_________|________________________________
 
 - satp寄存器，其中的MODE部分设置所使用的虚拟内存规范，ASID部分表示地址空间，一般用于区分多进程之间相同的虚拟地址。PPN部分指根页表的基地址（root page table）的PPN（physical page number）部分。Sv39中PPN为44位
 
-  ![satp](./image/satp.png)
+  ![satp](./images/satp.png)
 - page table entry，表示页表项。在做Page Table Walker的时候需要根据其中的flags确定page table存在还是不存在，不存在则会触发一个Page Fault异常。 交由操作系统Page Fault处理程序分配物理内存给这个虚拟地址，更新每一级的page table enry。RISC-V中的Page Table Walker要求物理实现。
 
-  ![Sv39](./image/Sv39.png)
+  ![Sv39](./images/Sv39.png)
 
 > 上图来源于 *The RISC-V Instruction Set Manual, Volume II: RISC-V Privileged Architectures V20211203*
 
