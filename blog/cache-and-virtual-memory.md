@@ -4,7 +4,7 @@
 
 当前的计算系系统包含了CPU和Memory两个组件，CPU在执行程序的时候需要读写Memory。受到成本制约，CPU读写Memory的速度比读写Register慢至少100倍以上。为了减少读写Memory的耗时，可以在CPU和Memory之间引入多层Cache组件，一般会有3层。因此存储数据的组件包括了这几种（到Memory为止，后面其实还有Flash/Disk等不在本文的讨论范围）：Register -> L1 Cache -> L2 Cache -> L3 Cache -> Memory。它们的速度和单位成本递减，而容量递增。一般来说L1 Cache会进一步分成L1i Cache和L1d Cache，分别用于缓存指令内容和数据内容。
 
-<img src="./images/memory-hierarchy.drawio.png" style="width: 500px">
+<img src="./images/memory-hierarchy.drawio.png" style="width: 500px" />
 
 把Cache作为一个模块来看，对上它给CPU提供了读和写某个地址的接口。读的时候CPU向Cache提供数据所在地址，Cache返回该地址对应的数据给CPU。写的时候CPU向Cache提供写入的数据和所要写入的地址，Cache负责将数据写入到对应的位置。对下层存储模块来说，它类似CPU会发起读写请求。如果当前Cache中不存在所读取的数据（未命中缓存，cache miss），则需要向下层Cache读取，有的话直接返回给请求者（命中缓存，cache hit）。Cache命中率是衡量Cache性能的核心指标（此外根据使用场景，像面积和功耗也要重点考虑，本文不会涉及到这部分内容）。
 
@@ -21,7 +21,7 @@ Cache能够起作用是因为程序执行过程中存在时间局部性（Tempor
 
 因为Cache的容量比Memory小很多，在实现其缓存效果的过程中需要考虑如何在Cache中存放缓存数据，以便后续判断缓存是否命中。另外还要考虑当Cache没有空闲位置的时候如何淘汰已缓存的数据，以便腾出来用于缓存新数据。最简单的存放方式就是固定将数据存放在Cache的一个位置，这个存放的位置也叫Cache Line，使用数据地址的某一部分来索引。比如如下面所示将数据地址分成了三部分，然后使用Index部分来索引存放的Cache Line。Offset部分表示数据在一个Cache Line内的偏移。然后用Tag部分进一步判断该Cache Line缓存的数据是否是地址所指向的数据，因为有可能该位置缓存的数据是另外一个Index部分一样但Tag部分不一样的数据，或者还没有缓存有效的数据。这种存放方式叫做直接映射（direct-mapped）。
 
-<img src="images/address.png" style="width:400px"></img>
+<img src="images/address.png" style="width:400px" />
 
 直接映射很容易使用硬件实现，不过这种方式会导致Index部分相同的地址挤占同一个Cache Line，使得之前缓存的数据被迫清除，降低了Cache的命中率。这时可以通过增加Index部分能够映射到的Cache Line的数量来降低互相挤占的情况。比如增加到2个Cache Line，那么当其中一个Cache Line被占用的时候，可以将数据缓存到另外一个Cache Line。我们将Index部分所能映射到的所有Cache Line的集合叫Cache Set。取数据的时候需要判断所有可以被映射的Cache Line中的数据是否有效（valid/invalid）且Cache Line记录的Tag跟地址的Tag部分一致。这种存放方式叫做组相连（set-associative），可以存放到2个Cache Line的叫做2路组相连。进一步如果数据可以存放到所有的Cache Line中，则称之为全相连（fully-associative），这时地址只需分成Tag部分和Offset部分，然后用Tag部分和所有Cache Line中记录的Tag进行比较确认是否命中。直接映射和全相连可以看作是组相连的两个极端。
 
@@ -43,31 +43,31 @@ Cache能够起作用是因为程序执行过程中存在时间局部性（Tempor
 
 Tree-PLRU算法创建一颗完美二叉树，且完美二叉树的叶子节点一一对应Cache Set中的Cache Line。非叶子结点则使用一个bit表示年龄位，为0表示低路数Cache Lines最近有没被访问的Cache Line，为1表示指向高路数Cache Lines最近有没被访问的Cache Line。也就是说指向哪路说明哪路可以被替换。如下图所示是一个8-way组相连的Cache的完美二叉树结构，需要三级年龄位。需要注意的是，下图给每个年龄位可以为0或者1，并且画了两个指向下一级的箭头，实际上只会有一个箭头，当年龄位为0时表示指向右上的箭头，为1时表示指向右下的箭头。
 
-<img style="width:500px" src="./images/tree-plru-perfect-tree.drawio.png"></img>
+<img style="width:500px" src="./images/tree-plru-perfect-tree.drawio.png" />
 
 假设第一级年龄位为0，表示方向指向way 0～3 Cache Lines，说明这些Cache Lines可以被替换，至于具体哪个Cache Line可以被替换，需要进一步查看第二级年龄位和第三级年龄位。每级年龄位的更新过程如下：
 
 1. 假设Cache Set已经没有空闲（invlaid）的Cache Line了，同时假设所有的年龄位都为0，也就是说way 0 Cache Line是最近最少使用的Cache Line。初始化的Tree如下图所示，这时从第一级年龄位开始跟着箭头能走到way 0 Cache Line，我们称这些箭头组成了当前的Tree Path。这个Tree Path指向的是最近最少使用的Cache Line
 
-   <img style="width:300px" src="./images/tree-plru-perfect-tree-s1.drawio.png"></img>
+   <img style="width:300px" src="./images/tree-plru-perfect-tree-s1.drawio.png" />
 
 2. 来了一个未缓存过的load请求，Cache根据每一级年龄位的值，选择淘汰way 0处的Cache Line。同时将访问到的第一级、第二级、第三级年龄位的值都改为1。修改后的Tree如下图所示，这时的Tree Path指向way 4。
 
-   <img style="width:300px" src="./images/tree-plru-perfect-tree-s2.drawio.png"></img>
+   <img style="width:300px" src="./images/tree-plru-perfect-tree-s2.drawio.png" />
 
 3. 又有一个未缓存过的load请求，Cache根据每一级年龄位的值，选择way 4 Cache Line缓存该地址的值。同时将第一级年龄位的值改为0，对应第二级和第三级年龄位的值改为1。修改后的Tree如下图所示，这时的Tree Path指向way 2。
 
-   <img style="width:300px" src="./images/tree-plru-perfect-tree-s3.drawio.png"></img>
+   <img style="width:300px" src="./images/tree-plru-perfect-tree-s3.drawio.png" />
 
 4. 之后所有的未缓存过的load请求，都是替换根据从第一级年龄位开始箭头最终指向的Cache Line。比如后面依次淘汰way 2、way 6、way 1、way 5、way 3、way 7。可以看到基本上是淘汰最近最少使用的Cache Line了。
 
 5. 假如来的是缓存过的load请求，则只需要修改对应的年龄位的值以便体现了其刚被使用了。比如接着第3步来了一个请求way 6的load请求，则需要将路径上对应的第一级年龄位改为0（本来就是0），第二级年龄位改为0，第三级年龄位改为1。如下图所示。
 
-   <img style="width:300px" src="./images/tree-plru-perfect-tree-s5.drawio.png"></img>
+   <img style="width:300px" src="./images/tree-plru-perfect-tree-s5.drawio.png" />
 
 总的来说，如果是请求已经缓存过的地址，则只更新到达该Cache Line的Tree Path中的年龄位。如果请求的未缓存过的地址且没有invalid的Cache Line，则选择当前年龄位组成的Tree Path所指向的Cache Line来替换。因为是近似模拟LRU算法，在某些情况下会出现不够准确的情况。比如假设Cache的状态为第1步所处状态，然后依次访问已经缓存过的way 4、way 0、way 1、way 2、way 3、way 6，此时的Tree如下图所示。
 
-   <img style="width:300px" src="./images/tree-plru-perfect-tree-s6.drawio.png"></img>
+   <img style="width:300px" src="./images/tree-plru-perfect-tree-s6.drawio.png" />
 
 假如这时又来了一个未缓存的请求，则根据年龄位所形成的Tree Path，会选择way 0处的Cache Line给替换掉。但实际上，way 0并不是最近最少使用的，它比way 4、way 5、way 7都要新，这种情况下就没有选择最近最少使用的来替换。
 
