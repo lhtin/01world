@@ -66,6 +66,7 @@ r1 = y       |  r2 = x
 问题：程序执行完之后，r1和r2可能都为0吗？
 
 - SC内存模型：不能（r1和r2中至少有一个为1）
+
 - TSO内存模型：可能
 
 比如下面这种运行情况就可以得到该结果：
@@ -100,6 +101,7 @@ y = 1        |  r2 = x
 问题：假设x和y为不同内存地址，程序执行完之后，r1 = 1，r2 = 0？
 
 - SC内存模型：不能
+
 - TSO内存模型：不能
 - RC内存模型：可能（`x = 1`和`y = 1`执行时允许调换顺序）
 
@@ -123,7 +125,9 @@ x = 1        |  y = 1        |  r1 = x       |  r3 = y
 问题：程序执行完之后，r1 = 1, r2 = 0, r3 = 1, r4 = 0?
 
 - SC内存模型：不能
+
 - TSO内存模型：不能
+
 - RC内存模型：可能
 
 比如下面这种运行情况就可以得到该结果：
@@ -167,48 +171,73 @@ RISC-V架构中提供两种内存模型供选择，RVWMO和RVTSO。RVWMO属于RC
 
 RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中Preserved Program Order规则集规定了哪些情况下，同一线程中的内存操作a和b之间的global memory order必须和他们之间的program order保持一致（即preserved program order）。3条公理用于增加新的限制。详细介绍如下：
 
-- Preserved Program Order  
+- Preserved Program Order
+
   如果在program order中，a内存操作在b内存操作之前，并且a和b之间满足下面的任何一条规则。则a和b之间的global memory order必须跟他们的program order保持一致：
+
   - 地址重叠
+
     - Rule 1：b为store操作；并且a和b访问的内存地址有重叠
     - Rule 2：a和b都为load操作；假设x为a和b共同读取的某个字节的内存地址，在a和b之间（program order）没有store操作写入x中；并且a和b返回x中的值是由不同的内存操作写入的。
     - Rule 3：a操作由指令AMO或者SC产生；b为load操作；并且b返回的是a操作写入的值。
+
   - 同步指令
+
     - Rule 4：a和b之间的FENCE指令要求a和b保持program order。
     - Rule 5：a有acquire标记。
     - Rule 6：b有release标记。
     - Rule 7：a有release标记；b有acquire标记。
     - Rule 8：a为LR指令生产的操作；b为SC指令生产的操作；并且他们成对。
+
   - 语法依赖
+
     - Rule 9：b和a之间存在地址依赖。
     - Rule 10：b和a之间存在数据依赖。
     - Rule 11：b为store操作；b和a之间存在控制依赖。
+
   - 流水线依赖
+
     - Rule 12：b为load操作；a和b之间（program order）存在store操作m，并且m和a之间存在地址或者数据依赖，并且b返回m写入的值。
     - Rule 13：b为store操作；在a和b之间（program order）存在指令m，并且m和a之间存在地址依赖。
-- Load Value Axiom  
-  load操作i返回的每个内存字节的值，为下面两个store操作中最晚的一个所写入的值（在global memory order）：  
-  1. 在global memory order中发生在i之前的store操作。  
-  2. 在program order中在i之前的store操作。  
+
+- Load Value Axiom
+
+  load操作i返回的每个内存字节的值，为下面两个store操作中最晚的一个所写入的值（在global memory order）：
+
+  1. 在global memory order中发生在i之前的store操作。
+
+  2. 在program order中在i之前的store操作。
+  
   这条公理增加了对load操作返回值的限制，如果当前线程对应的store操作还没有写到shared memory组件时，返回该store的值，否则返回写到shared memory的最后一个store的值。
-- Atomicity Axiom  
+
+- Atomicity Axiom
+
   如果r和w是hart *h*中的成对操作，store操作s写入内存x，r返回s写入的值，则s在global memory order中必须先于w；并且其他线程中没有写入x的store操作发生在s和w之间（global memory order）。
-- Progress Axiom  
-  没有内存操作会出现在无限内存操作序列之后（global memory order）。  
+
+- Progress Axiom
+
+  没有内存操作会出现在无限内存操作序列之后（global memory order）。
+
   解释：换句话说就是store操作会在有限的时间内被所有harts观察到。
 
 ### 相关指令
 
-- `fence [rw]+, [rw]+`  
+- `fence [rw]+, [rw]+`
+
   r指load操作，w指store操作。该指令禁止指定的之前的内存操作发生在指定的之后的内存操作之后。目前有以下5种组合：
+
   - `fence rw, rw` 全禁止
   - `fence rw, w` release
   - `fence r, rw` acquire
   - `fence r, r` 读屏障
   - `fence w, w` 写屏障
-- 原子操作  
+
+- 原子操作
+
   原子操作默认并不会影响指令的global memory order，但是这些指令可以携带acquire和release标记，这些标记会影响global memory order。如果指令携带acquire标记，将禁止原子操作之后的内存操作发生在原子操作之前。如果指令携带release标记，将禁止原子操作之前的内存操作发生在原子操作之后。如果携带了acquire和release标记，则原子操作前后的内存操作都不允许跨越原子操作。相当于原子操作之前有`fence rw, w`，之后有`fence r, rw`，这里原子操作同时包含load和store操作。
+
   - 常用原子操作
+
     - `amoswap.w/d rd, rs2, (rs1)` 原子交换
     - `amoadd.w/d rd, rs2, (rs1)` 原子加操作
     - `amoand.w/d rd, rs2, (rs1)` 原子与操作
@@ -216,10 +245,14 @@ RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中
     - `amoxor.w/d rd, rs2, (rs1)` 原子异或操作
     - `amomax[u].w/d rd, rs2, (rs1)` 原子取最大值操作
     - `amomin[u].w/d rd, rs2, (rs1)` 原子取最小值操作
+
   - 其余原子操作
+
     - `lr.w/d rd, (rs1)` 返回内存rs1处的值，同时跟处理器预约对内存地址rs1的修改
-    - `sc.w/d rd, rs2, (rs1)` 如果内存地址rs1处于预约修改状态，则成功修改rs1处的值，同时移除对内存地址rs1的预约  
+    - `sc.w/d rd, rs2, (rs1)` 如果内存地址rs1处于预约修改状态，则成功修改rs1处的值，同时移除对内存地址rs1的预约
+
     对于其余原子操作，可以通过使用lr/sc的组合实现。比如原子乘操作：
+
     ```asm
     # atomic_mul (*m, val)
     # a0 = m
@@ -235,11 +268,14 @@ RVWMO内存模型由Preserved Program Order规则集和3条公理组成。其中
 ## 参考
 
 - [Memory Consistency and Event Ordering in Scalable Shared-Memory Multiprocessors](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.17.8112&rep=rep1&type=pdf)
+
 - [Memory Models](https://research.swtch.com/mm)
   - Part 1: [Hardware Memory Models](https://research.swtch.com/hwmm)
   - Part 2: [Programming Language Memory Models](https://research.swtch.com/plmm)
   - Part 3: [Updating the Go Memory Model](https://research.swtch.com/gomm)
+  
 - [Weak Ordering - A New Deﬁnition](http://rsim.cs.uiuc.edu/Pubs/ps2pdf/isca90.pdf)
+
 - [The RISC-V Instruction Set Manual](https://riscv.org/technical/specifications)
   - Volume I: [Unprivileged ISA](https://github.com/riscv/riscv-isa-manual/releases/download/Ratified-IMAFDQC/riscv-spec-20191213.pdf)
   - Volume II: [Privileged Architecture](https://github.com/riscv/riscv-isa-manual/releases/download/Priv-v1.12/riscv-privileged-20211203.pdf)
