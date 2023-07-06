@@ -202,8 +202,8 @@ const initBox = () => {
   doms.pipelineCanvas.addEventListener('mousedown', onMouseDown)
   window.addEventListener('mouseup', onMouseUp)
   window.addEventListener('mousemove', onMouseMove)
-  doms.pipelineCanvas.addEventListener("mousewheel", onMouseWheel)
-  doms.labelCanvas.addEventListener("mousewheel", onMouseWheel)
+  doms.pipelineCanvas.addEventListener("wheel", onMouseWheel)
+  doms.labelCanvas.addEventListener("wheel", onMouseWheel)
   let fired = false
   let starSlope = false;
   window.addEventListener("keydown", (e) => {
