@@ -76,6 +76,7 @@
     - [binutils](./tools/binutils.md)
     - [Python3](./tools/python3.md)
     - [VS Code](./tools/vscode.md)
+    - [tmux](./tools/tmux.md)
 
 
 
