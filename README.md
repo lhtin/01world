@@ -75,6 +75,7 @@
     - [qemu](./tools/qemu.md)
     - [binutils](./tools/binutils.md)
     - [Python3](./tools/python3.md)
+    - [VS Code](./tools/vscode.md)
 
 
 
