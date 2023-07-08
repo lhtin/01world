@@ -31,7 +31,7 @@
 
 > GCC development is a part of the GNU Project, aiming to improve the compiler used in the GNU system including the GNU/Linux variant. The GCC development effort uses an open development environment and supports many other platforms in order to foster a world-class optimizing compiler, to attract a larger team of developers, to ensure that GCC and the GNU system work on multiple architectures and diverse environments, and to more thoroughly test and extend the features of GCC.
 
-[Richard Stallman](https://en.wikipedia.org/wiki/Richard_Stallman)于1987年开源了GCC的第一个版本0.9，至今已走过36年，最新发布的版本为13.1。目前主流的开源编译器除了GCC，还包括[LLVM](https://llvm.org)。LLVM项目由[Chris Lattner](https://en.wikipedia.org/wiki/Chris_Lattner)在2000年启动，最新版本为16，是GCC的主要竞争对手。LLVM相对于GCC来说开源协议更加友好（二次开发可以用于商业目的），代码上也更加模块化，更容易集成到其他项目，更容易阅读和理解。可能是感受到了LLVM带来的竞争压力，GCC在LLVM发展初期也进行了大量新功能开发（包括SSA框架、寄存器分配、自动向量化等重要优化）和代码重构。
+[Richard Stallman](https://en.wikipedia.org/wiki/Richard_Stallman)于1987年开源了GCC的第一个版本0.9，至今已走过36年，最新发布的版本为13.1。目前主流的开源编译器除了GCC，还包括[LLVM](https://llvm.org)。LLVM项目由[Chris Lattner](https://en.wikipedia.org/wiki/Chris_Lattner)在2000年启动，最新版本为16，是GCC的主要竞争对手。LLVM相对于GCC来说开源协议更加友好（二次开发可以不开源），代码上也更加模块化，更容易集成到其他项目，更容易阅读和理解。可能是感受到了LLVM带来的竞争压力，GCC在LLVM发展初期也进行了大量新功能开发（包括SSA框架、寄存器分配、自动向量化等重要优化）和代码重构。
 
 本书主要介绍以下内容：
 - GCC项目构建和调试方法
