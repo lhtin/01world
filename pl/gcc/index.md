@@ -230,7 +230,6 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
     - `git clone https://gitlab.com/qemu-project/qemu.git`
     - `mkdir build && cd build && ../configure --target-list=aarch64-linux-user --prefix=/path/to/install`
     - `make -j && make install -j`
-    - `cp /path/to/install/bin/qemu-aarch64 /path/to/install/bin/`
   - 运行gcc测试
     - add bellow code to site.exp
       ```
@@ -238,7 +237,7 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
         set boards_dir {}
       }
       lappend boards_dir /path/to/dejagnu/baseboards
-      set SIM "qemu-aarch64 -L /path/to/build-gcc/sysroot"
+      set SIM "/path/to/install/bin/qemu-aarch64 -L /path/to/build-gcc/sysroot"
       ```
     - `make check RUNTESTFLAGS="--target_board=aarch64-sim" -j`
   
