@@ -240,12 +240,17 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
       set SIM "/path/to/install/bin/qemu-aarch64 -L /path/to/build-gcc/sysroot"
       ```
     - `make check RUNTESTFLAGS="--target_board=aarch64-sim" -j`
-  
+
+
+
 ## GCC提交patch到upstream
 
 - 申请write after approval权限
-- `git remote set-url origin git+ssh://lhtin@gcc.gnu.org/git/gcc.git` 其中lhtin改为你申请权限时设置的名字
-- `git pull --rebase` 拉取最新代码
-- `git am -s /path/to/your/patch` 将你的代码commit
-- **完整测试（这一步很重要，因为有可能在你提交patch到patch被接受之间有其他人提交新代码过来）**
-- `git push` 提交代码
+- 同步至最新代码：
+  - `git remote add upstream git://gcc.gnu.org/git/gcc.git` 和 `git remote add github https://github.com/gcc-mirror/gcc.git`
+  - 设置同步源并拉去代码。如果你访问git://gcc.gnu.org/git/gcc.git源的速度很快，则可以忽略本步骤。直接使用下一步中的源同步代码。
+  - 这两个git源那个快用哪个，我一般先用github源同步到最新（`git pull github trunk --rebase --verbose`）然后在用upstream同步github源上确实的（`git pull upstream trunk --rebase --verbose`）。github源速度会快些，但是因为有同步频率问题（不是实时），有些非常新的commit只有upstream源上面有，所以两个都要。
+- `git remote set-url lhtin git+ssh://lhtin@gcc.gnu.org/git/gcc.git` 增加提及代码的git源，其中lhtin改为你申请权限时设置的名字
+- `git am /path/to/your/patch` 将你的代码commit
+- **完整测试（这一步很重要，因为有可能在你提交patch让别人review到patch被接受之间有其他人提交新代码过来，除非你确保这段时间没有相关的改动）**
+- `git push lhtin` 提交代码
