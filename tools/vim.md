@@ -1,5 +1,7 @@
 # VIM使用笔记
 
+[.vimrc](./.vimrc)
+
 ## Use Guide
 
 - Normal Mode (Esc)
