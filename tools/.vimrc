@@ -7,11 +7,12 @@ set expandtab
 set autoindent
 set hlsearch
 set shell=zsh
+setlocal scrolloff=0
 
 " render tab and space chars
 set listchars=tab:»\ ,space:·
 set list
-hi SpecialKey ctermfg=8
+highlight SpecialKey ctermfg=DarkGray
 
 " save file history, support undo
 set nobackup
