@@ -9,6 +9,10 @@ set hlsearch
 set shell=zsh
 setlocal scrolloff=0
 
+" Disable connect to the X server (which will slow down startup)
+" https://stackoverflow.com/a/17719528/7004926
+set clipboard=exclude:.*
+
 " render tab and space chars
 set listchars=tab:»\ ,space:·
 set list
