@@ -32,14 +32,14 @@ endif
 " set cursor:
 "   1. normal mode is steady block
 "   2. insert mode is blinking bar
-let &t_SI = "\e[5 q"
-let &t_EI = "\e[2 q"
+let &t_SI="\e[5 q"
+let &t_EI="\e[2 q"
 
 " exit terminal work mode
 tnoremap <Esc><Esc> <C-\><C-N>
 
 " Tagbar plugin
 " https://github.com/preservim/tagbar
-let g:tagbar_sort = 0
-let g:tagbar_width = 60
+let g:tagbar_sort=0
+let g:tagbar_width=60
 nnoremap <silent> <F9> :TagbarToggle<CR>
