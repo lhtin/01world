@@ -168,6 +168,167 @@ next_after_fail1354:;
 }
 ```
 
+## 支持stride load/store步骤(如下添加internal function）
+
+### Sample Codes
+
+```c
+// riscv64-rivai-elf-gcc -O3 -fno-builtin stride.c -S -fdump-tree-ifcvt-details -fdump-tree-vect-details
+#include <stdlib.h>
+
+void foo(int *restrict in, int *restrict out, size_t stride) {
+  for (size_t i = 0; i < 16; i++) {
+    out[i] = in[i * stride];
+  }
+}
+```
+
+### 主要实现代码
+
+```c++
+/* gcc/optabs.def */
+/* The entries in optabs.def are categorized:
+     C: A "conversion" optab, which uses two modes; has libcall data.
+     N: A "normal" optab, which uses one mode; has libcall data.
+     D: A "direct" optab, which uses one mode; does not have libcall data.
+     V: An "oVerflow" optab.  Like N, but does not record its code in
+        code_to_optab.
+
+     CX, NX, VX: An extra pattern entry for a conversion or normal optab.
+
+   These patterns may be present in the MD file with names that contain
+   the mode(s) used and the name of the operation.  This array contains
+   a list of optabs that need to be initialized.  Within each name,
+   $a and $b are used to match a short mode name (the part of the mode
+   name not including `mode' and converted to lower-case).
+
+   $I means that only full integer modes should be considered for the
+   next mode, and $F means that only float modes should be considered.
+   $P means that both full and partial integer modes should be considered.
+   $Q means that only fixed-point modes should be considered.
+
+   The pattern may be NULL if the optab exists only for the libcalls
+   that we plan to attach to it, and there are no named patterns in
+   the md files.  */
+// 定义RTL IR中的名字，将上面的.LEN_STRIDE_LOAD展开为.md中对应的len_stride_load_<mode>
+OPTAB_D (len_stride_load_optab, "len_stride_load_$a")
+OPTAB_CD (len_maskload_optab, "len_maskload$a$b")
+
+/* gcc/internal-fn.def */
+// #define DEF_INTERNAL_OPTAB_FN(CODE, FLAGS, OPTAB, TYPE)
+// 定义Gimple IR中的函数，名字为.LEN_STRIDE_LOAD，第三个参数OPTAB_optab会对应到上面定义的RTL IR名字
+DEF_INTERNAL_OPTAB_FN (LEN_STRIDE_LOAD, ECF_PURE, len_stride_load, len_stride_load)
+
+/* gcc/internal-fn.h */
+/* Describes an internal function that maps directly to an optab.  */
+struct direct_internal_fn_info
+{
+  /* optabs can be parameterized by one or two modes.  These fields describe
+     how to select those modes from the types of the return value and
+     arguments.  A value of -1 says that the mode is determined by the
+     return type while a value N >= 0 says that the mode is determined by
+     the type of argument N.  A value of -2 says that this internal
+     function isn't directly mapped to an optab.  */
+  signed int type0 : 8; // 第一个参数
+  signed int type1 : 8; // 第二个参数，如果是len_stride_load_$a，则只会使用type0
+  /* True if the function is pointwise, so that it can be vectorized by
+     converting the return type and all argument types to vectors of the
+     same number of elements.  E.g. we can vectorize an IFN_SQRT on
+     floats as an IFN_SQRT on vectors of N floats.
+
+     This only needs 1 bit, but occupies the full 16 to ensure a nice
+     layout.  */
+  unsigned int vectorizable : 16;
+};
+
+/* gcc/internal-fn.cc */
+/*
+const direct_internal_fn_info direct_internal_fn_array[IFN_LAST + 1] = {
+#define DEF_INTERNAL_FN(CODE, FLAGS, FNSPEC) not_direct,
+#define DEF_INTERNAL_OPTAB_FN(CODE, FLAGS, OPTAB, TYPE) TYPE##_direct,
+#define DEF_INTERNAL_SIGNED_OPTAB_FN(CODE, FLAGS, SELECTOR, SIGNED_OPTAB, \
+				     UNSIGNED_OPTAB, TYPE) TYPE##_direct,
+#define DEF_INTERNAL_SIGNED_CONVERT_OPTAB_FN(CODE, FLAGS, SELECTOR1, SELECTOR2, SIGNED_OPTAB, \
+				     UNSIGNED_OPTAB, TYPE) TYPE##_direct,
+#include "internal-fn.def"
+  not_direct
+};
+*/
+#define len_stride_load_direct { -1, -1, false }
+#define len_mask_load_direct { -1, 2, false }
+
+/*
+#define DEF_INTERNAL_OPTAB_FN(CODE, FLAGS, OPTAB, TYPE) \
+  static void						\
+  expand_##CODE (internal_fn fn, gcall *stmt)		\
+  {							\
+    expand_##TYPE##_optab_fn (fn, stmt, OPTAB##_optab);	\
+  }
+#define DEF_INTERNAL_SIGNED_OPTAB_FN(CODE, FLAGS, SELECTOR, SIGNED_OPTAB, \
+				     UNSIGNED_OPTAB, TYPE)		\
+  static void								\
+  expand_##CODE (internal_fn fn, gcall *stmt)				\
+  {									\
+    tree_pair types = direct_internal_fn_types (fn, stmt);		\
+    optab which_optab = direct_internal_fn_optab (fn, types);		\
+    expand_##TYPE##_optab_fn (fn, stmt, which_optab);			\
+  }
+#define DEF_INTERNAL_SIGNED_CONVERT_OPTAB_FN(CODE, FLAGS, SELECTOR1, SELECTOR2, SIGNED_OPTAB, \
+				     UNSIGNED_OPTAB, TYPE)		\
+  static void								\
+  expand_##CODE (internal_fn fn, gcall *stmt)				\
+  {									\
+    tree_pair types = direct_internal_fn_types (fn, stmt);		\
+    optab which_optab = direct_internal_fn_optab (fn, types);		\
+    expand_##TYPE##_optab_fn (fn, stmt, which_optab);			\
+  }
+#include "internal-fn.def"
+*/
+#define expand_len_stride_load_optab_fn expand_partial_load_optab_fn
+
+/*
+bool
+direct_internal_fn_supported_p (internal_fn fn, tree_pair types,
+				optimization_type opt_type)
+{
+  switch (fn)
+    {
+#define DEF_INTERNAL_FN(CODE, FLAGS, FNSPEC) \
+    case IFN_##CODE: break;
+#define DEF_INTERNAL_OPTAB_FN(CODE, FLAGS, OPTAB, TYPE) \
+    case IFN_##CODE: \
+      return direct_##TYPE##_optab_supported_p (OPTAB##_optab, types, \
+						opt_type);
+#define DEF_INTERNAL_SIGNED_OPTAB_FN(CODE, FLAGS, SELECTOR, SIGNED_OPTAB, \
+				     UNSIGNED_OPTAB, TYPE)		\
+    case IFN_##CODE:							\
+      {									\
+	optab which_optab = (TYPE_UNSIGNED (types.SELECTOR)		\
+			     ? UNSIGNED_OPTAB ## _optab			\
+			     : SIGNED_OPTAB ## _optab);			\
+	return direct_##TYPE##_optab_supported_p (which_optab, types,	\
+						  opt_type);		\
+      }
+#define DEF_INTERNAL_SIGNED_CONVERT_OPTAB_FN(CODE, FLAGS, SELECTOR1, SELECTOR2, SIGNED_OPTAB, \
+				     UNSIGNED_OPTAB, TYPE)		\
+    case IFN_##CODE:							\
+      {									\
+	optab which_optab = (TYPE_UNSIGNED (types.SELECTOR1)		\
+			     ? UNSIGNED_OPTAB ## _optab			\
+			     : SIGNED_OPTAB ## _optab);			\
+	return convert_optab_handler (which_optab, TYPE_MODE (types.SELECTOR1),	TYPE_MODE (types.SELECTOR2));		\
+      }
+#include "internal-fn.def"
+
+    case IFN_LAST:
+      break;
+    }
+  gcc_unreachable ();
+}
+*/
+#define direct_len_stride_load_optab_supported_p direct_optab_supported_p
+```
+
 ## 添加TARGET HOOKS
 
 1. 修改如下文件添加新target hook
