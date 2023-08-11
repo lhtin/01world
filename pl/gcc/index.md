@@ -416,3 +416,8 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
 - `git am /path/to/your/patch` 将你的代码commit
 - **完整测试（这一步很重要，因为有可能在你提交patch让别人review到patch被接受之间有其他人提交新代码过来，除非你确保这段时间没有相关的改动）**
 - `git push lhtin` 提交代码
+
+## 开发智慧
+
+- 修改已有的prxxx.c测试用例时，要看清楚该用例的用途，可以通过查看当时的bugzilla单了解
+  - 类似这个patch修复的内容，我之前提交的一个patch只是简单的增加了一个error，但实际上这个testcase是想要测试两个字母的extension不会报错，改了之后没有达到测试的目的：https://gcc.gnu.org/pipermail/gcc-patches/2023-August/627122.html
