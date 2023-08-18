@@ -417,6 +417,7 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
 - **完整测试（这一步很重要，因为有可能在你提交patch让别人review到patch被接受之间有其他人提交新代码过来，除非你确保这段时间没有相关的改动）**
 - `git push lhtin` 提交代码
 - 推荐使用[Thunderbird](https://www.thunderbird.net/)邮箱客户端
+  - 订阅qq邮箱时，如果有的文件夹没有出来，可以右键邮箱然后选择Subscribe，勾选想要通过的目录（不小心弄丢了也可以这样子找回来）
   - 纯文本邮箱客户端推荐：https://useplaintext.email
   - 如果使用git-send-email：https://git-send-email.io
 
