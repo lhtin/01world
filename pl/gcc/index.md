@@ -416,6 +416,9 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
 - `git am /path/to/your/patch` 将你的代码commit
 - **完整测试（这一步很重要，因为有可能在你提交patch让别人review到patch被接受之间有其他人提交新代码过来，除非你确保这段时间没有相关的改动）**
 - `git push lhtin` 提交代码
+- 推荐使用[Thunderbird](https://www.thunderbird.net/)邮箱客户端
+  - 纯文本邮箱客户端推荐：https://useplaintext.email
+  - 如果使用git-send-email：https://git-send-email.io/
 
 ## 开发智慧
 
