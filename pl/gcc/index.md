@@ -418,7 +418,7 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
 - `git push lhtin` 提交代码
 - 推荐使用[Thunderbird](https://www.thunderbird.net/)邮箱客户端
   - 纯文本邮箱客户端推荐：https://useplaintext.email
-  - 如果使用git-send-email：https://git-send-email.io/
+  - 如果使用git-send-email：https://git-send-email.io
 
 ## 开发智慧
 
