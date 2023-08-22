@@ -1,5 +1,12 @@
 # GCC 笔记
 
+## 开发笔记
+
+- gen_xxx和expand_insn的区别
+  - gen_xxx是你传入什么参数，就生成什么RTL
+  - expand_insn则会帮你调整参数以便满足对应pattern的predicate
+    - 比如predicate要求必须为reg，但是给的参数是mem，则会force_reg一下
+
 ## 调试
 
 .gdbinit 配置如下
