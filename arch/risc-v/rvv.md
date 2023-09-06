@@ -1,5 +1,12 @@
 # RISC-V V Extension Instruction Set Listings
 
+## 6. Configuration-Setting Instructions (vsetvli/vsetivli/vsetvl)
+
+    vsetvli rd, rs1, vtypei # rd = new vl, rs1 = AVL, vtypei = new vtype setting
+    vsetivli rd, uimm, vtypei # rd = new vl, uimm = AVL, vtypei = new vtype setting
+    vsetvl rd, rs1, rs2 # rd = new vl, rs1 = AVL, rs2 = new vtype value
+
+
 ## 7. Vector Loads and Stores
 
 ### 7.4. Vector Unit-Stride Instructions
@@ -277,6 +284,11 @@
     # vd.mask[i] = carry_out(vs2[i] + imm)
     vmadc.vi    vd, vs2, imm      # Vector-immediate, no carry-in
 
+    # Example multi-word arithmetic sequence, accumulating into v4
+    vmadc.vvm v1, v4, v8, v0 # Get carry into temp register v1
+    vadc.vvm v4, v4, v8, v0 # Calc new sum
+    vmmv.m v0, v1 # Move temp carry into v0 for next word
+
     # Produce difference with borrow.
 
     # vd[i] = vs2[i] - vs1[i] - v0.mask[i]
@@ -314,6 +326,8 @@
     vxor.vx vd, vs2, rs1, vm    # vector-scalar
     vxor.vi vd, vs2, imm, vm    # vector-immediate
 
+    vnot.v vd, vs, vm = vxor.vi vd, vs, -1, vm
+
 ### 11.6. Vector Single-Width Shift Instructions
 
     # Bit shift operations
@@ -340,6 +354,8 @@
     vnsra.wv vd, vs2, vs1, vm   # vector-vector
     vnsra.wx vd, vs2, rs1, vm   # vector-scalar
     vnsra.wi vd, vs2, uimm, vm   # vector-immediate
+
+    vncvt.x.x.w vd, vs, vm = vnsrl.wx vd, vs, x0, vm
 
 ### 11.8. Vector Integer Compare Instructions
 
@@ -549,6 +565,11 @@
     vmv.v.v vd, vs1 # vd[i] = vs1[i]
     vmv.v.x vd, rs1 # vd[i] = x[rs1]
     vmv.v.i vd, imm # vd[i] = imm
+
+    Mask values can be widened into SEW-width elements using a sequence vmv.v.i vd, 0; vmerge.vim vd, vd, 1, v0.
+
+    The form vmv.v.v vd, vd, which leaves body elements unchanged, can be used to indicate that the register will next be used with an EEW equal to SEW.
+
 
 ## 12. Vector Fixed-Point Arithmetic Instructions
 
@@ -761,6 +782,9 @@
     vfsgnjx.vv vd, vs2, vs1, vm  # Vector-vector
     vfsgnjx.vf vd, vs2, rs1, vm  # vector-scalar
 
+    vfneg.v vd, vs = vfsgnjn.vv vd, vs, vs
+    vfabs.v vd, vs = vfsgnjx.vv vd, vs, vs
+
 ### 13.13. Vector Floating-Point Compare Instructions
 
     # Compare equal
@@ -789,8 +813,8 @@
 
     va < vb         vmflt.vv vd, va, vb, vm
     va <= vb        vmfle.vv vd, va, vb, vm
-    va > vb         vmflt.vv vd, vb, va, vm    vmfgt.vv vd, va, vb, vm
-    va >= vb        vmfle.vv vd, vb, va, vm    vmfge.vv vd, va, vb, vm
+    va > vb         vmflt.vv vd, vb, va, vm       vmfgt.vv vd, va, vb, vm
+    va >= vb        vmfle.vv vd, vb, va, vm       vmfge.vv vd, va, vb, vm
 
     va < f          vmflt.vf vd, va, f, vm
     va <= f         vmfle.vf vd, va, f, vm
@@ -799,6 +823,13 @@
 
     va, vb vector register groups
     f      scalar floating-point register
+
+    # Example of implementing isgreater()
+    vmfeq.vv v0, va, va # Only set where A is not NaN.
+    vmfeq.vv v1, vb, vb # Only set where B is not NaN.
+    vmand.mm v0, v0, v1 # Only set where A and B are ordered,
+    vmfgt.vv v0, va, vb, v0.t # so only set flags on ordered values.
+
 
 ### 13.14. Vector Floating-Point Classify Instruction
 
@@ -851,6 +882,12 @@
     vfncvt.rod.f.f.w vd, vs2, vm    # Convert double-width float to single-width float,
                                     #  rounding towards odd.
 
+    A full set of floating-point narrowing conversions is not supported as single instructions.
+    Conversions can be implemented in a sequence of halving steps. Results are equivalently rounded
+    and the same exception flags are raised if all but the last halving step use roundtowards-odd (vfncvt.rod.f.f.w).
+    Only the final step should use the desired rounding mode.
+
+
 ## 14. Vector Reduction Operations
 
 ### 14.1. Vector Single-Width Integer Reduction Instructions
@@ -881,6 +918,10 @@
     vfredmax.vs  vd, vs2, vs1, vm # Maximum value
     vfredmin.vs  vd, vs2, vs1, vm # Minimum value
 
+    The vfredosum instruction must sum the floating-point values in element order,
+    starting with the scalar in vs1[0]--that is, it performs the computation:
+    vd[0] = `(((vs1[0] + vs2[0]) + vs2[1]) + ...) + vs2[vl-1]`
+
 ### 14.4. Vector Widening Floating-Point Reduction Instructions
 
     # Simple reductions.
@@ -909,6 +950,9 @@
 ### 15.2. Vector count population in mask `vcpop.m`
 
     vcpop.m rd, vs2, vm
+
+    # The operation can be performed under a mask, in which case only the masked elements are counted.
+    vcpop.m rd, vs2, v0.t # x[rd] = sum_i ( vs2.mask[i] && v0.mask[i] )
 
 ### 15.3. `vfirst` find-first-set mask bit
 
@@ -1028,7 +1072,7 @@
 
                       0 <  i < max(vstart, OFFSET)  Unchanged
     max(vstart, OFFSET) <= i < vl                   vd[i] = vs2[i-OFFSET] if v0.mask[i] enabled
-                    vl <= i < VLMAX                Follow tail policy
+                     vl <= i < VLMAX                Follow tail policy
 
 #### 16.3.2. Vector Slidedown Instructions
 
@@ -1041,13 +1085,12 @@
 
     vslidedown behavior for destination element i in slide
                     0 <  i < vstart         Unchanged
-                vstart <= i < vl             vd[i] = src[i] if v0.mask[i] enabled
-                    vl <= i < VLMAX          Follow tail policy
+               vstart <= i < vl             vd[i] = src[i] if v0.mask[i] enabled
+                   vl <= i < VLMAX          Follow tail policy
 
 #### 16.3.3. Vector Slide1up
 
     vslide1up.vx  vd, vs2, rs1, vm        # vd[0]=x[rs1], vd[i+1] = vs2[i]
-    vfslide1up.vf vd, vs2, rs1, vm        # vd[0]=f[rs1], vd[i+1] = vs2[i]
 
     vslide1up behavior when vl > 0
 
@@ -1056,10 +1099,13 @@
     max(vstart, 1) <= i < vl      vd[i] = vs2[i-1] if v0.mask[i] enabled
                 vl <= i < VLMAX   Follow tail policy
 
-#### 16.3.4. Vector Slide1down Instruction
+#### 16.3.4. Vector Floating-Point Slide1up Instruction
+
+    vfslide1up.vf vd, vs2, rs1, vm        # vd[0]=f[rs1], vd[i+1] = vs2[i]
+
+#### 16.3.5. Vector Slide1down Instruction
 
     vslide1down.vx  vd, vs2, rs1, vm      # vd[i] = vs2[i+1], vd[vl-1]=x[rs1]
-    vfslide1down.vf vd, vs2, rs1, vm      # vd[i] = vs2[i+1], vd[vl-1]=f[rs1]
 
     vslide1down behavior
 
@@ -1067,6 +1113,10 @@
               vstart <= i < vl-1    vd[i] = vs2[i+1] if v0.mask[i] enabled
               vstart <= i = vl-1    vd[vl-1] = x[rs1] if v0.mask[i] enabled
                   vl <= i < VLMAX   Follow tail policy
+
+#### 16.3.6. Vector Floating-Point Slide1down Instruction
+
+    vfslide1down.vf vd, vs2, rs1, vm      # vd[i] = vs2[i+1], vd[vl-1]=f[rs1]
 
 ### 16.4. Vector Register Gather Instructions
 
