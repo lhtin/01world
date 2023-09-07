@@ -738,6 +738,10 @@
 
 ### 13.7. Vector Widening Floating-Point Fused Multiply-Add Instructions
 
+    # The widening floating-point fused multiply-add instructions all
+    # overwrite the wide addend with the result. The multiplier inputs
+    # are all SEW wide, while the addend and destination is 2*SEW bits wide.
+
     # FP widening multiply-accumulate, overwrites addend
     vfwmacc.vv vd, vs1, vs2, vm    # vd[i] = +(vs1[i] * vs2[i]) + vd[i]
     vfwmacc.vf vd, rs1, vs2, vm    # vd[i] = +(f[rs1] * vs2[i]) + vd[i]
