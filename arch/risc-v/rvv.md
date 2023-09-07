@@ -507,6 +507,9 @@
 
 ### 11.12. Vector Widening Integer Multiply Instructions
 
+    # The widening integer multiply instructions return the
+    # full 2*SEW-bit product from an SEW-bit*SEW-bit multiply
+
     # Widening signed-integer multiply
     vwmul.vv  vd, vs2, vs1, vm # vector-vector
     vwmul.vx  vd, vs2, rs1, vm # vector-scalar
@@ -538,6 +541,11 @@
     vnmsub.vx vd, rs1, vs2, vm    # vd[i] = -(x[rs1] * vd[i]) + vs2[i]
 
 ### 11.14. Vector Widening Integer Multiply-Add Instructions
+
+    # The widening integer multiply-add instructions add the full 2*SEW-bit
+    # product from a SEW-bit*SEW-bit multiply to a 2*SEW-bit value and produce
+    # a 2*SEW-bit result. All combinations of signed and unsigned multiply
+    # operands are supported.
 
     # Widening unsigned-integer multiply-add, overwrite addend
     vwmaccu.vv vd, vs1, vs2, vm    # vd[i] = +(vs1[i] * vs2[i]) + vd[i]
