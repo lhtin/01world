@@ -417,12 +417,14 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
 - 申请write after approval权限
 - 同步至最新代码：
   - `git remote add upstream git://gcc.gnu.org/git/gcc.git` 和 `git remote add github https://github.com/gcc-mirror/gcc.git`
-  - 设置同步源并拉去代码。如果你访问git://gcc.gnu.org/git/gcc.git源的速度很快，则可以忽略本步骤。直接使用下一步中的源同步代码。
-  - 这两个git源那个快用哪个，我一般先用github源同步到最新（`git pull github trunk --rebase --verbose`）然后在用upstream同步github源上确实的（`git pull upstream trunk --rebase --verbose`）。github源速度会快些，但是因为有同步频率问题（不是实时），有些非常新的commit只有upstream源上面有，所以两个都要。
-- `git remote set-url lhtin git+ssh://lhtin@gcc.gnu.org/git/gcc.git` 增加提及代码的git源，其中lhtin改为你申请权限时设置的名字
+  - 设置同步源并拉取代码。如果你访问git://gcc.gnu.org/git/gcc.git源的速度很快，则可以忽略本步骤。直接使用下一步中的源同步代码。
+  - 这两个git源那个快用哪个，我一般先用github源同步到最新（`git pull github trunk --rebase --verbose`）然后再用upstream同步github源上缺失的（`git pull upstream trunk --rebase --verbose`）。github源速度会快些，但是因为有同步频率问题（不是实时），有些非常新的commit只有upstream源上面有，所以两个都要。
+- `git remote add lhtin git+ssh://lhtin@gcc.gnu.org/git/gcc.git` 增加提交代码的git源，其中lhtin改为你申请权限时设置的名字
 - `git am /path/to/your/patch` 将你的代码commit
+  - 如果是再patchwork上可以先`wget xxx`然后再`git am index.html`应用
 - **完整测试（这一步很重要，因为有可能在你提交patch让别人review到patch被接受之间有其他人提交新代码过来，除非你确保这段时间没有相关的改动）**
 - `git push lhtin` 提交代码
+- `ssh lhtin@gcc.gnu.org appendkey < ~/temp/id_ed25519.pub` 添加新的key（一般换新机器需要）
 - 推荐使用[Thunderbird](https://www.thunderbird.net/)邮箱客户端
   - 订阅qq邮箱时，如果有的文件夹没有出来，可以右键邮箱然后选择Subscribe，勾选想要通过的目录（不小心弄丢了也可以这样子找回来）
   - 纯文本邮箱客户端推荐：https://useplaintext.email
