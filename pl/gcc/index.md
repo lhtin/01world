@@ -427,6 +427,8 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
   - 订阅qq邮箱时，如果有的文件夹没有出来，可以右键邮箱然后选择Subscribe，勾选想要通过的目录（不小心弄丢了也可以这样子找回来）
   - 纯文本邮箱客户端推荐：https://useplaintext.email
   - 如果使用git-send-email：https://git-send-email.io
+- 邮件用语记录
+  - Bootstrap and testsuite are unchanged on aarch64 and x86.
 
 ## 开发智慧
 
