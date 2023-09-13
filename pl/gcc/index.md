@@ -383,6 +383,9 @@ new text in /path/to/gcc/build-gcc-elf-rv64/build-gcc-newlib-stage2/gcc/tm.texi,
   - 可能是因为没有找到合适的pattern，一般是在vregs pass中出错
     - 自定义的pattern的寻找是通过mode和unspec进行的，如果某个指定了mode的参数的predicate支持(const_int 0)，则有可能在GET_MODE的时候返回VOID mode，进而无法匹配到pattern
   - 可能是constraint没有匹配的，虽然predicate过了。一般在reload pass中出错
+- error: unknown iterator value `V_DOUBLE_EXTEND_VEL'
+  - 确定你确实定义了V_DOUBLE_EXTEND_VEL attr
+  - 如果你确实添加了这个attr，那么可能是因为里面少了一些项需要补充上去
 
 ## GCC test
 
