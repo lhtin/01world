@@ -162,7 +162,7 @@ TLB的引入会导致一个问题，就是在进程销毁或者进程切换时�
 
 ### 2.3.1 Cache改造
 
-因为虚拟地址的引入，Cache缓存所有的地址可以选择物理地址，也可以选择虚拟地址。目前用的最多的是Virtually-Indexed，Physically-Tagged（VIPT）方式，即虚拟地址作为Cache Index，物理地址作为Cache Tag。这种方式会有synonym（同义）问题，解决这个问题的方法一般是通过限制单个way的大小为4KiB（即页的大小），然后通过增加way数来达到增加Cache总容量的效果。
+因为虚拟地址的引入，Cache缓存所有的地址可以选择物理地址，也可以选择虚拟地址。目前用的最多的是Virtually-Indexed，Physically-Tagged（VIPT）方式，即虚拟地址作为Cache Index，物理地址作为Cache Tag。这种方式会有synonym（同义）问题，解决这个问题的方法一般是通过限制单个way的大小为4KiB（即页的大小，也即index bits + offset bits <= 12，2<sup>12</sup>=4KiB），然后通过增加way数来达到增加Cache总容量的效果。
 
 ## 参考
 
