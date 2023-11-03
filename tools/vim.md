@@ -66,6 +66,14 @@
     - 需添加配置：`tnoremap <Esc><Esc> <C-\><C-N>`
   - `a` or `i` 从终端Normal模式进入终端作业模式
 
+## 常用功能
+
+### 替换
+
+- `:%s/SSS/RRR/g` 将整个文件中的SSS替换成RRR
+- `:5,12s/SSS/RRR/g` 将5到12行中的SSS替换成RRR
+- `:.,+10s/SSS/RRR/g` 将当前光标所在行及后面10行中的SSS替换成RRR
+
 ## Install
 
 ```
