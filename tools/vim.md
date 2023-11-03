@@ -73,6 +73,7 @@
 - `:%s/SSS/RRR/g` 将整个文件中的SSS替换成RRR
 - `:5,12s/SSS/RRR/g` 将5到12行中的SSS替换成RRR
 - `:.,+10s/SSS/RRR/g` 将当前光标所在行及后面10行中的SSS替换成RRR
+- `:'<,'>s/SSS/RRR/g` 将选择部分的内容中的SSS替换成RRR。在Visual Mode模式下按下`:`就会出现`:'<,'>`
 
 ## Install
 
