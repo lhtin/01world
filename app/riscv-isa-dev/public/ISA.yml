@@ -48,7 +48,7 @@ RV32I: &id_rv32i
       imm = sign_extend(imm12)
       rd = rs1 | imm
   XORI:
-    asm: andi rd, rs1, imm12
+    asm: xori rd, rs1, imm12
     desc: XORI are logical operations that perform bitwise XOR on register rs1 and the sign-extended 12-bit immediate and place the result in rd.
     code: |
       imm = sign_extend(imm12)
