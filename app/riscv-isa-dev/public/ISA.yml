@@ -852,7 +852,7 @@ D:
     asm: fadd.d rd, rs1, rs2, rm
     desc: FADD.D and FMUL.D perform double-precision floating-point addition and multiplication respectively, between rs1 and rs2.
   FMUL.D:
-    asm: fadd.d rd, rs1, rs2, rm
+    asm: fmul.d rd, rs1, rs2, rm
     desc: FADD.D and FMUL.D perform double-precision floating-point addition and multiplication respectively, between rs1 and rs2.
   FSUB.d:
     asm: fsub.d rd, rs1, rs2, rm
