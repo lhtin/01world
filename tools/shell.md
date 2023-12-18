@@ -22,3 +22,6 @@
   - `.tar.zst`: 'zstd -d xxx.tar.zst && tar -xf xxx.tar`
 - `ldd` 查看程序所以来的动态库
 - `lsof +D /path/to/dir` 查看文件占用情况
+- rsync拷贝文件，可以跨服务器
+  - `rsync --progress SRC [SRC]... DEST`
+  - `rsync --progress [USER@]HOST:SRC [DEST]`
