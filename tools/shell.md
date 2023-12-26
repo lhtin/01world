@@ -23,5 +23,7 @@
 - `ldd` 查看程序所以来的动态库
 - `lsof +D /path/to/dir` 查看文件占用情况
 - rsync 同步文件，可以跨服务器（参考：https://www.ruanyifeng.com/blog/2020/08/rsync.html）
-  - `rsync -r --progress SRC [SRC]... DEST`
-  - `rsync -r --progress [USER@]HOST:SRC [DEST]`
+  - `rsync -r -l --progress SRC [SRC]... DEST`
+    - `-r` 表示目录
+    - `-l` 表示也复制软连接
+  - `rsync -r -l --progress [USER@]HOST:SRC DEST`
