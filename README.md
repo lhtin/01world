@@ -23,6 +23,8 @@
 - GCC系列-寄存器分配
 - Loop Dependence Analysis
 - RISC-V ISA 介绍
+- [Nand2Tetris Part 2 课程总结](./blog/Nand2Tetris-2.md)
+- [Nand2Tetris Part 1 课程总结](./blog/Nand2Tetris-1.md)
 - [CPU Cache 和 Virtual Memory 介绍](./blog/cache-and-virtual-memory.md)（2023-6-24）
 - [GCC系列-RISC-V 函数栈帧及GCC实现](./blog/riscv-function-frame.md)（2023-3-19）
 - [LLVM 中的 riscv-sextw-removal Pass 分析](./blog/llvm-riscv-sextw-removal-pass.md)（2022-12-15）
