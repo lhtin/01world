@@ -27,3 +27,9 @@
     - `-r` 表示目录
     - `-l` 表示也复制软连接
   - `rsync -r -l --progress [USER@]HOST:SRC DEST`
+- 获取程序运行最大内存：
+  ```
+  valgrind --tool=massif --pages-as-heap=yes --massif-out-file=massif.out prop [args]
+  # 输出mem_heap_B最大值
+  grep mem_heap_B massif.out | sed -e 's/mem_heap_B=\(.*\)/\1/' | sort -g | tail -n 1
+  ```
