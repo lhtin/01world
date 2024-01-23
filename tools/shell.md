@@ -29,10 +29,13 @@
   - `rsync -r -l --progress [USER@]HOST:SRC DEST`
 - 获取程序运行最大内存：
   ```
+  # --pages-as-heap=yes 表示统计整个程序的内存占用，包括堆、栈、elf中的数据段和代码段等load段所占用的内存。也就是这个程序申请的page数量
   valgrind --tool=massif --pages-as-heap=yes --massif-out-file=massif.out prop [args]
   # 输出mem_heap_B最大值
   grep mem_heap_B massif.out | sed -e 's/mem_heap_B=\(.*\)/\1/' | sort -g | tail -n 1
   ```
+  注意查看GCC中的编译器内存消耗时，因为gcc是一个壳，它会调用cc1/cc1plus/f951等程序去编译，我们需要直接找到cc1命令来统计内存占用。
+  例如：`valgrind --tool=massif --pages-as-heap=yes --massif-out-file=massif.out /install/libexec/gcc/riscv64-unknown-linux-gnu/14.0.1/cc1 -quiet -v -imultilib . hello.c -quiet -dumpdir a- -dumpbase hello.c -dumpbase-ext .c -mtune=rocket -march=rv64imafdcv_zicsr_zifencei_zve32f_zve32x_zve64d_zve64f_zve64x_zvl128b_zvl32b_zvl64b -mabi=lp64d -misa-spec=20191213 -march=rv64imafdcv_zicsr_zifencei_zve32f_zve32x_zve64d_zve64f_zve64x_zvl128b_zvl32b_zvl64b -O3 -version -o /tmp/ccPfT8KL.s`
 - 将diff和patch转成更容易看的html网页：`diff2html --input file --style side --file a.html --  a.diff`
   - 安装：`npm install diff2html-cli`
   - 官网：https://diff2html.xyz/
