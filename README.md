@@ -71,17 +71,16 @@
     - 书
       - [Computer Organization and Design: the Hardware/Software Interface](./res/book/computer-organization-and-design/index.md)
   - 工具箱
-    - [little tools](./tools/little-tools.md)
-    - [dev-env-init](./tools/dev-env-init.md)
-    - [Graphviz](./tools/graphviz.md)
     - [shell](./tools/shell.md)
     - [vim](./tools/vim.md)
     - [make](./tools/make.md)
     - [gdb](./tools/gdb.md)
     - [git](./tools/git.md)
+    - [Python3](./tools/python3.md)
+    - [dev-env-init](./tools/dev-env-init.md)
+    - [Graphviz](./tools/graphviz.md)
     - [qemu](./tools/qemu.md)
     - [binutils](./tools/binutils.md)
-    - [Python3](./tools/python3.md)
     - [VS Code](./tools/vscode.md)
     - [tmux](./tools/tmux.md)
 
