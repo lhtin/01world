@@ -12,7 +12,7 @@
 
 ## Remote SSH
 
-- 如果远程服务器网络下载很慢，可以去远程服务器kill掉下面这个wget进程，kill了之后vscode应该就会转到从本地服务器scp到远程服务器
+- 如果远程服务器网络下载很慢，可以去远程服务器kill掉下面这个wget进程，kill了之后vscode应该就会转到从本地服务器下载然后scp到远程服务器
   `wget --tries=1 --connect-timeout=7 --dns-timeout=7 -nv -O vscode-server.tar.gz https://update.code.visualstudio.com/commit:8b3775030ed1a69b13e4f4c628c612102e30a681/server-linux-x64/stable`
   - 插件日志如下
 ```
