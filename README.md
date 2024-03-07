@@ -77,12 +77,12 @@
     - [gdb](./tools/gdb.md)
     - [git](./tools/git.md)
     - [Python3](./tools/python3.md)
-    - [dev-env-init](./tools/dev-env-init.md)
     - [Graphviz](./tools/graphviz.md)
     - [qemu](./tools/qemu.md)
     - [binutils](./tools/binutils.md)
     - [VS Code](./tools/vscode.md)
     - [tmux](./tools/tmux.md)
+    - [Valgrind](./tools/valgrind.md)
 
 
 
