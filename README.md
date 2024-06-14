@@ -71,6 +71,7 @@
     - 书
       - [Computer Organization and Design: the Hardware/Software Interface](./res/book/computer-organization-and-design/index.md)
   - 工具箱
+    - [Mac](./tools/mac.md)
     - [shell](./tools/shell.md)
     - [vim](./tools/vim.md)
     - [make](./tools/make.md)
