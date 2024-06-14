@@ -2,4 +2,4 @@
 
 ## 快捷键
 
-- `Cammand + Ctrl + D` 翻译鼠标所在的单词
+- `Command + Ctrl + D` 翻译鼠标所在的单词
