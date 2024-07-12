@@ -1,6 +1,6 @@
 # Dev Env Init
 
-一键初始化：`/bin/bash -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/01world/-/raw/main/tools/init-dev-env.sh)"`
+一键初始化：`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/lhtin/01world/main/tools/init-env.sh)"`
 
 - [brew](https://brew.sh) 包管理器（Mac and Linux and WSL）
   - `/bin/bash -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/brew-install/-/raw/tin/install.sh)"`
