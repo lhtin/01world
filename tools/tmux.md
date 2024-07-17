@@ -17,5 +17,5 @@ set-window-option -g mode-keys vi
 ## 快捷键
 
 - `Ctrl + B` + `D`：detach 当前窗口
-  - `tmux attach-session -t 0` 重新 attach 0 session
-  - `tmux new-session -A -s 0` 如果有 0 session 则 attach，否则创建 0 session
+  - `tmux attach-session -t dev` 重新 attach dev session
+  - `tmux new-session -A -s 0` 如果有 dev session 存在则 attach，否则创建 dev session
