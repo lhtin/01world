@@ -107,6 +107,7 @@
     - `-r` 表示目录
     - `-l` 表示也复制软连接
   - `rsync -r -l --progress [USER@]HOST:SRC DEST`
+- `pstree -alp docker` 查看 docker 用户的进程树
 - 获取程序运行最大内存：
   ```
   # --pages-as-heap=yes 表示统计整个程序的内存占用，包括堆、栈、elf中的数据段和代码段等load段所占用的内存。也就是这个程序申请的page数量
