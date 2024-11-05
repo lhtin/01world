@@ -1,6 +1,6 @@
 # Dev Env Init
 
-一键初始化：`/bin/bash -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/01world/-/raw/main/tools/init-dev-env.sh)"`
+一键初始化：`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/lhtin/01world/main/tools/init-env.sh)"`
 
 - [brew](https://brew.sh) 包管理器（Mac and Linux and WSL）
   - `/bin/bash -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/brew-install/-/raw/tin/install.sh)"`
@@ -59,7 +59,6 @@
 - zsh-syntax-highlighting
 
   ```
-  sh -c "$(curl -fsSL https://gitlab.com/lhtin-rivai/ohmyzsh/-/raw/master/tools/install.sh)"
   git clone https://gitlab.com/lhtin-rivai/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   git clone https://gitlab.com/lhtin-rivai/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
   ```
