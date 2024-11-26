@@ -4,6 +4,6 @@
   
   https://github.com/lhtin/01world/blob/433d92c0c1ce556135466275935811afa336cf41/tools/libs.py#L1-L11
   
-- venv 创建虚拟环境，只将包安装在这里面
-  - 创建：`python -m venv /path/to/my/venv`
+- [venv](https://docs.python.org/zh-cn/3/library/venv.html) 创建虚拟环境，只将包安装在这里面
+  - 创建：`python3 -m venv /path/to/my/venv`
   - 激活：`source /path/to/my/venv`
