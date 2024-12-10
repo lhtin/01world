@@ -6,4 +6,4 @@
   
 - [venv](https://docs.python.org/zh-cn/3/library/venv.html) 创建虚拟环境，只将包安装在这里面
   - 创建：`python3 -m venv /path/to/my/venv`
-  - 激活：`source /path/to/my/venv`
+  - 激活：`source /path/to/my/venv/bin/activate`
