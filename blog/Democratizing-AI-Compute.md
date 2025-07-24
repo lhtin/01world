@@ -32,7 +32,7 @@
 - [第八部份：MLIR 编译器基础设施如何？](https://www.modular.com/blog/democratizing-ai-compute-part-8-what-about-the-mlir-compiler-infrastructure)
 - [第九部分：为什么硬件公司难以构建 AI 软件?](https://www.modular.com/blog/democratizing-ai-compute-part-9-why-do-hw-companies-struggle-to-build-ai-software)
 - [第十部分：Modular 突破“矩阵”的决心](https://www.modular.com/blog/modulars-bet-to-break-out-of-the-matrix-democratizing-ai-compute-part-10)
-- [第十一部分: Modular 如何使 AI 算力民主化?](https://www.modular.com/blog/how-is-modular-democratizing-ai-compute)
+- [第十一部分: Modular 是如何让 AI 算力民主化的?](https://www.modular.com/blog/how-is-modular-democratizing-ai-compute)
 
 ## Democratizing AI Compute, Part 1: DeepSeek’s Impact on AI
 
