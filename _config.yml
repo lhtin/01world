@@ -5,11 +5,3 @@ kramdown:
   syntax_highlighter: rouge
   auto_ids: true
   toc_levels: 1..6
-plugins:
-  - jekyll-toc
-toc:
- min_level: 1
- max_level: 6
- list_class: toc
- list_class: toc__list
- sublist_class: toc__sublist
