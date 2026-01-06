@@ -14,9 +14,11 @@ p {
 
 /* TOC styles */
 #markdown-toc {
+    border: 1px solid #eee;
     list-style: none;
-    padding-left: 0;
+    padding: 15px;
     ul {
         list-style: none;
+        padding-left: 15px;
     }
 }
