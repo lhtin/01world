@@ -3,6 +3,8 @@ highlighter: rouge
 kramdown:
   math_engine: mathjax
   syntax_highlighter: rouge
+  auto_ids: true
+  toc_levels: 1..6
 plugins:
   - jekyll-toc
 toc:
