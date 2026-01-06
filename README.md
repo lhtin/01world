@@ -71,6 +71,8 @@
   - 资料
     - 书
       - [Computer Organization and Design: the Hardware/Software Interface](./res/book/computer-organization-and-design/index.md)
+      - 经济解释
+        - [卷一：科学说需求](./economic-explanation/volume-one.md)
   - 工具箱
     - [Mac](./tools/mac.md)
     - [shell](./tools/shell.md)
