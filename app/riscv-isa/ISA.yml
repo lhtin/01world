@@ -707,7 +707,7 @@ F:
     asm: fadd.s rd, rs1, rs2, rm
     desc: FADD.S and FMUL.S perform single-precision floating-point addition and multiplication respectively, between rs1 and rs2.
   FMUL.S:
-    asm: fadd.s rd, rs1, rs2, rm
+    asm: fmul.s rd, rs1, rs2, rm
     desc: FADD.S and FMUL.S perform single-precision floating-point addition and multiplication respectively, between rs1 and rs2.
   FSUB.S:
     asm: fsub.s rd, rs1, rs2, rm
