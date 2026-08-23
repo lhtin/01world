@@ -1,9 +1,42 @@
 <mxfile host="app.diagrams.net">
   <diagram name="第 1 页" id="soKlhM1qVx88rF2fgFbi">
-    <mxGraphModel dx="982" dy="650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1155" dy="765" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="x_buE7l57LasAZE4hO3A-2" edge="1" parent="1" style="endArrow=classic;startArrow=classic;html=1;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=3;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="400" y="760" as="sourcePoint" />
+            <mxPoint x="400" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x_buE7l57LasAZE4hO3A-3" edge="1" parent="1" style="endArrow=classic;startArrow=classic;html=1;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=3;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="760" y="400" as="sourcePoint" />
+            <mxPoint x="40" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x_buE7l57LasAZE4hO3A-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=20;fontFamily=Times New Roman;fontColor=#0000FF;fontStyle=1" value="该做的" vertex="1">
+          <mxGeometry height="30" width="90" x="400" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="x_buE7l57LasAZE4hO3A-24" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=20;fontFamily=Times New Roman;fontColor=#0000FF;fontStyle=1" value="不该做的" vertex="1">
+          <mxGeometry height="30" width="90" x="410" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="x_buE7l57LasAZE4hO3A-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=20;fontFamily=Times New Roman;fontColor=#0000FF;fontStyle=1" value="做了" vertex="1">
+          <mxGeometry height="30" width="90" x="680" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="x_buE7l57LasAZE4hO3A-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=20;fontFamily=Times New Roman;fontColor=#0000FF;fontStyle=1" value="没做" vertex="1">
+          <mxGeometry height="30" width="90" x="30" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="x_buE7l57LasAZE4hO3A-29" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=20;fontFamily=Times New Roman;fontColor=#FF00FF;fontStyle=1" value="投资&lt;div&gt;育儿&lt;/div&gt;&lt;div&gt;家庭&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="480" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="x_buE7l57LasAZE4hO3A-33" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=20;fontFamily=Times New Roman;fontColor=#FF00FF;fontStyle=1" value="运动&lt;div&gt;睡眠调整&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="90" x="187" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="x_buE7l57LasAZE4hO3A-34" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=20;fontFamily=Times New Roman;fontColor=#FF00FF;fontStyle=1" value="抽烟喝酒" vertex="1">
+          <mxGeometry height="30" width="90" x="165" y="485" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
